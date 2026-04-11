@@ -35,10 +35,6 @@ replay_*.log
 # java results
 *.class
 
-# Please use maven. Modrinth hosts one if you're depending on other mods.
-# https://support.modrinth.com/en/articles/8801191-modrinth-maven
-*.jar
-
 # scala results
 *.tasty
 

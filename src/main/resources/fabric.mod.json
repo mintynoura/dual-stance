@@ -31,6 +31,9 @@
 			"io.github.mintynoura.dualstance.DualStance"
 		],
 		"client": [
+		],
+		"fabric-datagen": [
+			"io.github.mintynoura.dualstance.datagen.DualStanceDataGenerator"
 		]
 	}
 }
