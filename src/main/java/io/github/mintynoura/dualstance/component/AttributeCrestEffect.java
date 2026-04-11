@@ -28,7 +28,7 @@ public record AttributeCrestEffect(List<Entry> modifiers) implements CrestEffect
 
 	public record Entry(Holder<Attribute> attribute, AttributeModifier modifier) {
 		public static final Codec<Entry> CODEC = RecordCodecBuilder.create(builder -> builder.group(
-			Attribute.CODEC.fieldOf("attribute").forGetter(Entry::attribute),
+			Attribute.CODEC.fieldOf("type").forGetter(Entry::attribute),
 			AttributeModifier.MAP_CODEC.forGetter(Entry::modifier)
 		).apply(builder, Entry::new));
 	}
