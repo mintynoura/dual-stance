@@ -1,0 +1,36 @@
+{
+	"schemaVersion": 1,
+	"id": "${modId}",
+	"version": "${version}",
+	"name": "${modName}",
+	"description": "${modDescription}",
+	"authors": [
+		"${authors}"
+	],
+	"contributors": [
+		"${contributors}"
+	],
+	"contact": {
+		"issues": "https://github.com/mintynoura/dual-stance/issues",
+		"sources": "https://github.com/mintynoura/dual-stance"
+	},
+	"license": "${license}",
+	"icon": "assets/dual_stance/icon.png",
+	"mixins": [
+		"dual_stance.mixins.json"
+	],
+	"depends": {
+		"minecraft": ">=${minecraftVersion}",
+		"fabricloader": ">=${fabricLoaderVersion}",
+		"fabric-api": ">=${fabricApiVersion}"
+	},
+	"suggests": {
+	},
+	"entrypoints": {
+		"main": [
+			"io.github.mintynoura.dualstance.DualStance"
+		],
+		"client": [
+		]
+	}
+}
