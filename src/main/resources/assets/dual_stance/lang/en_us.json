@@ -1,2 +1,7 @@
 {
+	"item.dual_stance.heart_seal": "Heart Seal",
+	"lore.item.dual_stance.heart_seal": "When two players use a Heart Seal on each other, they will become paired and support each other! Attach a crest to determine the pair up bonus.",
+
+	"item.dual_stance.peace_crest": "Crest of Peace",
+	"lore.item.dual_stance.peace_crest": "Attach a crest to a Heart Seal to determine its pair up bonus. This crest has protective properties."
 }

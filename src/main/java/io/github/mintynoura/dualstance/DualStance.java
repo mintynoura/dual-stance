@@ -12,6 +12,7 @@ public class DualStance implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		LOGGER.info("[Dual Stance] I fight for my friends.");
 		DualStanceItems.initialize();
 		DualStanceComponents.initialize();
 	}
