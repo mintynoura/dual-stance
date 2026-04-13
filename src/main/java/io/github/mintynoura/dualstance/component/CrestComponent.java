@@ -3,6 +3,7 @@ package io.github.mintynoura.dualstance.component;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.mintynoura.dualstance.DualStance;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -29,6 +30,15 @@ public record CrestComponent(Identifier id, List<CrestEffect> crestEffects) impl
 
 	@Override
 	public void addToTooltip(Item.TooltipContext context, Consumer<Component> consumer, TooltipFlag flag, DataComponentGetter components) {
-
+		if (!this.crestEffects.isEmpty()) {
+			consumer.accept(Component.translatableWithFallback("tooltip.dual_stance.crest_bond", "When bonded:").withStyle(ChatFormatting.GRAY));
+				for (CrestEffect crestEffect : this.crestEffects) {
+					if (crestEffect instanceof AttributeCrestEffect) {
+						for (AttributeCrestEffect.Entry entry : ((AttributeCrestEffect) crestEffect).modifiers()) {
+							AttributeCrestEffect.display(consumer, entry.attribute(), entry.modifier());
+						}
+					}
+				}
+		}
 	}
 }

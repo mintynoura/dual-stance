@@ -1,4 +1,5 @@
-{
+{	"tooltip.dual_stance.crest_bond": "When bonded:",
+
 	"item.dual_stance.heart_seal": "Heart Seal",
 	"lore.item.dual_stance.heart_seal": "When two players use a Heart Seal on each other, they will become paired and support each other! Attach a crest to determine the pair up bonus.",
 
