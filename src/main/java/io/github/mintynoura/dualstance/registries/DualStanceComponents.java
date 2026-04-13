@@ -1,6 +1,7 @@
-package io.github.mintynoura.dualstance.component;
+package io.github.mintynoura.dualstance.registries;
 
 import io.github.mintynoura.dualstance.DualStance;
+import io.github.mintynoura.dualstance.component.CrestComponent;
 import net.fabricmc.fabric.api.item.v1.ItemComponentTooltipProviderRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;

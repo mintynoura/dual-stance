@@ -1,7 +1,7 @@
 package io.github.mintynoura.dualstance;
 
-import io.github.mintynoura.dualstance.component.DualStanceComponents;
-import io.github.mintynoura.dualstance.item.DualStanceItems;
+import io.github.mintynoura.dualstance.registries.DualStanceComponents;
+import io.github.mintynoura.dualstance.registries.DualStanceItems;
 import net.fabricmc.api.ModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

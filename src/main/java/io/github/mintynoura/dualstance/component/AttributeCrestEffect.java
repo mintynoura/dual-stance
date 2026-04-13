@@ -3,6 +3,7 @@ package io.github.mintynoura.dualstance.component;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.github.mintynoura.dualstance.registries.CrestEffectTypes;
 import net.minecraft.core.Holder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -23,7 +24,7 @@ public record AttributeCrestEffect(List<Entry> modifiers) implements CrestEffect
 
 	@Override
 	public Type<? extends CrestEffect> getType() {
-		return CrestEffectTypes.ATTRIBUTE_CREST_EFFECT_TYPE;
+		return CrestEffectTypes.ATTRIBUTE_CREST_EFFECT_TYPE; //TODO: Modify this if adding new types.
 	}
 
 	public record Entry(Holder<Attribute> attribute, AttributeModifier modifier) {

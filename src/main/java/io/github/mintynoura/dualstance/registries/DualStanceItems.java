@@ -1,14 +1,17 @@
-package io.github.mintynoura.dualstance.item;
+package io.github.mintynoura.dualstance.registries;
 
 import io.github.mintynoura.dualstance.DualStance;
 import io.github.mintynoura.dualstance.component.AttributeCrestEffect;
 import io.github.mintynoura.dualstance.component.CrestComponent;
-import io.github.mintynoura.dualstance.component.DualStanceComponents;
+import io.github.mintynoura.dualstance.item.CrestItem;
+import io.github.mintynoura.dualstance.item.HeartSealItem;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
@@ -22,7 +25,8 @@ public class DualStanceItems {
 
 	public static final Item PEACE_CREST = registerItem("peace_crest", CrestItem::new, new Item.Properties()
 		// we should probably make a helper method to make the crest components easier to read/write
-		.component(DualStanceComponents.CREST_COMPONENT, new CrestComponent(Identifier.fromNamespaceAndPath(DualStance.ID, "peace_crest"), List.of(
+		.component(DualStanceComponents.CREST_COMPONENT, new CrestComponent(Identifier.fromNamespaceAndPath(DualStance.ID, "peace_crest"),
+			List.of(
 			new AttributeCrestEffect(List.of(
 				new AttributeCrestEffect.Entry(Attributes.ARMOR, new AttributeModifier(Identifier.fromNamespaceAndPath(DualStance.ID, "peace_crest"), 1.0f, AttributeModifier.Operation.ADD_VALUE)),
 				new AttributeCrestEffect.Entry(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(Identifier.fromNamespaceAndPath(DualStance.ID, "peace_crest"), 1.0f, AttributeModifier.Operation.ADD_VALUE)
@@ -35,6 +39,5 @@ public class DualStanceItems {
 		Registry.register(BuiltInRegistries.ITEM, itemRegistryKey, item);
 		return item;
 	}
-
 	public static void initialize() {}
 }
