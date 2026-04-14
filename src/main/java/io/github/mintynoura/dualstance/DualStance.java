@@ -2,11 +2,13 @@ package io.github.mintynoura.dualstance;
 
 import io.github.mintynoura.dualstance.registries.DualStanceComponents;
 import io.github.mintynoura.dualstance.registries.DualStanceItems;
+import io.github.mintynoura.dualstance.registries.ModRenderers;
+import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DualStance implements ModInitializer {
+public class DualStance implements ModInitializer, ClientModInitializer {
 	public static final String ID = "dual_stance";
 	public static final Logger LOGGER = LoggerFactory.getLogger(ID);
 
@@ -15,5 +17,10 @@ public class DualStance implements ModInitializer {
 		LOGGER.info("[Dual Stance] I fight for my friends.");
 		DualStanceItems.initialize();
 		DualStanceComponents.initialize();
+	}
+
+	@Override
+	public void onInitializeClient() {
+		ModRenderers.register();
 	}
 }
