@@ -4,5 +4,15 @@
 	"lore.item.dual_stance.heart_seal": "When two players use a Heart Seal on each other, they will become paired and support each other! Attach a crest to determine the pair up bonus.",
 
 	"item.dual_stance.peace_crest": "Crest of Peace",
-	"lore.item.dual_stance.peace_crest": "Attach a crest to a Heart Seal to determine its pair up bonus. This crest has protective properties."
+	"item.dual_stance.bones_crest": "Crest of Bones",
+	"item.dual_stance.emblem_crest": "Crest of Emblems",
+	"item.dual_stance.shells_crest": "Crest of Shells",
+	"item.dual_stance.stone_crest": "Crest of Stone",
+	"item.dual_stance.vector_crest": "Crest of Vectors",
+	"lore.item.dual_stance.peace_crest": "Attach a crest to a Heart Seal to determine its pair up bonus. This crest has protective properties.",
+	"lore.item.dual_stance.bones_crest": "Attach a crest to a Heart Seal to determine its pair up bonus. This crest gives you faster fingers.",
+	"lore.item.dual_stance.emblem_crest": "Attach a crest to a Heart Seal to determine its pair up bonus. This crest has healing properties.",
+	"lore.item.dual_stance.shells_crest": "Attach a crest to a Heart Seal to determine its pair up bonus. This crest is said to provide nourishment.",
+	"lore.item.dual_stance.stone_crest": "Attach a crest to a Heart Seal to determine its pair up bonus. This crest has strength-enhancing properties.",
+	"lore.item.dual_stance.vector_crest": "Attach a crest to a Heart Seal to determine its pair up bonus. This crest gives you some more mobility."
 }
