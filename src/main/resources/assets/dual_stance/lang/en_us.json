@@ -14,5 +14,7 @@
 	"lore.item.dual_stance.emblem_crest": "Attach a crest to a Heart Seal to determine its pair up bonus. This crest has healing properties.",
 	"lore.item.dual_stance.shells_crest": "Attach a crest to a Heart Seal to determine its pair up bonus. This crest is said to provide nourishment.",
 	"lore.item.dual_stance.stone_crest": "Attach a crest to a Heart Seal to determine its pair up bonus. This crest has strength-enhancing properties.",
-	"lore.item.dual_stance.vector_crest": "Attach a crest to a Heart Seal to determine its pair up bonus. This crest gives you some more mobility."
+	"lore.item.dual_stance.vector_crest": "Attach a crest to a Heart Seal to determine its pair up bonus. This crest gives you some more mobility.",
+
+	"item.dual_stance.heart_seal.unbonded_description": "Attach a Crest to boost your bond"
 }

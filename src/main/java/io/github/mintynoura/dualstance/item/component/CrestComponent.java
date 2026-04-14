@@ -1,4 +1,4 @@
-package io.github.mintynoura.dualstance.component;
+package io.github.mintynoura.dualstance.item.component;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

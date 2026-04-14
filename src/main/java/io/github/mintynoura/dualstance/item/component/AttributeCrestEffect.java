@@ -1,4 +1,4 @@
-package io.github.mintynoura.dualstance.component;
+package io.github.mintynoura.dualstance.item.component;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -24,7 +24,6 @@ public record AttributeCrestEffect(List<Entry> modifiers) implements CrestEffect
 
 	public static void display(Consumer<Component> consumer, final Holder<Attribute> attribute, final AttributeModifier modifier) {
 		double amount = modifier.amount();
-
 		double displayAmount;
 		if (modifier.operation() == AttributeModifier.Operation.ADD_MULTIPLIED_BASE || modifier.operation() == AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL) {
 			displayAmount = amount * 100.0;

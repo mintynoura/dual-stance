@@ -1,8 +1,8 @@
 package io.github.mintynoura.dualstance.registries;
 
 import io.github.mintynoura.dualstance.DualStance;
-import io.github.mintynoura.dualstance.component.AttributeCrestEffect;
-import io.github.mintynoura.dualstance.component.CrestEffect;
+import io.github.mintynoura.dualstance.item.component.AttributeCrestEffect;
+import io.github.mintynoura.dualstance.item.component.CrestEffect;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
 
