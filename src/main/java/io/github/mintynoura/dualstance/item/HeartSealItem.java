@@ -85,7 +85,52 @@ public class HeartSealItem extends Item {
 
 	@Override
 	public boolean overrideOtherStackedOnMe(ItemStack self, ItemStack other, Slot slot, ClickAction clickAction, Player player, SlotAccess carriedItem) {
-		return super.overrideOtherStackedOnMe(self, other, slot, clickAction, player, carriedItem);
+		if (clickAction == ClickAction.PRIMARY && other.isEmpty()) {
+			toggleSelectedItem(self, -1);
+			return false;
+		} else {
+			HeartSealContents initialContents = self.get(DualStanceComponents.HEART_SEAL_CONTENTS);
+			if (initialContents == null) {
+				return false;
+			} else {
+				HeartSealContents.Mutable contents = new HeartSealContents.Mutable(initialContents);
+				if (clickAction == ClickAction.PRIMARY && !other.isEmpty()) {
+					if (slot.allowModification(player) && contents.tryInsert(other) > 0) {
+						playInsertSound(player);
+					} else {
+						playInsertFailSound(player);
+					}
+
+					self.set(DualStanceComponents.HEART_SEAL_CONTENTS, contents.toImmutable());
+					this.broadcastChangesOnContainerMenu(player);
+					return true;
+				} else if (clickAction == ClickAction.SECONDARY && other.isEmpty()) {
+					if (slot.allowModification(player)) {
+						ItemStack removed = contents.removeOne();
+						if (removed != null) {
+							playRemoveOneSound(player);
+							carriedItem.set(removed);
+						}
+					}
+
+					self.set(DualStanceComponents.HEART_SEAL_CONTENTS, contents.toImmutable());
+					this.broadcastChangesOnContainerMenu(player);
+					return true;
+				} else {
+					toggleSelectedItem(self, -1);
+					return false;
+				}
+			}
+		}
+	}
+
+	public static void toggleSelectedItem(final ItemStack stack, final int selectedItem) {
+		HeartSealContents initialContents = stack.get(DualStanceComponents.HEART_SEAL_CONTENTS);
+		if (initialContents != null) {
+			HeartSealContents.Mutable contents = new HeartSealContents.Mutable(initialContents);
+			contents.toggleSelectedItem(selectedItem);
+			stack.set(DualStanceComponents.HEART_SEAL_CONTENTS, contents.toImmutable());
+		}
 	}
 
 	@Override

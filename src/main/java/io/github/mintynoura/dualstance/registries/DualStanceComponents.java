@@ -33,5 +33,6 @@ public class DualStanceComponents {
 
 	public static void initialize() {
 		ItemComponentTooltipProviderRegistry.addFirst(CREST);
+		ItemComponentTooltipProviderRegistry.addLast(HEART_SEAL_CONTENTS);
 	}
 }

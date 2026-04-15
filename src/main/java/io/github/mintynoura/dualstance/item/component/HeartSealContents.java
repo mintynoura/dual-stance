@@ -7,23 +7,26 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+import io.github.mintynoura.dualstance.registries.DualStanceComponents;
 import io.github.mintynoura.dualstance.util.DualStanceTags;
+import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
-import net.minecraft.world.item.ItemInstance;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.TooltipProvider;
 import org.apache.commons.lang3.math.Fraction;
 import org.jspecify.annotations.Nullable;
 
-public final class HeartSealContents implements TooltipComponent {
+public final class HeartSealContents implements TooltipComponent, TooltipProvider {
 	public static final HeartSealContents EMPTY = new HeartSealContents(List.of());
 	public static final Codec<HeartSealContents> CODEC = ItemStackTemplate.CODEC.listOf().xmap(HeartSealContents::new, contents -> contents.items);
 	public static final StreamCodec<RegistryFriendlyByteBuf, HeartSealContents> STREAM_CODEC = ItemStackTemplate.STREAM_CODEC
@@ -66,14 +69,6 @@ public final class HeartSealContents implements TooltipComponent {
 		return itemToAdd.is(DualStanceTags.Items.CRESTS);
 	}
 
-	public int getNumberOfItemsToShow() {
-		int numberOfItemStacks = this.size();
-		int availableItemsToShow = numberOfItemStacks > 12 ? 11 : 12;
-		int itemsOnNonFullRow = numberOfItemStacks % 4;
-		int emptySpaceOnNonFullRow = itemsOnNonFullRow == 0 ? 0 : 4 - itemsOnNonFullRow;
-		return Math.min(numberOfItemStacks, availableItemsToShow - emptySpaceOnNonFullRow);
-	}
-
 	public Stream<ItemStack> itemCopyStream() {
 		return this.items.stream().map(ItemStackTemplate::create);
 	}
@@ -94,15 +89,6 @@ public final class HeartSealContents implements TooltipComponent {
 		return this.items.isEmpty();
 	}
 
-	public int getSelectedItemIndex() {
-		return this.selectedItem;
-	}
-
-	@Nullable
-	public ItemStackTemplate getSelectedItem() {
-		return this.selectedItem == -1 ? null : this.items.get(this.selectedItem);
-	}
-
 	public boolean equals(final Object obj) {
 		if (this == obj) {
 			return true;
@@ -117,6 +103,15 @@ public final class HeartSealContents implements TooltipComponent {
 
 	public String toString() {
 		return "HeartSealContents" + this.items;
+	}
+
+	@Override
+	public void addToTooltip(Item.TooltipContext context, Consumer<Component> consumer, TooltipFlag flag, DataComponentGetter components) {
+		if (!this.isEmpty()) {
+			if (this.items.getFirst().get(DualStanceComponents.CREST) != null) {
+				this.items.getFirst().get(DualStanceComponents.CREST).addToTooltip(context, consumer, flag, components);
+			}
+		}
 	}
 
 	public static class Mutable {
