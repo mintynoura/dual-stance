@@ -33,6 +33,5 @@ public class DualStanceComponents {
 
 	public static void initialize() {
 		ItemComponentTooltipProviderRegistry.addFirst(CREST);
-		ItemComponentTooltipProviderRegistry.addFirst(CREST);
 	}
 }
