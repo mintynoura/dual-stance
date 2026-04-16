@@ -16,7 +16,7 @@ public class DualStanceComponents {
 	// This data component holds the crest's effect on the crest item
 	public static final DataComponentType<CrestComponent> CREST =
 		Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, Identifier.fromNamespaceAndPath(DualStance.ID, "crest"),
-			DataComponentType.<CrestComponent>builder().persistent(CrestComponent.CODEC).build());
+			DataComponentType.<CrestComponent>builder().persistent(CrestComponent.CODEC).networkSynchronized(CrestComponent.STREAM_CODEC).build());
 
 	// This data component holds the linked player on the other player's heart seal
 	public static final DataComponentType<UUID> LINKED_PLAYER = Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE,
@@ -29,8 +29,7 @@ public class DualStanceComponents {
 			DataComponentType.<CrestComponent>builder().persistent(CrestComponent.CODEC).build());
 
 	public static final DataComponentType<HeartSealContents> HEART_SEAL_CONTENTS = Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, Identifier.fromNamespaceAndPath(DualStance.ID, "heart_seal_contents"),
-		DataComponentType.<HeartSealContents>builder().persistent(HeartSealContents.CODEC).build());
-	//TODO: Change to single itemstack and rename to HEART_SEAL_CREST_ITEM or smth
+		DataComponentType.<HeartSealContents>builder().persistent(HeartSealContents.CODEC).networkSynchronized(HeartSealContents.STREAM_CODEC).build());
 
 	public static void initialize() {
 		ItemComponentTooltipProviderRegistry.addFirst(CREST);
