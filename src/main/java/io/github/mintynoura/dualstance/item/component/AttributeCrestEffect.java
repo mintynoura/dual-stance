@@ -5,7 +5,10 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.mintynoura.dualstance.registries.CrestEffectTypes;
 import net.minecraft.core.Holder;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -21,6 +24,11 @@ public record AttributeCrestEffect(List<Entry> modifiers) implements CrestEffect
 	public static final MapCodec<AttributeCrestEffect> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
 		Entry.CODEC.listOf().fieldOf("modifiers").forGetter(AttributeCrestEffect::modifiers)
 	).apply(builder, AttributeCrestEffect::new));
+	public static final StreamCodec<RegistryFriendlyByteBuf, AttributeCrestEffect> STREAM_CODEC = StreamCodec.composite(
+		Entry.STREAM_CODEC.apply(ByteBufCodecs.list()),
+		AttributeCrestEffect::modifiers,
+		AttributeCrestEffect::new
+	);
 
 	public static void display(Consumer<Component> consumer, final Holder<Attribute> attribute, final AttributeModifier modifier) {
 		double amount = modifier.amount();
@@ -67,5 +75,13 @@ public record AttributeCrestEffect(List<Entry> modifiers) implements CrestEffect
 			Attribute.CODEC.fieldOf("type").forGetter(Entry::attribute),
 			AttributeModifier.MAP_CODEC.forGetter(Entry::modifier)
 		).apply(builder, Entry::new));
+		public static final StreamCodec<RegistryFriendlyByteBuf, Entry> STREAM_CODEC = StreamCodec.composite(
+			Attribute.STREAM_CODEC,
+			Entry::attribute,
+			AttributeModifier.STREAM_CODEC,
+			Entry::modifier,
+			Entry::new
+		);
+
 	}
 }

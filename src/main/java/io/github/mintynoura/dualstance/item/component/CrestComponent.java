@@ -5,7 +5,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.mintynoura.dualstance.DualStance;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponentGetter;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
@@ -23,6 +26,13 @@ public record CrestComponent(Identifier id, List<CrestEffect> crestEffects) impl
 		Identifier.CODEC.optionalFieldOf("id", Identifier.fromNamespaceAndPath(DualStance.ID, "default")).forGetter(CrestComponent::id),
 		CrestEffect.CODEC.listOf().optionalFieldOf("crest_effects", List.of()).forGetter(CrestComponent::crestEffects)
 	).apply(builder, CrestComponent::new));
+	public static final StreamCodec<RegistryFriendlyByteBuf, CrestComponent> STREAM_CODEC = StreamCodec.composite(
+		Identifier.STREAM_CODEC,
+		CrestComponent::id,
+		CrestEffect.STREAM_CODEC.apply(ByteBufCodecs.list()),
+		CrestComponent::crestEffects,
+		CrestComponent::new
+	);
 
 	public void trigger(Level level, LivingEntity entity, ItemStack itemStack) {
 		this.crestEffects.forEach(action -> action.trigger(level,entity, itemStack));
