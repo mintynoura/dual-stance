@@ -6,6 +6,7 @@ import io.github.mintynoura.dualstance.item.component.HeartSealContents;
 import io.github.mintynoura.dualstance.item.component.HeartSealTooltip;
 import io.github.mintynoura.dualstance.registries.DualStanceComponents;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
@@ -36,7 +37,7 @@ public class HeartSealItem extends Item {
 	@Override
 	public void inventoryTick(ItemStack itemStack, ServerLevel level, Entity owner, @Nullable EquipmentSlot slot) {
 		super.inventoryTick(itemStack, level, owner, slot);
-		if(!itemStack.has(DualStanceComponents.LINKED_PLAYER) || !(owner instanceof Player thisPlayer))
+		if(!itemStack.has(DualStanceComponents.LINKED_PLAYER) || !(owner instanceof LivingEntity thisPlayer)) //TODO: Change to Player
 			return;
 		Player otherPlayer = level.getPlayerByUUID(itemStack.get(DualStanceComponents.LINKED_PLAYER));
 		if (otherPlayer == null || otherPlayer.distanceTo(thisPlayer) > 8 || otherPlayer.level().dimension().equals(level.dimension())){
@@ -44,7 +45,7 @@ public class HeartSealItem extends Item {
 			itemStack.remove(DualStanceComponents.LINKED_CREST);
 			return;
 		}
-		var effects1 = itemStack.get(DualStanceComponents.CREST);
+		var effects1 = itemStack.get(DualStanceComponents.HEART_SEAL_CONTENTS).items().get(0).get(DualStanceComponents.CREST);
 		var effects2 = itemStack.get(DualStanceComponents.LINKED_CREST);
 		applyCrestEffect(thisPlayer, effects1);
 		applyCrestEffect(thisPlayer, effects2);
@@ -54,24 +55,24 @@ public class HeartSealItem extends Item {
 
 	}
 
-	//TODO: Implement adding crest
 	@Override
 	public InteractionResult interactLivingEntity(ItemStack itemStack, Player player, LivingEntity target, InteractionHand type) {
-		if(player.level().isClientSide() || !(target instanceof Player otherPlayer))
+		if(!player.level().isClientSide() || !(target instanceof LivingEntity otherPlayer)) //TODO: Change back to player
 			return InteractionResult.FAIL;
 		ItemStack otherItemStack = otherPlayer.getItemInHand(InteractionHand.MAIN_HAND);
 		if(!(otherItemStack.getItem() instanceof HeartSealItem))
 			return InteractionResult.FAIL;
-		if(!otherItemStack.has(DualStanceComponents.CREST) || !itemStack.has(DualStanceComponents.CREST))
+		if(!otherItemStack.has(DualStanceComponents.HEART_SEAL_CONTENTS) || !itemStack.has(DualStanceComponents.HEART_SEAL_CONTENTS))
 			return InteractionResult.FAIL; //TODO: Figure out if this is the right result of this edge case.
 
 		otherItemStack.set(DualStanceComponents.LINKED_PLAYER, player.getUUID());
 		otherItemStack.set(DualStanceComponents.LINKED_CREST, itemStack.get(DualStanceComponents.CREST));
+		otherItemStack.set(DataComponents.CUSTOM_NAME, Component.literal("rawr2"));
 		itemStack.set(DualStanceComponents.LINKED_PLAYER, otherPlayer.getUUID());
 		itemStack.set(DualStanceComponents.LINKED_CREST, otherItemStack.get(DualStanceComponents.CREST));
+		itemStack.set(DataComponents.CUSTOM_NAME, Component.literal("rawr1"));
 		player.makeSound(SoundEvents.ENDER_DRAGON_DEATH);
-		// TODO: Add crest effects to each other's
-		//otherItemStack.set(DualStanceComponents.LINKED_CREST, )
+
 
 		return InteractionResult.SUCCESS;
 	}

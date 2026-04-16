@@ -30,6 +30,7 @@ public class DualStanceComponents {
 
 	public static final DataComponentType<HeartSealContents> HEART_SEAL_CONTENTS = Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, Identifier.fromNamespaceAndPath(DualStance.ID, "heart_seal_contents"),
 		DataComponentType.<HeartSealContents>builder().persistent(HeartSealContents.CODEC).build());
+	//TODO: Change to single itemstack and rename to HEART_SEAL_CREST_ITEM or smth
 
 	public static void initialize() {
 		ItemComponentTooltipProviderRegistry.addFirst(CREST);
