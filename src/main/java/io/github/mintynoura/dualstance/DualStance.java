@@ -1,5 +1,6 @@
 package io.github.mintynoura.dualstance;
 
+import io.github.mintynoura.dualstance.registries.CrestEffectTypes;
 import io.github.mintynoura.dualstance.registries.DualStanceComponents;
 import io.github.mintynoura.dualstance.registries.DualStanceItems;
 import net.fabricmc.api.ModInitializer;
@@ -13,7 +14,8 @@ public class DualStance implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		LOGGER.info("[Dual Stance] I fight for my friends.");
-		DualStanceItems.initialize();
+		CrestEffectTypes.initialize();
 		DualStanceComponents.initialize();
+		DualStanceItems.initialize();
 	}
 }
