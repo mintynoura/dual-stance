@@ -1,8 +1,7 @@
 package io.github.mintynoura.dualstance.item;
 
 import io.github.mintynoura.dualstance.item.component.CrestComponent;
-import io.github.mintynoura.dualstance.item.component.CrestEffect;
-import io.github.mintynoura.dualstance.item.component.HeartSealContents;
+import io.github.mintynoura.dualstance.item.component.HeartSealedCrest;
 import io.github.mintynoura.dualstance.item.component.HeartSealTooltip;
 import io.github.mintynoura.dualstance.registries.DualStanceComponents;
 import net.minecraft.core.component.DataComponents;
@@ -45,7 +44,7 @@ public class HeartSealItem extends Item {
 			itemStack.remove(DualStanceComponents.LINKED_CREST);
 			return;
 		}
-		var effects1 = itemStack.get(DualStanceComponents.HEART_SEAL_CONTENTS).items().get(0).get(DualStanceComponents.CREST);
+		var effects1 = itemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest().get(DualStanceComponents.CREST);
 		var effects2 = itemStack.get(DualStanceComponents.LINKED_CREST);
 		applyCrestEffect(thisPlayer, effects1);
 		applyCrestEffect(thisPlayer, effects2);
@@ -62,7 +61,7 @@ public class HeartSealItem extends Item {
 		ItemStack otherItemStack = otherPlayer.getItemInHand(InteractionHand.MAIN_HAND);
 		if(!(otherItemStack.getItem() instanceof HeartSealItem))
 			return InteractionResult.FAIL;
-		if(!otherItemStack.has(DualStanceComponents.HEART_SEAL_CONTENTS) || !itemStack.has(DualStanceComponents.HEART_SEAL_CONTENTS))
+		if(!otherItemStack.has(DualStanceComponents.HEART_SEALED_CREST) || !itemStack.has(DualStanceComponents.HEART_SEALED_CREST))
 			return InteractionResult.FAIL; //TODO: Figure out if this is the right result of this edge case.
 
 		otherItemStack.set(DualStanceComponents.LINKED_PLAYER, player.getUUID());
@@ -79,34 +78,29 @@ public class HeartSealItem extends Item {
 
 	@Override
 	public boolean overrideStackedOnOther(ItemStack self, Slot slot, ClickAction clickAction, Player player) {
-		HeartSealContents initialContents = self.get(DualStanceComponents.HEART_SEAL_CONTENTS);
-		if (initialContents == null) {
+		HeartSealedCrest sealedCrest = self.get(DualStanceComponents.HEART_SEALED_CREST);
+		HeartSealedCrest newSealedCrest = HeartSealedCrest.EMPTY;
+		if (sealedCrest == null) {
 			return false;
-		}else {
+		} else {
 			ItemStack other = slot.getItem();
-			HeartSealContents.Mutable contents = new HeartSealContents.Mutable(initialContents);
 			if (clickAction == ClickAction.PRIMARY && !other.isEmpty()) {
-				if (contents.tryTransfer(slot, player) > 0) {
+				if (sealedCrest.canInsert(slot.getItem())) {
 					playInsertSound(player);
+					newSealedCrest = new HeartSealedCrest(other.copyWithCount(1));
+					self.set(DualStanceComponents.HEART_SEALED_CREST, newSealedCrest);
+					other.shrink(1);
 				} else {
 					playInsertFailSound(player);
 				}
-
-				self.set(DualStanceComponents.HEART_SEAL_CONTENTS, contents.toImmutable());
 				this.broadcastChangesOnContainerMenu(player);
 				return true;
-			} else if (clickAction == ClickAction.SECONDARY && other.isEmpty()) {
-				ItemStack itemStack = contents.removeOne();
-				if (itemStack != null) {
-					ItemStack remainder = slot.safeInsert(itemStack);
-					if (remainder.getCount() > 0) {
-						contents.tryInsert(remainder);
-					} else {
-						playRemoveOneSound(player);
-					}
+			} else if (clickAction == ClickAction.SECONDARY && other.isEmpty() && !sealedCrest.isEmpty()) {
+				ItemStack slotStack = slot.safeInsert(sealedCrest.crest());
+				if (slotStack != null) {
+					playRemoveOneSound(player);
 				}
-
-				self.set(DualStanceComponents.HEART_SEAL_CONTENTS, contents.toImmutable());
+				self.set(DualStanceComponents.HEART_SEALED_CREST, newSealedCrest);
 				this.broadcastChangesOnContainerMenu(player);
 				return true;
 			} else {
@@ -118,62 +112,51 @@ public class HeartSealItem extends Item {
 	@Override
 	public boolean overrideOtherStackedOnMe(ItemStack self, ItemStack other, Slot slot, ClickAction clickAction, Player player, SlotAccess carriedItem) {
 		if (clickAction == ClickAction.PRIMARY && other.isEmpty()) {
-			toggleSelectedItem(self, -1);
 			return false;
 		} else {
-			HeartSealContents initialContents = self.get(DualStanceComponents.HEART_SEAL_CONTENTS);
-			if (initialContents == null) {
+			HeartSealedCrest sealedCrest = self.get(DualStanceComponents.HEART_SEALED_CREST);
+			HeartSealedCrest newSealedCrest = HeartSealedCrest.EMPTY;
+			if (sealedCrest == null) {
 				return false;
 			} else {
-				HeartSealContents.Mutable contents = new HeartSealContents.Mutable(initialContents);
 				if (clickAction == ClickAction.PRIMARY && !other.isEmpty()) {
-					if (slot.allowModification(player) && contents.tryInsert(other) > 0) {
+					if (slot.allowModification(player) && sealedCrest.canInsert(other)) {
 						playInsertSound(player);
+						newSealedCrest = new HeartSealedCrest(other.copyWithCount(1));
+						self.set(DualStanceComponents.HEART_SEALED_CREST, newSealedCrest);
+						other.shrink(1);
 					} else {
 						playInsertFailSound(player);
 					}
-
-					self.set(DualStanceComponents.HEART_SEAL_CONTENTS, contents.toImmutable());
 					this.broadcastChangesOnContainerMenu(player);
 					return true;
 				} else if (clickAction == ClickAction.SECONDARY && other.isEmpty()) {
-					if (slot.allowModification(player)) {
-						ItemStack removed = contents.removeOne();
+					if (slot.allowModification(player) && !sealedCrest.isEmpty()) {
+						ItemStack removed = sealedCrest.crest();
 						if (removed != null) {
 							playRemoveOneSound(player);
 							carriedItem.set(removed);
 						}
 					}
 
-					self.set(DualStanceComponents.HEART_SEAL_CONTENTS, contents.toImmutable());
+					self.set(DualStanceComponents.HEART_SEALED_CREST, newSealedCrest);
 					this.broadcastChangesOnContainerMenu(player);
 					return true;
-				} else {
-					toggleSelectedItem(self, -1);
-					return false;
-				}
+				} else return false;
 			}
-		}
-	}
-
-	public static void toggleSelectedItem(final ItemStack stack, final int selectedItem) {
-		HeartSealContents initialContents = stack.get(DualStanceComponents.HEART_SEAL_CONTENTS);
-		if (initialContents != null) {
-			HeartSealContents.Mutable contents = new HeartSealContents.Mutable(initialContents);
-			contents.toggleSelectedItem(selectedItem);
-			stack.set(DualStanceComponents.HEART_SEAL_CONTENTS, contents.toImmutable());
 		}
 	}
 
 	@Override
 	public void onDestroyed(final ItemEntity entity) {
-		HeartSealContents contents = entity.getItem().get(DualStanceComponents.HEART_SEAL_CONTENTS);
+		HeartSealedCrest contents = entity.getItem().get(DualStanceComponents.HEART_SEALED_CREST);
 		if (contents != null) {
-			entity.getItem().set(DualStanceComponents.HEART_SEAL_CONTENTS, HeartSealContents.EMPTY);
+			entity.getItem().set(DualStanceComponents.HEART_SEALED_CREST, HeartSealedCrest.EMPTY);
 			ItemUtils.onContainerDestroyed(entity, contents.itemCopyStream());
 		}
 	}
 
+	// TODO: add new non-bundle sounds
 	private static void playRemoveOneSound(final Entity entity) {
 		entity.playSound(SoundEvents.BUNDLE_REMOVE_ONE, 0.8F, 0.8F + entity.level().getRandom().nextFloat() * 0.4F);
 	}
@@ -191,7 +174,7 @@ public class HeartSealItem extends Item {
 		TooltipDisplay display = self.getOrDefault(DataComponents.TOOLTIP_DISPLAY, TooltipDisplay.DEFAULT);
 		return !display.shows(DataComponents.BUNDLE_CONTENTS)
 			? Optional.empty()
-			: Optional.ofNullable(self.get(DualStanceComponents.HEART_SEAL_CONTENTS)).map(HeartSealTooltip::new);
+			: Optional.ofNullable(self.get(DualStanceComponents.HEART_SEALED_CREST)).map(HeartSealTooltip::new);
 	}
 
 	private void broadcastChangesOnContainerMenu(final Player player) {

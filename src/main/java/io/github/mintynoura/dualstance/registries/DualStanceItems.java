@@ -5,7 +5,7 @@ import io.github.mintynoura.dualstance.item.component.AttributeCrestEffect;
 import io.github.mintynoura.dualstance.item.component.CrestComponent;
 import io.github.mintynoura.dualstance.item.CrestItem;
 import io.github.mintynoura.dualstance.item.HeartSealItem;
-import io.github.mintynoura.dualstance.item.component.HeartSealContents;
+import io.github.mintynoura.dualstance.item.component.HeartSealedCrest;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -20,7 +20,7 @@ import java.util.function.Function;
 
 public class DualStanceItems {
 	public static final Item HEART_SEAL = registerItem("heart_seal", HeartSealItem::new, new Item.Properties()
-		.component(DualStanceComponents.HEART_SEAL_CONTENTS, HeartSealContents.EMPTY)
+		.component(DualStanceComponents.HEART_SEALED_CREST, HeartSealedCrest.EMPTY)
 		.stacksTo(1));
 
 	public static final Item PEACE_CREST = registerItem("peace_crest", CrestItem::new, new Item.Properties()

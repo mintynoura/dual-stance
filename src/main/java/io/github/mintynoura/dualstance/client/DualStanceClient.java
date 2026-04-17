@@ -11,7 +11,7 @@ public class DualStanceClient implements ClientModInitializer {
 		ModRenderers.register();
 		ClientTooltipComponentCallback.EVENT.register(component ->{
 			if (component instanceof HeartSealTooltip heartSealTooltip) {
-				return new ClientHeartSealTooltip(heartSealTooltip.contents());
+				return new ClientHeartSealTooltip(heartSealTooltip.crest());
 			} else return null;
 		});
 	}

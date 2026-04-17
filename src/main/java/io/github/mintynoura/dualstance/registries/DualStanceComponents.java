@@ -2,7 +2,7 @@ package io.github.mintynoura.dualstance.registries;
 
 import io.github.mintynoura.dualstance.DualStance;
 import io.github.mintynoura.dualstance.item.component.CrestComponent;
-import io.github.mintynoura.dualstance.item.component.HeartSealContents;
+import io.github.mintynoura.dualstance.item.component.HeartSealedCrest;
 import net.fabricmc.fabric.api.item.v1.ItemComponentTooltipProviderRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.UUIDUtil;
@@ -29,11 +29,11 @@ public class DualStanceComponents {
 			DataComponentType.<CrestComponent>builder().persistent(CrestComponent.CODEC).build());
 
 	//TODO: Change to single itemstack template - maybe change name too?
-	public static final DataComponentType<HeartSealContents> HEART_SEAL_CONTENTS = Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, Identifier.fromNamespaceAndPath(DualStance.ID, "heart_seal_contents"),
-		DataComponentType.<HeartSealContents>builder().persistent(HeartSealContents.CODEC).networkSynchronized(HeartSealContents.STREAM_CODEC).build());
+	public static final DataComponentType<HeartSealedCrest> HEART_SEALED_CREST = Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, Identifier.fromNamespaceAndPath(DualStance.ID, "heart_sealed_crest"),
+		DataComponentType.<HeartSealedCrest>builder().persistent(HeartSealedCrest.CODEC).networkSynchronized(HeartSealedCrest.STREAM_CODEC).build());
 
 	public static void initialize() {
 		ItemComponentTooltipProviderRegistry.addFirst(CREST);
-		ItemComponentTooltipProviderRegistry.addLast(HEART_SEAL_CONTENTS);
+		ItemComponentTooltipProviderRegistry.addLast(HEART_SEALED_CREST);
 	}
 }
