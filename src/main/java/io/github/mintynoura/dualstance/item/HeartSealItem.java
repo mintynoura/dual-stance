@@ -4,6 +4,7 @@ import io.github.mintynoura.dualstance.item.component.CrestComponent;
 import io.github.mintynoura.dualstance.item.component.HeartSealedCrest;
 import io.github.mintynoura.dualstance.item.component.HeartSealTooltip;
 import io.github.mintynoura.dualstance.registries.DualStanceComponents;
+import io.github.mintynoura.dualstance.registries.DualStanceItems;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -33,6 +34,7 @@ public class HeartSealItem extends Item {
 		super(properties);
 	}
 
+	// Effect applying
 	@Override
 	public void inventoryTick(ItemStack itemStack, ServerLevel level, Entity owner, @Nullable EquipmentSlot slot) {
 		super.inventoryTick(itemStack, level, owner, slot);
@@ -54,6 +56,7 @@ public class HeartSealItem extends Item {
 
 	}
 
+	// Linking code
 	@Override
 	public InteractionResult interactLivingEntity(ItemStack itemStack, Player player, LivingEntity target, InteractionHand type) {
 		if(!player.level().isClientSide() || !(target instanceof LivingEntity otherPlayer)) //TODO: Change back to player
@@ -61,6 +64,8 @@ public class HeartSealItem extends Item {
 		ItemStack otherItemStack = otherPlayer.getItemInHand(InteractionHand.MAIN_HAND);
 		if(!(otherItemStack.getItem() instanceof HeartSealItem))
 			return InteractionResult.FAIL;
+		if(player.getInventory().countItem(DualStanceItems.HEART_SEAL) > 2)
+			return InteractionResult.FAIL; //TODO: Figure out if this is the right result of this edge case.
 		if(!otherItemStack.has(DualStanceComponents.HEART_SEALED_CREST) || !itemStack.has(DualStanceComponents.HEART_SEALED_CREST))
 			return InteractionResult.FAIL; //TODO: Figure out if this is the right result of this edge case.
 
