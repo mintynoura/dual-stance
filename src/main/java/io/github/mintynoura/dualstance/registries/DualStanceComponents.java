@@ -28,7 +28,6 @@ public class DualStanceComponents {
 		Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, Identifier.fromNamespaceAndPath(DualStance.ID, "linked_crest"),
 			DataComponentType.<CrestComponent>builder().persistent(CrestComponent.CODEC).build());
 
-	//TODO: Change to single itemstack template - maybe change name too?
 	public static final DataComponentType<HeartSealedCrest> HEART_SEALED_CREST = Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, Identifier.fromNamespaceAndPath(DualStance.ID, "heart_sealed_crest"),
 		DataComponentType.<HeartSealedCrest>builder().persistent(HeartSealedCrest.CODEC).networkSynchronized(HeartSealedCrest.STREAM_CODEC).build());
 

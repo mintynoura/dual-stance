@@ -4,14 +4,10 @@ import com.mojang.blaze3d.pipeline.DepthStencilState;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import io.github.mintynoura.dualstance.DualStance;
 import io.github.mintynoura.dualstance.item.component.HeartSealTooltip;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.ClientTooltipComponentCallback;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.resources.Identifier;
-
-import java.util.Optional;
 
 public class DualStanceClient implements ClientModInitializer {
 
@@ -34,6 +30,5 @@ public class DualStanceClient implements ClientModInitializer {
 				return new ClientHeartSealTooltip(heartSealTooltip.crest());
 			} else return null;
 		});
-
 	}
 }
