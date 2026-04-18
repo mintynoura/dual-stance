@@ -6,6 +6,7 @@ import io.github.mintynoura.dualstance.item.component.HeartSealTooltip;
 import io.github.mintynoura.dualstance.item.component.LinkedPlayerComponent;
 import io.github.mintynoura.dualstance.registries.DualStanceComponents;
 import io.github.mintynoura.dualstance.registries.DualStanceItems;
+import io.github.mintynoura.dualstance.util.CrestHelper;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -39,20 +40,18 @@ public class HeartSealItem extends Item {
 	@Override
 	public void inventoryTick(ItemStack itemStack, ServerLevel level, Entity owner, @Nullable EquipmentSlot slot) {
 		super.inventoryTick(itemStack, level, owner, slot);
-		if(!itemStack.has(DualStanceComponents.LINKED_PLAYER) || !(owner instanceof LivingEntity thisPlayer)) //TODO: Change to Player
+		if(!itemStack.has(DualStanceComponents.LINKED_PLAYER) || !(owner instanceof Player thisPlayer))
 			return;
-		Player otherPlayer = level.getPlayerByUUID(itemStack.get(DualStanceComponents.LINKED_PLAYER).id());
+		// TODO: Change back to player
+		Entity otherPlayer = level.getEntity(itemStack.get(DualStanceComponents.LINKED_PLAYER).id());
 		if (otherPlayer == null || otherPlayer.distanceTo(thisPlayer) > 8 || !otherPlayer.level().dimension().equals(level.dimension())){
 			unlink(itemStack);
 		}
 		var effects1 = itemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest().get(DualStanceComponents.CREST);
 		var effects2 = itemStack.get(DualStanceComponents.LINKED_CREST);
-		applyCrestEffect(thisPlayer, effects1);
-		applyCrestEffect(thisPlayer, effects2);
-	}
-
-	public static void applyCrestEffect(Entity owner, CrestComponent effects) {
-
+		CrestHelper.applyCrestEffect(thisPlayer, effects1);
+		CrestHelper.applyCrestEffect(thisPlayer, effects2);
+		CrestHelper.renderLinkParticle(thisPlayer, otherPlayer);
 	}
 
 	// Linking code
