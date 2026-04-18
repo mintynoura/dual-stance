@@ -16,6 +16,11 @@ public class ItemTagProvider extends FabricTagsProvider.ItemTagsProvider {
 	@Override
 	protected void addTags(HolderLookup.Provider registries) {
 		valueLookupBuilder(DualStanceTags.Items.CRESTS)
-			.add(DualStanceItems.PEACE_CREST);
+			.add(DualStanceItems.PEACE_CREST)
+			.add(DualStanceItems.BONES_CREST)
+			.add(DualStanceItems.STONE_CREST)
+			.add(DualStanceItems.EMBLEMS_CREST)
+			.add(DualStanceItems.SPECTERS_CREST)
+			.add(DualStanceItems.SHELLS_CREST);
 	}
 }

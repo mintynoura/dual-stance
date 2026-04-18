@@ -20,7 +20,7 @@ import net.minecraft.world.level.Level;
 import java.util.List;
 import java.util.function.Consumer;
 
-public record AttributeCrestEffect(List<Entry> modifiers) implements CrestEffect{
+public record AttributeCrestEffect(List<Entry> modifiers) implements CrestEffect {
 	public static final MapCodec<AttributeCrestEffect> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
 		Entry.CODEC.listOf().fieldOf("modifiers").forGetter(AttributeCrestEffect::modifiers)
 	).apply(builder, AttributeCrestEffect::new));

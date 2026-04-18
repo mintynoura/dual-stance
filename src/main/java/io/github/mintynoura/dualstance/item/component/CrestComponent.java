@@ -38,6 +38,7 @@ public record CrestComponent(Identifier id, List<CrestEffect> crestEffects) impl
 		this.crestEffects.forEach(action -> action.trigger(level,entity, itemStack));
 	}
 
+	// TODO: check linked crests, add mob effect tooltips
 	@Override
 	public void addToTooltip(Item.TooltipContext context, Consumer<Component> consumer, TooltipFlag flag, DataComponentGetter components) {
 		if (!this.crestEffects.isEmpty()) {
