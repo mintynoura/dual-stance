@@ -3,7 +3,6 @@ package io.github.mintynoura.dualstance.registries;
 import io.github.mintynoura.dualstance.DualStance;
 import io.github.mintynoura.dualstance.item.component.AttributeCrestEffect;
 import io.github.mintynoura.dualstance.item.component.CrestComponent;
-import io.github.mintynoura.dualstance.item.CrestItem;
 import io.github.mintynoura.dualstance.item.HeartSealItem;
 import io.github.mintynoura.dualstance.item.component.HeartSealedCrest;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
@@ -26,7 +25,7 @@ public class DualStanceItems {
 		.component(DualStanceComponents.HEART_SEALED_CREST, HeartSealedCrest.EMPTY)
 		.stacksTo(1), CreativeModeTabs.COMBAT);
 
-	public static final Item PEACE_CREST = registerItem("peace_crest", CrestItem::new, new Item.Properties()
+	public static final Item PEACE_CREST = registerItem("peace_crest", Item::new, new Item.Properties()
 		// we should probably make a helper method to make the crest components easier to read/write
 		.component(DualStanceComponents.CREST, new CrestComponent(Identifier.fromNamespaceAndPath(DualStance.ID, "peace_crest"),
 			List.of(

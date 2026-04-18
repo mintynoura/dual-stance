@@ -3,6 +3,7 @@ package io.github.mintynoura.dualstance.item;
 import io.github.mintynoura.dualstance.item.component.CrestComponent;
 import io.github.mintynoura.dualstance.item.component.HeartSealedCrest;
 import io.github.mintynoura.dualstance.item.component.HeartSealTooltip;
+import io.github.mintynoura.dualstance.item.component.LinkedPlayerComponent;
 import io.github.mintynoura.dualstance.registries.DualStanceComponents;
 import io.github.mintynoura.dualstance.registries.DualStanceItems;
 import net.minecraft.core.component.DataComponents;
@@ -40,11 +41,9 @@ public class HeartSealItem extends Item {
 		super.inventoryTick(itemStack, level, owner, slot);
 		if(!itemStack.has(DualStanceComponents.LINKED_PLAYER) || !(owner instanceof LivingEntity thisPlayer)) //TODO: Change to Player
 			return;
-		Player otherPlayer = level.getPlayerByUUID(itemStack.get(DualStanceComponents.LINKED_PLAYER));
-		if (otherPlayer == null || otherPlayer.distanceTo(thisPlayer) > 8 || otherPlayer.level().dimension().equals(level.dimension())){
-			itemStack.remove(DualStanceComponents.LINKED_PLAYER);
-			itemStack.remove(DualStanceComponents.LINKED_CREST);
-			return;
+		Player otherPlayer = level.getPlayerByUUID(itemStack.get(DualStanceComponents.LINKED_PLAYER).id());
+		if (otherPlayer == null || otherPlayer.distanceTo(thisPlayer) > 8 || !otherPlayer.level().dimension().equals(level.dimension())){
+			unlink(itemStack);
 		}
 		var effects1 = itemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest().get(DualStanceComponents.CREST);
 		var effects2 = itemStack.get(DualStanceComponents.LINKED_CREST);
@@ -52,32 +51,35 @@ public class HeartSealItem extends Item {
 		applyCrestEffect(thisPlayer, effects2);
 	}
 
-	public static void applyCrestEffect(Entity owner, CrestComponent effects){
+	public static void applyCrestEffect(Entity owner, CrestComponent effects) {
 
 	}
 
 	// Linking code
 	@Override
 	public InteractionResult interactLivingEntity(ItemStack itemStack, Player player, LivingEntity target, InteractionHand type) {
-		if(!player.level().isClientSide() || !(target instanceof LivingEntity otherPlayer)) //TODO: Change back to player
+		if(!(target instanceof LivingEntity otherPlayer)) //TODO: Change back to player
 			return InteractionResult.FAIL;
 		ItemStack otherItemStack = otherPlayer.getItemInHand(InteractionHand.MAIN_HAND);
 		if(!(otherItemStack.getItem() instanceof HeartSealItem))
 			return InteractionResult.FAIL;
-		if(player.getInventory().countItem(DualStanceItems.HEART_SEAL) > 2)
+		if(player.getInventory().countItem(DualStanceItems.HEART_SEAL) > 1)
 			return InteractionResult.FAIL; //TODO: Figure out if this is the right result of this edge case.
-		if(!otherItemStack.has(DualStanceComponents.HEART_SEALED_CREST) || !itemStack.has(DualStanceComponents.HEART_SEALED_CREST))
-			return InteractionResult.FAIL; //TODO: Figure out if this is the right result of this edge case.
-
-		otherItemStack.set(DualStanceComponents.LINKED_PLAYER, player.getUUID());
-		otherItemStack.set(DualStanceComponents.LINKED_CREST, itemStack.get(DualStanceComponents.CREST));
-		otherItemStack.set(DataComponents.CUSTOM_NAME, Component.literal("rawr2"));
-		itemStack.set(DualStanceComponents.LINKED_PLAYER, otherPlayer.getUUID());
-		itemStack.set(DualStanceComponents.LINKED_CREST, otherItemStack.get(DualStanceComponents.CREST));
-		itemStack.set(DataComponents.CUSTOM_NAME, Component.literal("rawr1"));
-		player.makeSound(SoundEvents.ENDER_DRAGON_DEATH);
-
-
+		if(!otherItemStack.has(DualStanceComponents.HEART_SEALED_CREST) || !itemStack.has(DualStanceComponents.HEART_SEALED_CREST)) {
+			//TODO: Figure out if this is the right result of this edge case.
+			return InteractionResult.FAIL;
+		}
+		if (itemStack.get(DualStanceComponents.HEART_SEALED_CREST).isEmpty() || otherItemStack.get(DualStanceComponents.HEART_SEALED_CREST).isEmpty()) {
+			return InteractionResult.FAIL;
+		}
+		itemStack.set(DualStanceComponents.LINKED_PLAYER, new LinkedPlayerComponent(otherPlayer.getUUID()));
+		otherItemStack.set(DualStanceComponents.LINKED_PLAYER, new LinkedPlayerComponent(player.getUUID()));
+		itemStack.set(DualStanceComponents.LINKED_CREST, otherItemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest().get(DualStanceComponents.CREST));
+		otherItemStack.set(DualStanceComponents.LINKED_CREST, itemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest().get(DualStanceComponents.CREST));
+		otherItemStack.set(DataComponents.ITEM_NAME, Component.literal("rawr2"));
+		itemStack.set(DataComponents.ITEM_NAME, Component.literal("rawr1"));
+		player.makeSound(SoundEvents.PLAYER_LEVELUP);
+		player.setItemInHand(InteractionHand.MAIN_HAND, itemStack);
 		return InteractionResult.SUCCESS;
 	}
 
@@ -159,6 +161,11 @@ public class HeartSealItem extends Item {
 			entity.getItem().set(DualStanceComponents.HEART_SEALED_CREST, HeartSealedCrest.EMPTY);
 			ItemUtils.onContainerDestroyed(entity, contents.itemCopyStream());
 		}
+	}
+
+	public static void unlink(ItemStack itemStack) {
+		itemStack.remove(DualStanceComponents.LINKED_PLAYER);
+		itemStack.remove(DualStanceComponents.LINKED_CREST);
 	}
 
 	// TODO: add new non-bundle sounds
