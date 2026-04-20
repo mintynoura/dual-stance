@@ -1,5 +1,6 @@
 package io.github.mintynoura.dualstance.util;
 
+import io.github.mintynoura.dualstance.item.component.AttributeCrestEffect;
 import io.github.mintynoura.dualstance.item.component.CrestComponent;
 import io.github.mintynoura.dualstance.item.component.CrestEffect;
 import io.github.mintynoura.dualstance.item.component.MobEffectCrestEffect;
@@ -7,8 +8,11 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.List;
 
 public class CrestHelper {
 
@@ -35,6 +39,16 @@ public class CrestHelper {
 		for (CrestEffect crestEffect : effects.crestEffects()) {
 			if (crestEffect instanceof MobEffectCrestEffect mobEffectCrestEffect) {
 				loopMobEffectCrest(entity, mobEffectCrestEffect);
+			}
+			// TODO: clear attributes when unlinking
+			if (crestEffect instanceof AttributeCrestEffect(List<AttributeCrestEffect.Entry> modifiers)) {
+				for (AttributeCrestEffect.Entry modifierEntry : modifiers) {
+					AttributeInstance instance = entity.getAttributes().getInstance(modifierEntry.attribute());
+					if (instance != null) {
+						instance.removeModifier(modifierEntry.modifier().id());
+						instance.addTransientModifier(modifierEntry.modifier());
+					}
+				}
 			}
 		}
 	}

@@ -10,11 +10,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipProvider;
-import net.minecraft.world.level.Level;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -33,22 +31,20 @@ public record CrestComponent(Identifier id, List<CrestEffect> crestEffects) impl
 		CrestComponent::new
 	);
 
-	public void trigger(Level level, LivingEntity entity) {
-		this.crestEffects.forEach(action -> action.trigger(level,entity));
-	}
-
-	// TODO: check linked crests, add mob effect tooltips
 	@Override
 	public void addToTooltip(Item.TooltipContext context, Consumer<Component> consumer, TooltipFlag flag, DataComponentGetter components) {
 		if (!this.crestEffects.isEmpty()) {
 			consumer.accept(Component.translatableWithFallback("tooltip.dual_stance.crest_bond", "When bonded:").withStyle(ChatFormatting.GRAY));
-				for (CrestEffect crestEffect : this.crestEffects) {
-					if (crestEffect instanceof AttributeCrestEffect) {
-						for (AttributeCrestEffect.Entry entry : ((AttributeCrestEffect) crestEffect).modifiers()) {
-							AttributeCrestEffect.display(consumer, entry.attribute(), entry.modifier());
-						}
+			for (CrestEffect crestEffect : this.crestEffects) {
+				if (crestEffect instanceof AttributeCrestEffect(List<AttributeCrestEffect.Entry> modifiers)) {
+					for (AttributeCrestEffect.Entry entry : modifiers) {
+						AttributeCrestEffect.display(consumer, entry.attribute(), entry.modifier());
 					}
 				}
+				if (crestEffect instanceof MobEffectCrestEffect mobEffectCrestEffect) {
+					MobEffectCrestEffect.display(mobEffectCrestEffect.effects(), consumer);
+				}
+			}
 		}
 	}
 }

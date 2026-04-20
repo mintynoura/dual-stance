@@ -185,7 +185,7 @@ public class HeartSealItem extends Item {
 	@Override
 	public Optional<TooltipComponent> getTooltipImage(final ItemStack self) {
 		TooltipDisplay display = self.getOrDefault(DataComponents.TOOLTIP_DISPLAY, TooltipDisplay.DEFAULT);
-		return !display.shows(DataComponents.BUNDLE_CONTENTS)
+		return !display.shows(DualStanceComponents.HEART_SEALED_CREST)
 			? Optional.empty()
 			: Optional.ofNullable(self.get(DualStanceComponents.HEART_SEALED_CREST)).map(HeartSealTooltip::new);
 	}

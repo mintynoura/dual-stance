@@ -17,6 +17,7 @@ public class DualStanceComponents {
 			DataComponentType.<CrestComponent>builder().persistent(CrestComponent.CODEC).networkSynchronized(CrestComponent.STREAM_CODEC).build());
 
 	// This data component holds the linked player on the other player's heart seal
+	// TODO: Make players unable to damage their linked player
 	public static final DataComponentType<LinkedPlayerComponent> LINKED_PLAYER = Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE,
 		Identifier.fromNamespaceAndPath(DualStance.ID,"linked_player"),
 		DataComponentType.<LinkedPlayerComponent>builder().persistent(LinkedPlayerComponent.CODEC).networkSynchronized(LinkedPlayerComponent.STREAM_CODEC).build());

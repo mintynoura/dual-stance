@@ -52,7 +52,7 @@ public class DualStanceItems {
 			List.of(new AttributeCrestEffect(List.of(
 				new AttributeCrestEffect.Entry(Attributes.LUCK, new AttributeModifier(Identifier.fromNamespaceAndPath(DualStance.ID, "emblems_crest"), 1.0f, AttributeModifier.Operation.ADD_VALUE)
 				))),
-				new MobEffectCrestEffect(List.of(new MobEffectInstance(MobEffects.INSTANT_HEALTH, 1, 0, true, true)), 200)
+				new MobEffectCrestEffect(List.of(new MobEffectInstance(MobEffects.INSTANT_HEALTH, 1, 0, true, true)), 400)
 			)
 		)), CreativeModeTabs.COMBAT);
 

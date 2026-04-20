@@ -45,11 +45,11 @@ public record HeartSealedCrest(ItemStack crest) implements TooltipComponent, Too
 		return "HeartSealedCrest" + this.crest;
 	}
 
-	// TODO: add linked buffs and combos here
+	// TODO: add linked buffs and combos here, fix linked crest "when bonded" line
 	@Override
 	public void addToTooltip(Item.TooltipContext context, Consumer<Component> consumer, TooltipFlag flag, DataComponentGetter components) {
 		if (!this.isEmpty()) {
-			if (this.crest.get(DualStanceComponents.CREST) != null) {
+			if (this.crest.has(DualStanceComponents.CREST)) {
 				this.crest.get(DualStanceComponents.CREST).addToTooltip(context, consumer, flag, components);
 			}
 		}
