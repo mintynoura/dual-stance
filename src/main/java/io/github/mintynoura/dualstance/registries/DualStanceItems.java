@@ -52,7 +52,7 @@ public class DualStanceItems {
 			List.of(new AttributeCrestEffect(List.of(
 				new AttributeCrestEffect.Entry(Attributes.LUCK, new AttributeModifier(Identifier.fromNamespaceAndPath(DualStance.ID, "emblems_crest"), 1.0f, AttributeModifier.Operation.ADD_VALUE)
 				))),
-				new MobEffectCrestEffect(List.of(new MobEffectInstance(MobEffects.INSTANT_HEALTH, 1, 0, true, false)), 200)
+				new MobEffectCrestEffect(List.of(new MobEffectInstance(MobEffects.INSTANT_HEALTH, 1, 0, true, true)), 200)
 			)
 		)), CreativeModeTabs.COMBAT);
 
@@ -66,7 +66,7 @@ public class DualStanceItems {
 				new AttributeCrestEffect.Entry(Attributes.BURNING_TIME, new AttributeModifier(Identifier.fromNamespaceAndPath(DualStance.ID, "shells_crest"), -0.5f, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)),
 				new AttributeCrestEffect.Entry(Attributes.OXYGEN_BONUS, new AttributeModifier(Identifier.fromNamespaceAndPath(DualStance.ID, "shells_crest"), 0.25f, AttributeModifier.Operation.ADD_VALUE)
 				))),
-				new MobEffectCrestEffect(List.of(new MobEffectInstance(MobEffects.SATURATION, 1, 0, true, false)), 200)
+				new MobEffectCrestEffect(List.of(new MobEffectInstance(MobEffects.SATURATION, 1, 0, true, true)), 200)
 			))), CreativeModeTabs.COMBAT);
 
 	public static Item registerItem(String name, Function<Item.Properties, Item> factory, Item.Properties settings, ResourceKey<CreativeModeTab> tab) {

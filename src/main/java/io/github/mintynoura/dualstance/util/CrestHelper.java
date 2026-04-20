@@ -1,17 +1,13 @@
 package io.github.mintynoura.dualstance.util;
 
 import io.github.mintynoura.dualstance.item.component.CrestComponent;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.BlockParticleOption;
-import net.minecraft.core.particles.ParticleOptions;
+import io.github.mintynoura.dualstance.item.component.CrestEffect;
+import io.github.mintynoura.dualstance.item.component.MobEffectCrestEffect;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.ParticleUtils;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 public class CrestHelper {
@@ -35,7 +31,17 @@ public class CrestHelper {
 		return x1+ t*(x2-x1);
 	}
 
-	public static void applyCrestEffect(Entity owner, CrestComponent effects) {
+	public static void applyCrestEffect(LivingEntity entity, CrestComponent effects) {
+		for (CrestEffect crestEffect : effects.crestEffects()) {
+			if (crestEffect instanceof MobEffectCrestEffect mobEffectCrestEffect) {
+				loopMobEffectCrest(entity, mobEffectCrestEffect);
+			}
+		}
+	}
 
+	public static void loopMobEffectCrest(LivingEntity entity, MobEffectCrestEffect crestEffect) {
+		if (entity.level().getGameTime() % crestEffect.interval() == 0L) {
+			crestEffect.trigger(entity.level(), entity);
+		}
 	}
 }

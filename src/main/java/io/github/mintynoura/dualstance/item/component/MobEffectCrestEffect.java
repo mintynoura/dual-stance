@@ -10,7 +10,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
@@ -29,13 +28,13 @@ public record MobEffectCrestEffect(List<MobEffectInstance> effects, int interval
 		MobEffectCrestEffect::new
 	);
 	@Override
-	public void trigger(Level level, LivingEntity entity, ItemStack itemStack) {
+	public void trigger(Level level, LivingEntity entity) {
 		if (level instanceof ServerLevel serverLevel) {
 			for (MobEffectInstance effectInstance: effects) {
 				if (effectInstance.getEffect().value().isInstantenous()) {
 					effectInstance.getEffect().value().applyInstantenousEffect(serverLevel, entity, entity, entity, effectInstance.getAmplifier(), 1.0);
 				} else {
-					entity.addEffect(effectInstance);
+					entity.addEffect(new MobEffectInstance(effectInstance));
 				}
 			}
 		}

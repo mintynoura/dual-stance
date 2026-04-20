@@ -11,14 +11,13 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 public interface CrestEffect {
 	Codec<CrestEffect> CODEC = Type.CREST_EFFECT_TYPE_REGISTRY.byNameCodec().dispatch("type", CrestEffect::getType, Type::codec);
 	StreamCodec<RegistryFriendlyByteBuf, CrestEffect> STREAM_CODEC = ByteBufCodecs.registry(Type.CREST_EFFECT_TYPE_KEY).dispatch(CrestEffect::getType, CrestEffect.Type::streamCodec);
 
-	void trigger(Level level, LivingEntity entity, ItemStack itemStack);
+	void trigger(Level level, LivingEntity entity);
 
 	CrestEffect.Type<? extends CrestEffect> getType();
 

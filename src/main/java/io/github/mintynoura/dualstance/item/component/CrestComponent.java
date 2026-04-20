@@ -12,7 +12,6 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipProvider;
 import net.minecraft.world.level.Level;
@@ -34,8 +33,8 @@ public record CrestComponent(Identifier id, List<CrestEffect> crestEffects) impl
 		CrestComponent::new
 	);
 
-	public void trigger(Level level, LivingEntity entity, ItemStack itemStack) {
-		this.crestEffects.forEach(action -> action.trigger(level,entity, itemStack));
+	public void trigger(Level level, LivingEntity entity) {
+		this.crestEffects.forEach(action -> action.trigger(level,entity));
 	}
 
 	// TODO: check linked crests, add mob effect tooltips
