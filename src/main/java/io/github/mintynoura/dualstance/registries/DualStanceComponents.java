@@ -31,8 +31,8 @@ public class DualStanceComponents {
 		DataComponentType.<HeartSealedCrest>builder().persistent(HeartSealedCrest.CODEC).networkSynchronized(HeartSealedCrest.STREAM_CODEC).build());
 
 	public static void initialize() {
-		ItemComponentTooltipProviderRegistry.addFirst(CREST);
-		ItemComponentTooltipProviderRegistry.addAfter(CREST, LINKED_CREST);
-		ItemComponentTooltipProviderRegistry.addLast(HEART_SEALED_CREST);
+		ItemComponentTooltipProviderRegistry.addFirst(CREST); // crest of itself
+		ItemComponentTooltipProviderRegistry.addAfter(CREST,HEART_SEALED_CREST); // crest inside of it
+		ItemComponentTooltipProviderRegistry.addAfter(HEART_SEALED_CREST, LINKED_CREST); // crest linked
 	}
 }

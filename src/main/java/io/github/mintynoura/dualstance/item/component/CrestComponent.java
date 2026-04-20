@@ -3,8 +3,10 @@ package io.github.mintynoura.dualstance.item.component;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.mintynoura.dualstance.DualStance;
+import io.github.mintynoura.dualstance.registries.DualStanceComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponentGetter;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -31,10 +33,25 @@ public record CrestComponent(Identifier id, List<CrestEffect> crestEffects) impl
 		CrestComponent::new
 	);
 
+	// this call is for crest items and linked crests
 	@Override
 	public void addToTooltip(Item.TooltipContext context, Consumer<Component> consumer, TooltipFlag flag, DataComponentGetter components) {
+		addToTooltip(true, context, consumer, flag, components);
+	}
+
+	// This method is called in HeartSealedCrest to handle double "When Bounded" texts
+	public void addToTooltip(boolean withText, Item.TooltipContext context, Consumer<Component> consumer, TooltipFlag flag, DataComponentGetter components) {
 		if (!this.crestEffects.isEmpty()) {
-			consumer.accept(Component.translatableWithFallback("tooltip.dual_stance.crest_bond", "When bonded:").withStyle(ChatFormatting.GRAY));
+			// no player, with text (linked) -> bounded text
+			// no player, without text (inner) -> bounded text
+			// player, with text (linked) -> thanks to text
+			// player, without text (inner) -> no text
+			var linkedPlayer = components.get(DualStanceComponents.LINKED_PLAYER);
+			if(linkedPlayer == null)
+				consumer.accept(Component.translatableWithFallback("tooltip.dual_stance.crest_bond", "When bonded:").withStyle(ChatFormatting.GRAY));
+			else if(withText)
+				// TODO: Get Player Name
+				consumer.accept(Component.translatableWithFallback("tooltip.dual_stance.thanks_to", "Thanks to",linkedPlayer.id()).withStyle(ChatFormatting.GRAY));
 			for (CrestEffect crestEffect : this.crestEffects) {
 				if (crestEffect instanceof AttributeCrestEffect(List<AttributeCrestEffect.Entry> modifiers)) {
 					for (AttributeCrestEffect.Entry entry : modifiers) {

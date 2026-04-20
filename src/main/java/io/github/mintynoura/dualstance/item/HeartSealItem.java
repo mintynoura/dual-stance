@@ -77,8 +77,7 @@ public class HeartSealItem extends Item {
 		otherItemStack.set(DualStanceComponents.LINKED_PLAYER, new LinkedPlayerComponent(player.getUUID()));
 		itemStack.set(DualStanceComponents.LINKED_CREST, otherItemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest().get(DualStanceComponents.CREST));
 		otherItemStack.set(DualStanceComponents.LINKED_CREST, itemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest().get(DualStanceComponents.CREST));
-		otherItemStack.set(DataComponents.ITEM_NAME, Component.literal("rawr2"));
-		itemStack.set(DataComponents.ITEM_NAME, Component.literal("rawr1"));
+
 		player.makeSound(SoundEvents.PLAYER_LEVELUP);
 		player.setItemInHand(InteractionHand.MAIN_HAND, itemStack);
 		return InteractionResult.SUCCESS;
