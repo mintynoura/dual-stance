@@ -28,7 +28,7 @@ public class ClientHeartSealTooltip implements ClientTooltipComponent {
 
 	@Override
 	public int getWidth(final Font font) {
-		return 90;
+		return this.crest.isEmpty()? 90 : Math.max(90, font.width(this.crest.crest().getStyledHoverName()) + 24);
 	}
 
 	@Override
@@ -47,25 +47,24 @@ public class ClientHeartSealTooltip implements ClientTooltipComponent {
 	@Override
 	public void extractImage(final Font font, final int x, final int y, final int w, final int h, final GuiGraphicsExtractor graphics) {
 		if (this.crest.isEmpty()) {
-			extractEmptyDescriptionText(x, y, font, graphics);
+			extractEmptyDescriptionText(x, y, w, font, graphics);
 		} else {
-			this.extractWithItemsTooltip(font, x, y, w, graphics);
+			this.extractWithItemsTooltip(font, x, y, graphics);
 		}
 	}
 
 	private void extractWithItemsTooltip(
-		final Font font, final int x, final int y, final int w, final GuiGraphicsExtractor graphics
+		final Font font, final int x, final int y, final GuiGraphicsExtractor graphics
 	) {
 		ItemStack shownItem = this.crest.crest();
 		if (shownItem != null) {
-			this.extractCrest(x, y, w, shownItem, font, graphics);
+			this.extractCrest(x, y, shownItem, font, graphics);
 		}
 	}
 
 	private void extractCrest(
 		final int drawX,
 		final int drawY,
-		final int w,
 		final ItemStack shownItem,
 		final Font font,
 		final GuiGraphicsExtractor graphics
@@ -74,6 +73,7 @@ public class ClientHeartSealTooltip implements ClientTooltipComponent {
 		graphics.item(shownItem, drawX + 4, drawY + 4, 0);
 		graphics.itemDecorations(font, shownItem, drawX + 4, drawY + 4);
 		Component itemName = shownItem.getStyledHoverName();
+		int textWidth = font.width(itemName);
 //		ClientTooltipComponent itemNameTooltip = ClientTooltipComponent.create(itemName.getVisualOrderText());
 //		graphics.tooltip(
 //			font,
@@ -83,14 +83,14 @@ public class ClientHeartSealTooltip implements ClientTooltipComponent {
 //			DefaultTooltipPositioner.INSTANCE,
 //			Identifier.fromNamespaceAndPath(DualStance.ID, "crest_name")
 //		);
-		graphics.textWithWordWrap(font, itemName, drawX + 24, drawY + 9, w, -1);
+		graphics.textWithWordWrap(font, itemName, drawX + 24, drawY + 9, textWidth, -1);
 	}
 
-	private static void extractEmptyDescriptionText(final int x, final int y, final Font font, final GuiGraphicsExtractor graphics) {
-		graphics.textWithWordWrap(font, HEART_SEAL_EMPTY_DESCRIPTION, x, y, 96, -5592406);
+	private static void extractEmptyDescriptionText(final int x, final int y, final int w, final Font font, final GuiGraphicsExtractor graphics) {
+		graphics.textWithWordWrap(font, HEART_SEAL_EMPTY_DESCRIPTION, x, y, w, -5592406);
 	}
 
 	private static int getEmptyDescriptionTextHeight(final Font font) {
-		return font.split(HEART_SEAL_EMPTY_DESCRIPTION, 96).size() * 9;
+		return font.split(HEART_SEAL_EMPTY_DESCRIPTION, 94).size() * 9;
 	}
 }
