@@ -74,15 +74,6 @@ public class ClientHeartSealTooltip implements ClientTooltipComponent {
 		graphics.itemDecorations(font, shownItem, drawX + 4, drawY + 4);
 		Component itemName = shownItem.getStyledHoverName();
 		int textWidth = font.width(itemName);
-//		ClientTooltipComponent itemNameTooltip = ClientTooltipComponent.create(itemName.getVisualOrderText());
-//		graphics.tooltip(
-//			font,
-//			List.of(itemNameTooltip),
-//			drawX + 14,
-//			drawY + 20,
-//			DefaultTooltipPositioner.INSTANCE,
-//			Identifier.fromNamespaceAndPath(DualStance.ID, "crest_name")
-//		);
 		graphics.textWithWordWrap(font, itemName, drawX + 24, drawY + 9, textWidth, -1);
 	}
 
