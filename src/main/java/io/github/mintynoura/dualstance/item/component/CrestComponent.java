@@ -6,12 +6,12 @@ import io.github.mintynoura.dualstance.DualStance;
 import io.github.mintynoura.dualstance.registries.DualStanceComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponentGetter;
-import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipProvider;
@@ -33,6 +33,10 @@ public record CrestComponent(Identifier id, List<CrestEffect> crestEffects) impl
 		CrestComponent::new
 	);
 
+	public static CrestComponent copy(CrestComponent crestComponent) {
+		return new CrestComponent(crestComponent.id, crestComponent.crestEffects);
+	}
+
 	// this call is for crest items and linked crests
 	@Override
 	public void addToTooltip(Item.TooltipContext context, Consumer<Component> consumer, TooltipFlag flag, DataComponentGetter components) {
@@ -50,16 +54,17 @@ public record CrestComponent(Identifier id, List<CrestEffect> crestEffects) impl
 			if(linkedPlayer == null)
 				consumer.accept(Component.translatableWithFallback("tooltip.dual_stance.crest_bond", "When bonded:").withStyle(ChatFormatting.GRAY));
 			else if(withText)
-				// TODO: Get Player Name
-				consumer.accept(Component.translatableWithFallback("tooltip.dual_stance.thanks_to", "Thanks to",linkedPlayer.id()).withStyle(ChatFormatting.GRAY));
+				consumer.accept(Component.translatableWithFallback("tooltip.dual_stance.thanks_to", "Thanks to",linkedPlayer.name()).withStyle(ChatFormatting.GRAY));
 			for (CrestEffect crestEffect : this.crestEffects) {
 				if (crestEffect instanceof AttributeCrestEffect(List<AttributeCrestEffect.Entry> modifiers)) {
 					for (AttributeCrestEffect.Entry entry : modifiers) {
 						AttributeCrestEffect.display(consumer, entry.attribute(), entry.modifier());
 					}
 				}
-				if (crestEffect instanceof MobEffectCrestEffect mobEffectCrestEffect) {
-					MobEffectCrestEffect.display(mobEffectCrestEffect.effects(), consumer);
+				if (crestEffect instanceof MobEffectCrestEffect(
+					List<MobEffectInstance> effects, int interval
+				)) {
+					MobEffectCrestEffect.display(effects, consumer, interval);
 				}
 			}
 		}

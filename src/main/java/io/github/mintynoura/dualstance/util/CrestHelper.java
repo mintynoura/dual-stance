@@ -12,8 +12,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.List;
-
 public class CrestHelper {
 
 	public static void renderLinkParticle(Player p1, Entity p2){
@@ -35,20 +33,10 @@ public class CrestHelper {
 		return x1+ t*(x2-x1);
 	}
 
-	public static void applyCrestEffect(LivingEntity entity, CrestComponent effects) {
+	public static void tickCrestEffect(LivingEntity entity, CrestComponent effects) {
 		for (CrestEffect crestEffect : effects.crestEffects()) {
 			if (crestEffect instanceof MobEffectCrestEffect mobEffectCrestEffect) {
 				loopMobEffectCrest(entity, mobEffectCrestEffect);
-			}
-			// TODO: clear attributes when unlinking
-			if (crestEffect instanceof AttributeCrestEffect(List<AttributeCrestEffect.Entry> modifiers)) {
-				for (AttributeCrestEffect.Entry modifierEntry : modifiers) {
-					AttributeInstance instance = entity.getAttributes().getInstance(modifierEntry.attribute());
-					if (instance != null) {
-						instance.removeModifier(modifierEntry.modifier().id());
-						instance.addTransientModifier(modifierEntry.modifier());
-					}
-				}
 			}
 		}
 	}
@@ -56,6 +44,25 @@ public class CrestHelper {
 	public static void loopMobEffectCrest(LivingEntity entity, MobEffectCrestEffect crestEffect) {
 		if (entity.level().getGameTime() % crestEffect.interval() == 0L) {
 			crestEffect.trigger(entity.level(), entity);
+		}
+	}
+
+	public static void applyAttributeCrest(LivingEntity entity, AttributeCrestEffect crestEffect) {
+		for (AttributeCrestEffect.Entry modifierEntry : crestEffect.modifiers()) {
+			AttributeInstance instance = entity.getAttributes().getInstance(modifierEntry.attribute());
+			if (instance != null) {
+				instance.removeModifier(modifierEntry.modifier().id());
+				instance.addTransientModifier(modifierEntry.modifier());
+			}
+		}
+	}
+
+	public static void clearAttributeCrest(LivingEntity entity, AttributeCrestEffect crestEffect) {
+		for (AttributeCrestEffect.Entry modifierEntry : crestEffect.modifiers()) {
+			AttributeInstance instance = entity.getAttributes().getInstance(modifierEntry.attribute());
+			if (instance != null) {
+				instance.removeModifier(modifierEntry.modifier().id());
+			}
 		}
 	}
 }

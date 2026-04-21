@@ -1,13 +1,10 @@
 package io.github.mintynoura.dualstance.item;
 
-import io.github.mintynoura.dualstance.item.component.HeartSealedCrest;
-import io.github.mintynoura.dualstance.item.component.HeartSealTooltip;
-import io.github.mintynoura.dualstance.item.component.LinkedPlayerComponent;
+import io.github.mintynoura.dualstance.item.component.*;
 import io.github.mintynoura.dualstance.registries.DualStanceComponents;
 import io.github.mintynoura.dualstance.registries.DualStanceItems;
 import io.github.mintynoura.dualstance.util.CrestHelper;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
@@ -28,6 +25,7 @@ import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.component.TooltipDisplay;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Objects;
 import java.util.Optional;
 
 public class HeartSealItem extends Item {
@@ -43,16 +41,16 @@ public class HeartSealItem extends Item {
 		// TODO: Change back to player
 		Entity otherPlayer = level.getEntity(itemStack.get(DualStanceComponents.LINKED_PLAYER).id());
 		if (otherPlayer == null || otherPlayer.distanceTo(thisPlayer) > 8 || !otherPlayer.level().dimension().equals(level.dimension())){
-			unlink(itemStack);
+			unlink(itemStack, owner.asLivingEntity());
 		}
 		if (itemStack.has(DualStanceComponents.HEART_SEALED_CREST)) {
 			if (!itemStack.get(DualStanceComponents.HEART_SEALED_CREST).isEmpty() && itemStack.has(DualStanceComponents.LINKED_CREST)) {
 				var effects1 = itemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest().get(DualStanceComponents.CREST);
 				var effects2 = itemStack.get(DualStanceComponents.LINKED_CREST);
-				CrestHelper.applyCrestEffect(thisPlayer, effects1);
-				CrestHelper.applyCrestEffect(thisPlayer, effects2);
+				CrestHelper.tickCrestEffect(thisPlayer, effects1);
+				CrestHelper.tickCrestEffect(thisPlayer, effects2);
 				CrestHelper.renderLinkParticle(thisPlayer, otherPlayer);
-			} else unlink(itemStack);
+			} else unlink(itemStack, owner.asLivingEntity());
 		}
 	}
 
@@ -73,10 +71,8 @@ public class HeartSealItem extends Item {
 		if (itemStack.get(DualStanceComponents.HEART_SEALED_CREST).isEmpty() || otherItemStack.get(DualStanceComponents.HEART_SEALED_CREST).isEmpty()) {
 			return InteractionResult.FAIL;
 		}
-		itemStack.set(DualStanceComponents.LINKED_PLAYER, new LinkedPlayerComponent(otherPlayer.getUUID()));
-		otherItemStack.set(DualStanceComponents.LINKED_PLAYER, new LinkedPlayerComponent(player.getUUID()));
-		itemStack.set(DualStanceComponents.LINKED_CREST, otherItemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest().get(DualStanceComponents.CREST));
-		otherItemStack.set(DualStanceComponents.LINKED_CREST, itemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest().get(DualStanceComponents.CREST));
+		link(itemStack, otherItemStack, player, otherPlayer);
+		link(otherItemStack, itemStack, otherPlayer, player);
 
 		player.makeSound(SoundEvents.PLAYER_LEVELUP);
 		player.setItemInHand(InteractionHand.MAIN_HAND, itemStack);
@@ -163,7 +159,40 @@ public class HeartSealItem extends Item {
 		}
 	}
 
-	public static void unlink(ItemStack itemStack) {
+	public static CrestComponent getHeartSealedCrest(ItemStack itemStack) {
+		return Objects.requireNonNull(itemStack.get(DualStanceComponents.HEART_SEALED_CREST)).crest().get(DualStanceComponents.CREST);
+	}
+
+	public static void link(ItemStack itemStack, ItemStack otherItemStack, LivingEntity player, LivingEntity otherPlayer) {
+		itemStack.set(DualStanceComponents.LINKED_PLAYER, new LinkedPlayerComponent(otherPlayer.getUUID(), otherPlayer.getScoreboardName()));
+		itemStack.set(DualStanceComponents.LINKED_CREST, CrestComponent.copy(getHeartSealedCrest(otherItemStack)));
+
+		for (CrestEffect crestEffect : getHeartSealedCrest(itemStack).crestEffects()) {
+			if (crestEffect instanceof AttributeCrestEffect attributeCrestEffect) {
+				CrestHelper.applyAttributeCrest(player, attributeCrestEffect);
+			}
+		}
+		for (CrestEffect crestEffect2 : itemStack.get(DualStanceComponents.LINKED_CREST).crestEffects()) {
+			if (crestEffect2 instanceof AttributeCrestEffect attributeCrestEffect) {
+				CrestHelper.applyAttributeCrest(player, attributeCrestEffect);
+			}
+		}
+	}
+
+	public static void unlink(ItemStack itemStack, LivingEntity entity) {
+		for (CrestEffect crestEffect : getHeartSealedCrest(itemStack).crestEffects()) {
+			if (crestEffect instanceof AttributeCrestEffect attributeCrestEffect) {
+				CrestHelper.clearAttributeCrest(entity, attributeCrestEffect);
+			}
+		}
+		if (itemStack.has(DualStanceComponents.LINKED_CREST)) {
+			for (CrestEffect crestEffect2 : itemStack.get(DualStanceComponents.LINKED_CREST).crestEffects()) {
+				if (crestEffect2 instanceof AttributeCrestEffect attributeCrestEffect) {
+					CrestHelper.clearAttributeCrest(entity, attributeCrestEffect);
+				}
+			}
+		}
+
 		itemStack.remove(DualStanceComponents.LINKED_PLAYER);
 		itemStack.remove(DualStanceComponents.LINKED_CREST);
 	}

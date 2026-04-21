@@ -7,6 +7,7 @@ import io.github.mintynoura.dualstance.registries.CrestEffectTypes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -52,13 +53,14 @@ public record MobEffectCrestEffect(List<MobEffectInstance> effects, int interval
 		}
 	}
 
-	public static void display(Iterable<MobEffectInstance> effects, Consumer<Component> consumer) {
+	public static void display(Iterable<MobEffectInstance> effects, Consumer<Component> consumer, int interval) {
 		List<Pair<Holder<Attribute>, AttributeModifier>> list = new ArrayList<>();
 		for (MobEffectInstance effectInstance : effects) {
 			Holder<MobEffect> effect = effectInstance.getEffect();
 			int amplifier = effectInstance.getAmplifier();
 			effect.value().createModifiers(amplifier, (attribute, modifier) -> list.add(new Pair<>(attribute, modifier)));
-			MutableComponent mutableText = PotionContents.getPotionDescription(effect, amplifier);
+			MutableComponent mutableText = PotionContents.getPotionDescription(effect, amplifier).append(CommonComponents.space())
+				.append(Component.translatableWithFallback("tooltip.dual_stance.mob_effect_interval", "every", Math.round((float) interval / 20), "seconds"));
 			consumer.accept(mutableText.withStyle(effect.value().getCategory().getTooltipFormatting()));
 		}
 		if (!list.isEmpty()) {
@@ -86,7 +88,7 @@ public record MobEffectCrestEffect(List<MobEffectInstance> effects, int interval
 				} else if (amount < 0.0) {
 					displayAmount *= -1.0;
 					consumer.accept(
-						Component.literal("\t").append(
+						Component.literal("  ").append(
 							Component.translatable(
 								"attribute.modifier.take." + attributeModifier.operation().id(),
 								ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(displayAmount),

@@ -73,9 +73,7 @@ public class DualStanceItems {
 		ResourceKey<Item> itemRegistryKey = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(DualStance.ID, name));
 		Item item = factory.apply(settings.setId(itemRegistryKey));
 		Registry.register(BuiltInRegistries.ITEM, itemRegistryKey, item);
-		CreativeModeTabEvents.modifyOutputEvent(tab).register(creativeTab -> {
-			creativeTab.accept(item);
-		});
+		CreativeModeTabEvents.modifyOutputEvent(tab).register(creativeTab -> creativeTab.accept(item));
 		return item;
 	}
 	public static CrestComponent createSingleAttributeCrestComponent(String name, Holder<Attribute> attribute, float amount, AttributeModifier.Operation operation) {
