@@ -18,5 +18,6 @@
 
 	"item.dual_stance.heart_seal.empty_description": "Attach a Crest to boost your bond",
 	"tooltip.dual_stance.thanks_to": "Thanks to %s:",
-	"tooltip.dual_stance.mob_effect_interval": "every %s seconds"
+	"tooltip.dual_stance.mob_effect_interval": "every %s seconds",
+	"overlay.dual_stance.pair_up_offer": "%s wants to pair up!"
 }

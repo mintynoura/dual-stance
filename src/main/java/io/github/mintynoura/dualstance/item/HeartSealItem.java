@@ -1,10 +1,12 @@
 package io.github.mintynoura.dualstance.item;
 
+import io.github.mintynoura.dualstance.DualStance;
 import io.github.mintynoura.dualstance.item.component.*;
 import io.github.mintynoura.dualstance.registries.DualStanceComponents;
 import io.github.mintynoura.dualstance.registries.DualStanceItems;
 import io.github.mintynoura.dualstance.util.CrestHelper;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
@@ -37,6 +39,9 @@ public class HeartSealItem extends Item {
 	@Override
 	public void inventoryTick(ItemStack itemStack, ServerLevel level, Entity owner, @Nullable EquipmentSlot slot) {
 		super.inventoryTick(itemStack, level, owner, slot);
+		if (owner.getAttached(DualStance.PAIR_OFFER_TIMER) != null && owner.getAttached(DualStance.PAIR_OFFER_TIMER) > 0) {
+			owner.setAttached(DualStance.PAIR_OFFER_TIMER, owner.getAttached(DualStance.PAIR_OFFER_TIMER)-1);
+		}
 		if(!itemStack.has(DualStanceComponents.LINKED_PLAYER) || !(owner instanceof Player thisPlayer)) return;
 		// TODO: Change back to player
 		Entity otherPlayer = level.getEntity(itemStack.get(DualStanceComponents.LINKED_PLAYER).id());
@@ -57,7 +62,7 @@ public class HeartSealItem extends Item {
 	// Linking code
 	@Override
 	public InteractionResult interactLivingEntity(ItemStack itemStack, Player player, LivingEntity target, InteractionHand type) {
-		if(!(target instanceof LivingEntity otherPlayer)) //TODO: Change back to player
+		if(!(target instanceof Player otherPlayer)) //TODO: Change back to player
 			return InteractionResult.FAIL;
 		ItemStack otherItemStack = otherPlayer.getItemInHand(InteractionHand.MAIN_HAND);
 		if(!(otherItemStack.getItem() instanceof HeartSealItem))
@@ -71,10 +76,17 @@ public class HeartSealItem extends Item {
 		if (itemStack.get(DualStanceComponents.HEART_SEALED_CREST).isEmpty() || otherItemStack.get(DualStanceComponents.HEART_SEALED_CREST).isEmpty()) {
 			return InteractionResult.FAIL;
 		}
-		link(itemStack, otherItemStack, player, otherPlayer);
-		link(otherItemStack, itemStack, otherPlayer, player);
+		if (otherPlayer.getAttachedOrElse(DualStance.PAIR_OFFER_TIMER, 0) > 0) {
+			link(itemStack, otherItemStack, player, otherPlayer);
+			link(otherItemStack, itemStack, otherPlayer, player);
+			player.setAttached(DualStance.PAIR_OFFER_TIMER, 0);
+			otherPlayer.setAttached(DualStance.PAIR_OFFER_TIMER, 0);
+		} else {
+			player.setAttached(DualStance.PAIR_OFFER_TIMER, 200);
+			player.makeSound(SoundEvents.ARROW_HIT_PLAYER);
+			otherPlayer.sendOverlayMessage(Component.translatableWithFallback("overlay.dual_stance.pair_up_offer","%s wants to pair up!", player.getScoreboardName()));
+		}
 
-		player.makeSound(SoundEvents.PLAYER_LEVELUP);
 		player.setItemInHand(InteractionHand.MAIN_HAND, itemStack);
 		return InteractionResult.SUCCESS;
 	}
@@ -177,6 +189,7 @@ public class HeartSealItem extends Item {
 				CrestHelper.applyAttributeCrest(player, attributeCrestEffect);
 			}
 		}
+		player.makeSound(SoundEvents.PLAYER_LEVELUP);
 	}
 
 	public static void unlink(ItemStack itemStack, LivingEntity entity) {
@@ -192,9 +205,9 @@ public class HeartSealItem extends Item {
 				}
 			}
 		}
-
 		itemStack.remove(DualStanceComponents.LINKED_PLAYER);
 		itemStack.remove(DualStanceComponents.LINKED_CREST);
+		entity.makeSound(SoundEvents.VILLAGER_NO);
 	}
 
 	// TODO: add new non-bundle sounds

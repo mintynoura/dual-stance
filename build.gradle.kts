@@ -9,7 +9,7 @@ val branchName: String by project
 val slug: String by project
 val compatibleVersions: String by project
 
-version = "$modVersion+$branchName"
+version = modVersion
 
 dependencies {
 	minecraft(libs.minecraft)

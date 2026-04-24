@@ -60,7 +60,7 @@ public record MobEffectCrestEffect(List<MobEffectInstance> effects, int interval
 			int amplifier = effectInstance.getAmplifier();
 			effect.value().createModifiers(amplifier, (attribute, modifier) -> list.add(new Pair<>(attribute, modifier)));
 			MutableComponent mutableText = PotionContents.getPotionDescription(effect, amplifier).append(CommonComponents.space())
-				.append(Component.translatableWithFallback("tooltip.dual_stance.mob_effect_interval", "every", Math.round((float) interval / 20), "seconds"));
+				.append(Component.translatableWithFallback("tooltip.dual_stance.mob_effect_interval", "every %s seconds", Math.round((float) interval / 20)));
 			consumer.accept(mutableText.withStyle(effect.value().getCategory().getTooltipFormatting()));
 		}
 		if (!list.isEmpty()) {
