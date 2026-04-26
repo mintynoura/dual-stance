@@ -10,13 +10,14 @@
 	"item.dual_stance.stone_crest": "Crest of Stone",
 	"item.dual_stance.specters_crest": "Crest of Specters",
 	"item.dual_stance.pacifism_crest": "Crest of Pacifism",
+
 	"lore.item.dual_stance.peace_crest": "Attach a crest to a Heart Seal to determine its pair up bonus. This crest has protective properties.",
 	"lore.item.dual_stance.bones_crest": "Attach a crest to a Heart Seal to determine its pair up bonus. This crest gives you faster fingers.",
 	"lore.item.dual_stance.emblem_crest": "Attach a crest to a Heart Seal to determine its pair up bonus. This crest has healing properties.",
 	"lore.item.dual_stance.shells_crest": "Attach a crest to a Heart Seal to determine its pair up bonus. This crest is said to provide nourishment.",
 	"lore.item.dual_stance.stone_crest": "Attach a crest to a Heart Seal to determine its pair up bonus. This crest has strength-enhancing properties.",
 	"lore.item.dual_stance.specter_crest": "Attach a crest to a Heart Seal to determine its pair up bonus. This crest gives you some more mobility.",
-	"lore.item.dual_stance.pacifism_crest": "Attach a crest to a Heart Seal to determine its pair up bonus. This crest makes you a pacifist.",
+	"lore.item.dual_stance.pacifism_crest": "Attach this crest to a Heart Seal to designate your pair up partner as your protector. Provides pacifism and invulnerability.",
 
 	"item.dual_stance.heart_seal.empty_description": "Attach a Crest to boost your bond",
 	"tooltip.dual_stance.thanks_to": "Thanks to %s:",
