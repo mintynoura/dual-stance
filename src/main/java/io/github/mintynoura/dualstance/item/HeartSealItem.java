@@ -178,6 +178,7 @@ public class HeartSealItem extends Item {
 	public static void link(ItemStack itemStack, ItemStack otherItemStack, LivingEntity player, LivingEntity otherPlayer) {
 		itemStack.set(DualStanceComponents.LINKED_PLAYER, new LinkedPlayerComponent(otherPlayer.getUUID(), otherPlayer.getScoreboardName()));
 		itemStack.set(DualStanceComponents.LINKED_CREST, CrestComponent.copy(getHeartSealedCrest(otherItemStack)));
+		itemStack.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true);
 
 		for (CrestEffect crestEffect : getHeartSealedCrest(itemStack).crestEffects()) {
 			if (crestEffect instanceof AttributeCrestEffect attributeCrestEffect) {
@@ -207,6 +208,7 @@ public class HeartSealItem extends Item {
 		}
 		itemStack.remove(DualStanceComponents.LINKED_PLAYER);
 		itemStack.remove(DualStanceComponents.LINKED_CREST);
+		itemStack.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, false);
 		entity.makeSound(SoundEvents.VILLAGER_NO);
 	}
 

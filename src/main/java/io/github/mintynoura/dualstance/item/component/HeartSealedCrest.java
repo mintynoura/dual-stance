@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import io.github.mintynoura.dualstance.registries.DualStanceComponents;
+import io.github.mintynoura.dualstance.util.DualStanceTags;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -21,7 +22,7 @@ public record HeartSealedCrest(ItemStack crest) implements TooltipComponent, Too
 		.map(HeartSealedCrest::new, crest1 -> crest1.crest);
 
 	public static boolean canItemBeInHeartSeal(final ItemStack itemToAdd) {
-		return itemToAdd.has(DualStanceComponents.CREST);
+		return itemToAdd.has(DualStanceComponents.CREST) || itemToAdd.is(DualStanceTags.Items.CRESTS);
 	}
 
 	public Stream<ItemStack> itemCopyStream() {

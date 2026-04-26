@@ -69,6 +69,10 @@ public class DualStanceItems {
 				new MobEffectCrestEffect(List.of(new MobEffectInstance(MobEffects.SATURATION, 1, 0, true, true)), 200)
 			))), CreativeModeTabs.COMBAT);
 
+	public static final Item PACIFISM_CREST = registerItem("pacifism_crest", Item::new, new Item.Properties()
+		.component(DualStanceComponents.CREST, new CrestComponent(Identifier.fromNamespaceAndPath(DualStance.ID, "pacifism_crest"), List.of())),
+		CreativeModeTabs.COMBAT);
+
 	public static Item registerItem(String name, Function<Item.Properties, Item> factory, Item.Properties settings, ResourceKey<CreativeModeTab> tab) {
 		ResourceKey<Item> itemRegistryKey = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(DualStance.ID, name));
 		Item item = factory.apply(settings.setId(itemRegistryKey));

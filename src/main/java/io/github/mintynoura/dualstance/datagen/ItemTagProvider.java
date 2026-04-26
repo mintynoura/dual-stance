@@ -21,6 +21,7 @@ public class ItemTagProvider extends FabricTagsProvider.ItemTagsProvider {
 			.add(DualStanceItems.STONE_CREST)
 			.add(DualStanceItems.EMBLEMS_CREST)
 			.add(DualStanceItems.SPECTERS_CREST)
-			.add(DualStanceItems.SHELLS_CREST);
+			.add(DualStanceItems.SHELLS_CREST)
+			.add(DualStanceItems.PACIFISM_CREST);
 	}
 }
