@@ -34,18 +34,6 @@ public record HeartSealedCrest(ItemStack crest) implements TooltipComponent, Too
 		return this.crest.isEmpty();
 	}
 
-	public boolean equals(final Object obj) {
-		if (this == obj) {
-			return true;
-		} else {
-			return obj instanceof HeartSealedCrest(ItemStack crest1) && this.crest.equals(crest1);
-		}
-	}
-
-	public String toString() {
-		return "HeartSealedCrest" + this.crest;
-	}
-
 	@Override
 	public void addToTooltip(Item.TooltipContext context, Consumer<Component> consumer, TooltipFlag flag, DataComponentGetter components) {
 		if (this.isEmpty())
