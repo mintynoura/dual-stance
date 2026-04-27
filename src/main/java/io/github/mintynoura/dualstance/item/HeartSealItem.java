@@ -7,6 +7,7 @@ import io.github.mintynoura.dualstance.registries.DualStanceItems;
 import io.github.mintynoura.dualstance.util.CrestHelper;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
@@ -15,6 +16,9 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SlotAccess;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -171,16 +175,16 @@ public class HeartSealItem extends Item {
 		}
 	}
 
-	public static CrestComponent getHeartSealedCrest(ItemStack itemStack) {
+	public static CrestComponent getHeartSealedCrestEffects(ItemStack itemStack) {
 		return Objects.requireNonNull(itemStack.get(DualStanceComponents.HEART_SEALED_CREST)).crest().get(DualStanceComponents.CREST);
 	}
 
 	public static void link(ItemStack itemStack, ItemStack otherItemStack, LivingEntity player, LivingEntity otherPlayer) {
 		itemStack.set(DualStanceComponents.LINKED_PLAYER, new LinkedPlayerComponent(otherPlayer.getUUID(), otherPlayer.getScoreboardName()));
-		itemStack.set(DualStanceComponents.LINKED_CREST, CrestComponent.copy(getHeartSealedCrest(otherItemStack)));
+		itemStack.set(DualStanceComponents.LINKED_CREST, CrestComponent.copy(getHeartSealedCrestEffects(otherItemStack)));
 		itemStack.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true);
 
-		for (CrestEffect crestEffect : getHeartSealedCrest(itemStack).crestEffects()) {
+		for (CrestEffect crestEffect : getHeartSealedCrestEffects(itemStack).crestEffects()) {
 			if (crestEffect instanceof AttributeCrestEffect attributeCrestEffect) {
 				CrestHelper.applyAttributeCrest(player, attributeCrestEffect);
 			}
@@ -190,11 +194,19 @@ public class HeartSealItem extends Item {
 				CrestHelper.applyAttributeCrest(player, attributeCrestEffect);
 			}
 		}
+		// pacifism attack damage attribute modifier applying
+		if (itemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest().getItem() == DualStanceItems.PACIFISM_CREST) {
+			AttributeInstance instance = player.getAttributes().getInstance(Attributes.ATTACK_DAMAGE);
+			if (instance != null) {
+				instance.removeModifier(Identifier.fromNamespaceAndPath(DualStance.ID, "pacifism_crest"));
+				instance.addTransientModifier(new AttributeModifier(Identifier.fromNamespaceAndPath(DualStance.ID, "pacifism_crest"), -1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+			}
+		}
 		player.makeSound(SoundEvents.PLAYER_LEVELUP);
 	}
 
 	public static void unlink(ItemStack itemStack, LivingEntity entity) {
-		for (CrestEffect crestEffect : getHeartSealedCrest(itemStack).crestEffects()) {
+		for (CrestEffect crestEffect : getHeartSealedCrestEffects(itemStack).crestEffects()) {
 			if (crestEffect instanceof AttributeCrestEffect attributeCrestEffect) {
 				CrestHelper.clearAttributeCrest(entity, attributeCrestEffect);
 			}
@@ -204,6 +216,13 @@ public class HeartSealItem extends Item {
 				if (crestEffect2 instanceof AttributeCrestEffect attributeCrestEffect) {
 					CrestHelper.clearAttributeCrest(entity, attributeCrestEffect);
 				}
+			}
+		}
+		// pacifism attack damage attribute modifier clearing
+		if (itemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest().getItem() == DualStanceItems.PACIFISM_CREST) {
+			AttributeInstance instance = entity.getAttributes().getInstance(Attributes.ATTACK_DAMAGE);
+			if (instance != null) {
+				instance.removeModifier(Identifier.fromNamespaceAndPath(DualStance.ID, "pacifism_crest"));
 			}
 		}
 		itemStack.remove(DualStanceComponents.LINKED_PLAYER);
