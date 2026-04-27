@@ -2,8 +2,10 @@ package io.github.mintynoura.dualstance.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
+import io.github.mintynoura.dualstance.DualStance;
 import io.github.mintynoura.dualstance.registries.DualStanceComponents;
 import io.github.mintynoura.dualstance.registries.DualStanceItems;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
@@ -28,8 +30,8 @@ public abstract class PlayerMixin extends Avatar implements ContainerUser {
 	@ModifyReturnValue(method = "canHarmPlayer", at = @At("RETURN"))
 	private boolean dualStance$disableHarmingPartner(boolean original, @Local(argsOnly = true, name = "target") Player target) {
 		for (ItemStack itemStack : this.getInventory()) {
-			if (itemStack.has(DualStanceComponents.LINKED_PLAYER)) {
-				if (itemStack.get(DualStanceComponents.LINKED_PLAYER).id() == target.getUUID()) {
+			if (itemStack.has(DualStanceComponents.LINKED_MOB)) {
+				if (itemStack.get(DualStanceComponents.LINKED_MOB).id() == target.getUUID()) {
 					return false;
 				} else {
 					return original;
@@ -45,8 +47,15 @@ public abstract class PlayerMixin extends Avatar implements ContainerUser {
 			for (ItemStack itemStack : this.getInventory()) {
 				if (itemStack.has(DualStanceComponents.HEART_SEALED_CREST) && itemStack.has(DualStanceComponents.LINKED_CREST)) {
 					if (itemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest().getItem() == DualStanceItems.PACIFISM_CREST) {
-						damage = 0;
-						return damage;
+						if (itemStack.has(DualStanceComponents.LINKED_CREST)) {
+							if (!itemStack.get(DualStanceComponents.LINKED_CREST).id().equals(Identifier.fromNamespaceAndPath(DualStance.ID, "pacifism_crest"))) {
+								damage = 0;
+								return damage;
+							}
+						} else {
+							damage = 0;
+							return damage;
+						}
 					}
 				}
 			}

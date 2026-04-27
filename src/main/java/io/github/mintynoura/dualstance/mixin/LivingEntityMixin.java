@@ -1,8 +1,10 @@
 package io.github.mintynoura.dualstance.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import io.github.mintynoura.dualstance.DualStance;
 import io.github.mintynoura.dualstance.registries.DualStanceComponents;
 import io.github.mintynoura.dualstance.registries.DualStanceItems;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -25,10 +27,17 @@ public abstract class LivingEntityMixin extends Entity {
 	private float dualStance$disablePacifismAttackDamage(float damage, @Local(argsOnly = true, name = "source") DamageSource source) {
 		if (source.getEntity() != null && source.getEntity() instanceof Player player && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
 			for (ItemStack itemStack : player.getInventory()) {
-				if (itemStack.has(DualStanceComponents.HEART_SEALED_CREST) && itemStack.has(DualStanceComponents.LINKED_CREST)) {
+				if (itemStack.has(DualStanceComponents.HEART_SEALED_CREST) && itemStack.has(DualStanceComponents.LINKED_MOB)) {
 					if (itemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest().getItem() == DualStanceItems.PACIFISM_CREST) {
-						damage = 0;
-						return damage;
+						if (itemStack.has(DualStanceComponents.LINKED_CREST)) {
+							if (!itemStack.get(DualStanceComponents.LINKED_CREST).id().equals(Identifier.fromNamespaceAndPath(DualStance.ID, "pacifism_crest"))) {
+								damage = 0;
+								return damage;
+							}
+						} else {
+							damage = 0;
+							return damage;
+						}
 					}
 				}
 			}

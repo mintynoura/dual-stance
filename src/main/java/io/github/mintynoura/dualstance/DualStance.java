@@ -1,5 +1,6 @@
 package io.github.mintynoura.dualstance;
 
+import io.github.mintynoura.dualstance.gamerule.DualStanceGameRules;
 import io.github.mintynoura.dualstance.registries.CrestEffectTypes;
 import io.github.mintynoura.dualstance.registries.DualStanceComponents;
 import io.github.mintynoura.dualstance.registries.DualStanceItems;
@@ -24,5 +25,6 @@ public class DualStance implements ModInitializer {
 		CrestEffectTypes.initialize();
 		DualStanceComponents.initialize();
 		DualStanceItems.initialize();
+		DualStanceGameRules.initialize();
 	}
 }

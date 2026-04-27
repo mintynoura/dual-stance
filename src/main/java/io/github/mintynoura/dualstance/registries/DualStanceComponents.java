@@ -3,7 +3,7 @@ package io.github.mintynoura.dualstance.registries;
 import io.github.mintynoura.dualstance.DualStance;
 import io.github.mintynoura.dualstance.item.component.CrestComponent;
 import io.github.mintynoura.dualstance.item.component.HeartSealedCrest;
-import io.github.mintynoura.dualstance.item.component.LinkedPlayerComponent;
+import io.github.mintynoura.dualstance.item.component.LinkedMobComponent;
 import net.fabricmc.fabric.api.item.v1.ItemComponentTooltipProviderRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
@@ -18,9 +18,9 @@ public class DualStanceComponents {
 
 	// This data component holds the linked player on the other player's heart seal
 	// TODO: Make players unable to damage their linked player
-	public static final DataComponentType<LinkedPlayerComponent> LINKED_PLAYER = Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE,
-		Identifier.fromNamespaceAndPath(DualStance.ID,"linked_player"),
-		DataComponentType.<LinkedPlayerComponent>builder().persistent(LinkedPlayerComponent.CODEC).networkSynchronized(LinkedPlayerComponent.STREAM_CODEC).build());
+	public static final DataComponentType<LinkedMobComponent> LINKED_MOB = Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE,
+		Identifier.fromNamespaceAndPath(DualStance.ID,"linked_mob"),
+		DataComponentType.<LinkedMobComponent>builder().persistent(LinkedMobComponent.CODEC).networkSynchronized(LinkedMobComponent.STREAM_CODEC).build());
 
 	// This data component holds the linked crest effect on the other player's heart seal
 	public static final DataComponentType<CrestComponent> LINKED_CREST =

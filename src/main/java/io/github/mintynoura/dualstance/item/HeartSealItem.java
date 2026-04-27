@@ -1,24 +1,22 @@
 package io.github.mintynoura.dualstance.item;
 
 import io.github.mintynoura.dualstance.DualStance;
+import io.github.mintynoura.dualstance.gamerule.DualStanceGameRules;
 import io.github.mintynoura.dualstance.item.component.*;
 import io.github.mintynoura.dualstance.registries.DualStanceComponents;
 import io.github.mintynoura.dualstance.registries.DualStanceItems;
 import io.github.mintynoura.dualstance.util.CrestHelper;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SlotAccess;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -31,7 +29,6 @@ import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.component.TooltipDisplay;
 import org.jspecify.annotations.Nullable;
 
-import java.util.Objects;
 import java.util.Optional;
 
 public class HeartSealItem extends Item {
@@ -46,49 +43,58 @@ public class HeartSealItem extends Item {
 		if (owner.getAttached(DualStance.PAIR_OFFER_TIMER) != null && owner.getAttached(DualStance.PAIR_OFFER_TIMER) > 0) {
 			owner.setAttached(DualStance.PAIR_OFFER_TIMER, owner.getAttached(DualStance.PAIR_OFFER_TIMER)-1);
 		}
-		if(!itemStack.has(DualStanceComponents.LINKED_PLAYER) || !(owner instanceof Player thisPlayer)) return;
-		// TODO: Change back to player
-		Entity otherPlayer = level.getEntity(itemStack.get(DualStanceComponents.LINKED_PLAYER).id());
-		if (otherPlayer == null || otherPlayer.distanceTo(thisPlayer) > 8 || !otherPlayer.level().dimension().equals(level.dimension())){
-			unlink(itemStack, owner.asLivingEntity());
+		if(!itemStack.has(DualStanceComponents.LINKED_MOB) || !(owner instanceof Player thisPlayer)) return;
+		Entity otherMob = level.getEntity(itemStack.get(DualStanceComponents.LINKED_MOB).id());
+		if (otherMob == null || otherMob.distanceTo(thisPlayer) > 8 || !otherMob.level().dimension().equals(level.dimension())){
+			unlinkSelf(itemStack, owner.asLivingEntity());
 		}
 		if (itemStack.has(DualStanceComponents.HEART_SEALED_CREST)) {
-			if (!itemStack.get(DualStanceComponents.HEART_SEALED_CREST).isEmpty() && itemStack.has(DualStanceComponents.LINKED_CREST)) {
+			if (!itemStack.get(DualStanceComponents.HEART_SEALED_CREST).isEmpty() && itemStack.has(DualStanceComponents.LINKED_MOB)) {
 				var effects1 = itemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest().get(DualStanceComponents.CREST);
-				var effects2 = itemStack.get(DualStanceComponents.LINKED_CREST);
+				if (itemStack.has(DualStanceComponents.LINKED_CREST)) {
+					var effects2 = itemStack.get(DualStanceComponents.LINKED_CREST);
+					CrestHelper.tickCrestEffect(thisPlayer, effects2);
+				}
 				CrestHelper.tickCrestEffect(thisPlayer, effects1);
-				CrestHelper.tickCrestEffect(thisPlayer, effects2);
-				CrestHelper.renderLinkParticle(thisPlayer, otherPlayer);
-			} else unlink(itemStack, owner.asLivingEntity());
+				CrestHelper.renderLinkParticle(thisPlayer, otherMob);
+			} else unlinkSelf(itemStack, owner.asLivingEntity());
 		}
 	}
 
 	// Linking code
 	@Override
 	public InteractionResult interactLivingEntity(ItemStack itemStack, Player player, LivingEntity target, InteractionHand type) {
-		if(!(target instanceof Player otherPlayer)) //TODO: Change back to player
-			return InteractionResult.FAIL;
-		ItemStack otherItemStack = otherPlayer.getItemInHand(InteractionHand.MAIN_HAND);
-		if(!(otherItemStack.getItem() instanceof HeartSealItem))
-			return InteractionResult.FAIL;
-		if(player.getInventory().countItem(DualStanceItems.HEART_SEAL) > 1)
-			return InteractionResult.FAIL; //TODO: Figure out if this is the right result of this edge case.
-		if(!otherItemStack.has(DualStanceComponents.HEART_SEALED_CREST) || !itemStack.has(DualStanceComponents.HEART_SEALED_CREST)) {
-			//TODO: Figure out if this is the right result of this edge case.
-			return InteractionResult.FAIL;
+		// TODO: fix hand swinging on mobs even when gamerule is false
+		if (player.level() instanceof ServerLevel serverLevel && !(target instanceof Player)) {
+			if (serverLevel.getGameRules().get(DualStanceGameRules.ALLOW_PAIRING_WITH_MOBS) && itemStack.has(DualStanceComponents.HEART_SEALED_CREST)) {
+				if (!itemStack.get(DualStanceComponents.HEART_SEALED_CREST).isEmpty() && !itemStack.has(DualStanceComponents.LINKED_MOB)) {
+					linkNonPlayerMob(itemStack, player, target);
+					serverLevel.playSound(null, player.getOnPos(), SoundEvents.ARROW_HIT_PLAYER, SoundSource.PLAYERS);
+				} else return InteractionResult.FAIL;
+			} else return InteractionResult.FAIL;
 		}
-		if (itemStack.get(DualStanceComponents.HEART_SEALED_CREST).isEmpty() || otherItemStack.get(DualStanceComponents.HEART_SEALED_CREST).isEmpty()) {
-			return InteractionResult.FAIL;
-		}
-		if (otherPlayer.getAttachedOrElse(DualStance.PAIR_OFFER_TIMER, 0) > 0) {
-			link(itemStack, otherItemStack, player, otherPlayer);
-			link(otherItemStack, itemStack, otherPlayer, player);
-			player.setAttached(DualStance.PAIR_OFFER_TIMER, 0);
-			otherPlayer.setAttached(DualStance.PAIR_OFFER_TIMER, 0);
-		} else {
-			player.setAttached(DualStance.PAIR_OFFER_TIMER, 200);
-			player.makeSound(SoundEvents.ARROW_HIT_PLAYER);
-			otherPlayer.sendOverlayMessage(Component.translatableWithFallback("overlay.dual_stance.pair_up_offer","%s wants to pair up!", player.getScoreboardName()));
+		if (target instanceof Player otherPlayer) {
+			ItemStack otherItemStack = otherPlayer.getItemInHand(InteractionHand.MAIN_HAND);
+			if(!(otherItemStack.getItem() instanceof HeartSealItem))
+				return InteractionResult.FAIL;
+			if (player.getInventory().countItem(DualStanceItems.HEART_SEAL) > 1)
+				return InteractionResult.FAIL;
+			if (!otherItemStack.has(DualStanceComponents.HEART_SEALED_CREST) || !itemStack.has(DualStanceComponents.HEART_SEALED_CREST) || otherItemStack.has(DualStanceComponents.LINKED_MOB) || itemStack.has(DualStanceComponents.LINKED_MOB)) {
+				return InteractionResult.FAIL;
+			}
+			if (itemStack.get(DualStanceComponents.HEART_SEALED_CREST).isEmpty() || otherItemStack.get(DualStanceComponents.HEART_SEALED_CREST).isEmpty()) {
+				return InteractionResult.FAIL;
+			}
+			if (otherPlayer.getAttachedOrElse(DualStance.PAIR_OFFER_TIMER, 0) > 0) {
+				linkPlayer(itemStack, otherItemStack, player, otherPlayer);
+				linkPlayer(otherItemStack, itemStack, otherPlayer, player);
+				player.setAttached(DualStance.PAIR_OFFER_TIMER, 0);
+				otherPlayer.setAttached(DualStance.PAIR_OFFER_TIMER, 0);
+			} else {
+				player.setAttached(DualStance.PAIR_OFFER_TIMER, 200);
+				player.makeSound(SoundEvents.ARROW_HIT_PLAYER);
+				otherPlayer.sendOverlayMessage(Component.translatableWithFallback("overlay.dual_stance.pair_up_offer","%s wants to pair up!", player.getScoreboardName()));
+			}
 		}
 
 		player.setItemInHand(InteractionHand.MAIN_HAND, itemStack);
@@ -175,60 +181,22 @@ public class HeartSealItem extends Item {
 		}
 	}
 
-	public static CrestComponent getHeartSealedCrestEffects(ItemStack itemStack) {
-		return Objects.requireNonNull(itemStack.get(DualStanceComponents.HEART_SEALED_CREST)).crest().get(DualStanceComponents.CREST);
+	public static void linkPlayer(ItemStack itemStack, ItemStack otherItemStack, LivingEntity player, LivingEntity otherPlayer) {
+		CrestHelper.linkPlayer(itemStack, otherItemStack, player, otherPlayer);
+		// TODO: add linking sound event
+		player.level().playSound(null, player.getOnPos(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS);
 	}
 
-	public static void link(ItemStack itemStack, ItemStack otherItemStack, LivingEntity player, LivingEntity otherPlayer) {
-		itemStack.set(DualStanceComponents.LINKED_PLAYER, new LinkedPlayerComponent(otherPlayer.getUUID(), otherPlayer.getScoreboardName()));
-		itemStack.set(DualStanceComponents.LINKED_CREST, CrestComponent.copy(getHeartSealedCrestEffects(otherItemStack)));
-		itemStack.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true);
-
-		for (CrestEffect crestEffect : getHeartSealedCrestEffects(itemStack).crestEffects()) {
-			if (crestEffect instanceof AttributeCrestEffect attributeCrestEffect) {
-				CrestHelper.applyAttributeCrest(player, attributeCrestEffect);
-			}
-		}
-		for (CrestEffect crestEffect2 : itemStack.get(DualStanceComponents.LINKED_CREST).crestEffects()) {
-			if (crestEffect2 instanceof AttributeCrestEffect attributeCrestEffect) {
-				CrestHelper.applyAttributeCrest(player, attributeCrestEffect);
-			}
-		}
-		// pacifism attack damage attribute modifier applying
-		if (itemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest().getItem() == DualStanceItems.PACIFISM_CREST) {
-			AttributeInstance instance = player.getAttributes().getInstance(Attributes.ATTACK_DAMAGE);
-			if (instance != null) {
-				instance.removeModifier(Identifier.fromNamespaceAndPath(DualStance.ID, "pacifism_crest"));
-				instance.addTransientModifier(new AttributeModifier(Identifier.fromNamespaceAndPath(DualStance.ID, "pacifism_crest"), -1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-			}
-		}
-		player.makeSound(SoundEvents.PLAYER_LEVELUP);
+	public static void linkNonPlayerMob(ItemStack itemStack, LivingEntity player, LivingEntity mob) {
+		CrestHelper.linkNonPlayerMob(itemStack, player, mob);
+		// TODO: add linking sound event
+		player.level().playSound(null, player.getOnPos(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS);
 	}
 
-	public static void unlink(ItemStack itemStack, LivingEntity entity) {
-		for (CrestEffect crestEffect : getHeartSealedCrestEffects(itemStack).crestEffects()) {
-			if (crestEffect instanceof AttributeCrestEffect attributeCrestEffect) {
-				CrestHelper.clearAttributeCrest(entity, attributeCrestEffect);
-			}
-		}
-		if (itemStack.has(DualStanceComponents.LINKED_CREST)) {
-			for (CrestEffect crestEffect2 : itemStack.get(DualStanceComponents.LINKED_CREST).crestEffects()) {
-				if (crestEffect2 instanceof AttributeCrestEffect attributeCrestEffect) {
-					CrestHelper.clearAttributeCrest(entity, attributeCrestEffect);
-				}
-			}
-		}
-		// pacifism attack damage attribute modifier clearing
-		if (itemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest().getItem() == DualStanceItems.PACIFISM_CREST) {
-			AttributeInstance instance = entity.getAttributes().getInstance(Attributes.ATTACK_DAMAGE);
-			if (instance != null) {
-				instance.removeModifier(Identifier.fromNamespaceAndPath(DualStance.ID, "pacifism_crest"));
-			}
-		}
-		itemStack.remove(DualStanceComponents.LINKED_PLAYER);
-		itemStack.remove(DualStanceComponents.LINKED_CREST);
-		itemStack.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, false);
-		entity.makeSound(SoundEvents.VILLAGER_NO);
+	public static void unlinkSelf(ItemStack itemStack, LivingEntity player) {
+		CrestHelper.unlink(itemStack, player);
+		// TODO: add unlinking sound event
+		player.level().playSound(null, player.getOnPos(), SoundEvents.VILLAGER_NO, SoundSource.PLAYERS);
 	}
 
 	// TODO: add new non-bundle sounds

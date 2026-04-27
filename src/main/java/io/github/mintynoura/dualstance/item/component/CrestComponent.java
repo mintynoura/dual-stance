@@ -50,7 +50,7 @@ public record CrestComponent(Identifier id, List<CrestEffect> crestEffects) impl
 			// no player, without text (inner) -> bounded text
 			// player, with text (linked) -> thanks to text
 			// player, without text (inner) -> no text
-			var linkedPlayer = components.get(DualStanceComponents.LINKED_PLAYER);
+			var linkedPlayer = components.get(DualStanceComponents.LINKED_MOB);
 			if(linkedPlayer == null)
 				consumer.accept(Component.translatableWithFallback("tooltip.dual_stance.crest_bond", "When bonded:").withStyle(ChatFormatting.GRAY));
 			else if(withText)
