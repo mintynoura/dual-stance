@@ -46,7 +46,6 @@ public record HeartSealedCrest(ItemStack crest) implements TooltipComponent, Too
 		return "HeartSealedCrest" + this.crest;
 	}
 
-	// TODO: add and combos here
 	@Override
 	public void addToTooltip(Item.TooltipContext context, Consumer<Component> consumer, TooltipFlag flag, DataComponentGetter components) {
 		if (this.isEmpty())
