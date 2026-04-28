@@ -1,4 +1,4 @@
-package io.github.mintynoura.dualstance.gamerule;
+package io.github.mintynoura.dualstance.registries;
 
 import io.github.mintynoura.dualstance.DualStance;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleBuilder;

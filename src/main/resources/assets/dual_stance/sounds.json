@@ -1,0 +1,56 @@
+{
+	"pair.link": {
+		"subtitle": "subtitles.dual_stance.pair.link",
+		"sounds": [
+			{
+				"name": "block.chain.place",
+				"type": "event"
+			}
+		]
+	},
+	"pair.unlink": {
+		"subtitle": "subtitles.dual_stance.pair.unlink",
+		"sounds": [
+			{
+				"name": "block.chain.break",
+				"type": "event"
+			}
+		]
+	},
+	"pair.offer": {
+		"subtitle": "subtitles.dual_stance.pair.offer",
+		"sounds": [
+			{
+				"name": "entity.allay.item_given",
+				"type": "event"
+			}
+		]
+	},
+	"item.heart_seal.insert": {
+		"subtitle": "subtitles.dual_stance.heart_seal.insert",
+		"sounds": [
+			{
+				"name": "block.respawn_anchor.charge",
+				"type": "event"
+			}
+		]
+	},
+	"item.heart_seal.insert_fail": {
+		"subtitle": "subtitles.dual_stance.heart_seal.insert_fail",
+		"sounds": [
+			{
+				"name": "block.vault.insert_item_fail",
+				"type": "event"
+			}
+		]
+	},
+	"item.heart_seal.remove": {
+		"subtitle": "subtitles.dual_stance.heart_seal.remove",
+		"sounds": [
+			{
+				"name": "block.vault.open_shutter",
+				"type": "event"
+			}
+		]
+	}
+}

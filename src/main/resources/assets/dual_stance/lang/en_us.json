@@ -25,5 +25,12 @@
 	"overlay.dual_stance.pair_up_offer": "%s wants to pair up!",
 
 	"gamerule.dual_stance.allow_pairing_with_mobs": "Allow pairing with mobs",
-	"gamerule.dual_stance.allow_pairing_with_mobs.description": "Whether players are able to use a Heart Seal on a mob to pair up with them."
+	"gamerule.dual_stance.allow_pairing_with_mobs.description": "Whether players are able to use a Heart Seal on a mob to pair up with them.",
+
+	"subtitles.dual_stance.pair.link": "Pair linked",
+	"subtitles.dual_stance.pair.unlink": "Pair broken",
+	"subtitles.dual_stance.pair.offer": "Pair offered",
+	"subtitles.dual_stance.heart_seal.insert": "Crest attached",
+	"subtitles.dual_stance.heart_seal.insert_fail": "Heart Seal full",
+	"subtitles.dual_stance.heart_seal.remove": "Crest removed"
 }

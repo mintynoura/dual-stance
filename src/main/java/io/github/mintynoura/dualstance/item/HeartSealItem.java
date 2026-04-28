@@ -1,15 +1,15 @@
 package io.github.mintynoura.dualstance.item;
 
 import io.github.mintynoura.dualstance.DualStance;
-import io.github.mintynoura.dualstance.gamerule.DualStanceGameRules;
+import io.github.mintynoura.dualstance.registries.DualStanceGameRules;
 import io.github.mintynoura.dualstance.item.component.*;
 import io.github.mintynoura.dualstance.registries.DualStanceComponents;
 import io.github.mintynoura.dualstance.registries.DualStanceItems;
+import io.github.mintynoura.dualstance.registries.DualStanceSoundEvents;
 import io.github.mintynoura.dualstance.util.CrestHelper;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -69,7 +69,6 @@ public class HeartSealItem extends Item {
 					if (player.getInventory().countItem(DualStanceItems.HEART_SEAL) > 1)
 						return InteractionResult.FAIL;
 					if (!itemStack.get(DualStanceComponents.HEART_SEALED_CREST).isEmpty() && !itemStack.has(DualStanceComponents.LINKED_MOB)) {
-						// TODO: something is getting messed up in creative mode, but this works in survival
 						linkNonPlayerMob(itemStack, player, target);
 						player.setItemInHand(InteractionHand.MAIN_HAND, itemStack);
 						return InteractionResult.SUCCESS_SERVER;
@@ -94,7 +93,7 @@ public class HeartSealItem extends Item {
 					otherPlayer.setAttached(DualStance.PAIR_OFFER_TIMER, 0);
 				} else {
 					player.setAttached(DualStance.PAIR_OFFER_TIMER, 200);
-					player.makeSound(SoundEvents.ARROW_HIT_PLAYER);
+					player.level().playSound(null, player.getOnPos(), DualStanceSoundEvents.PAIR_OFFER, SoundSource.PLAYERS);
 					otherPlayer.sendOverlayMessage(Component.translatableWithFallback("overlay.dual_stance.pair_up_offer","%s wants to pair up!", player.getScoreboardName()));
 				}
 				player.setItemInHand(InteractionHand.MAIN_HAND, itemStack);
@@ -185,34 +184,30 @@ public class HeartSealItem extends Item {
 	}
 
 	public static void linkPlayer(ItemStack itemStack, ItemStack otherItemStack, LivingEntity player, LivingEntity otherPlayer) {
-		// TODO: add linking sound event
-		player.level().playSound(null, player.getOnPos(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS);
+		player.level().playSound(null, player.getOnPos(), DualStanceSoundEvents.PAIR_LINK, SoundSource.PLAYERS);
 		CrestHelper.linkPlayer(itemStack, otherItemStack, player, otherPlayer);
 	}
 
 	public static void linkNonPlayerMob(ItemStack itemStack, LivingEntity player, LivingEntity mob) {
-		// TODO: add linking sound event
-		player.level().playSound(null, player.getOnPos(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS);
+		player.level().playSound(null, player.getOnPos(), DualStanceSoundEvents.PAIR_LINK, SoundSource.PLAYERS);
 		CrestHelper.linkNonPlayerMob(itemStack, player, mob);
 	}
 
 	public static void unlinkSelf(ItemStack itemStack, LivingEntity self) {
-		// TODO: add unlinking sound event
-		self.level().playSound(null, self.getOnPos(), SoundEvents.VILLAGER_NO, SoundSource.PLAYERS);
+		self.level().playSound(null, self.getOnPos(), DualStanceSoundEvents.PAIR_UNLINK, SoundSource.PLAYERS);
 		CrestHelper.unlink(itemStack, self);
 	}
 
-	// TODO: add new non-bundle sounds
 	private static void playRemoveOneSound(final Entity entity) {
-		entity.playSound(SoundEvents.BUNDLE_REMOVE_ONE, 0.8F, 0.8F + entity.level().getRandom().nextFloat() * 0.4F);
+		entity.playSound(DualStanceSoundEvents.HEART_SEAL_REMOVE, 0.8F, 0.8F + entity.level().getRandom().nextFloat() * 0.4F);
 	}
 
 	private static void playInsertSound(final Entity entity) {
-		entity.playSound(SoundEvents.BUNDLE_INSERT, 0.8F, 0.8F + entity.level().getRandom().nextFloat() * 0.4F);
+		entity.playSound(DualStanceSoundEvents.HEART_SEAL_INSERT, 0.8F, 0.8F + entity.level().getRandom().nextFloat() * 0.4F);
 	}
 
 	private static void playInsertFailSound(final Entity entity) {
-		entity.playSound(SoundEvents.BUNDLE_INSERT_FAIL, 1.0F, 1.0F);
+		entity.playSound(DualStanceSoundEvents.HEART_SEAL_INSERT_FAIL, 1.0F, 1.0F);
 	}
 
 	@Override
