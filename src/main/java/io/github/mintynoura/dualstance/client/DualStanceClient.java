@@ -13,5 +13,6 @@ public class DualStanceClient implements ClientModInitializer {
 				return new ClientHeartSealTooltip(heartSealTooltip.crest());
 			} else return null;
 		});
+
 	}
 }

@@ -4,6 +4,7 @@ import io.github.mintynoura.dualstance.gamerule.DualStanceGameRules;
 import io.github.mintynoura.dualstance.registries.CrestEffectTypes;
 import io.github.mintynoura.dualstance.registries.DualStanceComponents;
 import io.github.mintynoura.dualstance.registries.DualStanceItems;
+import io.github.mintynoura.dualstance.registries.DualStanceParticles;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
@@ -26,5 +27,6 @@ public class DualStance implements ModInitializer {
 		DualStanceComponents.initialize();
 		DualStanceItems.initialize();
 		DualStanceGameRules.initialize();
+		DualStanceParticles.initialize();
 	}
 }
