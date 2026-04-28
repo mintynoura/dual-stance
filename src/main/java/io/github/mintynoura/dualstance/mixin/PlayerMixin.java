@@ -45,7 +45,7 @@ public abstract class PlayerMixin extends Avatar implements ContainerUser {
 	private float dualStance$disablePacifismDamageTaken(float damage, @Local(argsOnly = true, name = "source") DamageSource source) {
 		if (source.getEntity() != null && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
 			for (ItemStack itemStack : this.getInventory()) {
-				if (itemStack.has(DualStanceComponents.HEART_SEALED_CREST) && itemStack.has(DualStanceComponents.LINKED_CREST)) {
+				if (itemStack.has(DualStanceComponents.HEART_SEALED_CREST) && itemStack.has(DualStanceComponents.LINKED_MOB)) {
 					if (itemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest().getItem() == DualStanceItems.PACIFISM_CREST) {
 						if (itemStack.has(DualStanceComponents.LINKED_CREST)) {
 							if (!itemStack.get(DualStanceComponents.LINKED_CREST).id().equals(Identifier.fromNamespaceAndPath(DualStance.ID, "pacifism_crest"))) {

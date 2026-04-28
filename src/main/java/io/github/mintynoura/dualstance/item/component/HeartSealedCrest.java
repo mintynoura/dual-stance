@@ -29,7 +29,6 @@ public record HeartSealedCrest(ItemStack crest) implements TooltipComponent, Too
 		return Stream.of(this.crest);
 	}
 
-
 	public boolean isEmpty() {
 		return this.crest.isEmpty();
 	}

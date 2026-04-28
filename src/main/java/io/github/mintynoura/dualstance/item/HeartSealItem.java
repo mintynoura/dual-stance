@@ -36,26 +36,25 @@ public class HeartSealItem extends Item {
 		super(properties);
 	}
 
-	// Effect applying
 	@Override
 	public void inventoryTick(ItemStack itemStack, ServerLevel level, Entity owner, @Nullable EquipmentSlot slot) {
 		super.inventoryTick(itemStack, level, owner, slot);
 		if (owner.getAttached(DualStance.PAIR_OFFER_TIMER) != null && owner.getAttached(DualStance.PAIR_OFFER_TIMER) > 0) {
 			owner.setAttached(DualStance.PAIR_OFFER_TIMER, owner.getAttached(DualStance.PAIR_OFFER_TIMER)-1);
 		}
-		if(!itemStack.has(DualStanceComponents.LINKED_MOB) || !(owner instanceof Player thisPlayer)) return;
+		if (!itemStack.has(DualStanceComponents.LINKED_MOB) || !(owner instanceof Player thisPlayer)) return;
 		Entity otherMob = level.getEntity(itemStack.get(DualStanceComponents.LINKED_MOB).id());
-		if (otherMob == null || otherMob.distanceTo(thisPlayer) > 8 || !otherMob.level().dimension().equals(level.dimension())){
+		if (otherMob == null || otherMob.distanceTo(thisPlayer) > 8 || !otherMob.level().dimension().equals(level.dimension()) || otherMob == owner) {
 			unlinkSelf(itemStack, owner.asLivingEntity());
 		}
 		if (itemStack.has(DualStanceComponents.HEART_SEALED_CREST)) {
-			if (!itemStack.get(DualStanceComponents.HEART_SEALED_CREST).isEmpty() && itemStack.has(DualStanceComponents.LINKED_MOB)) {
-				var effects1 = itemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest().get(DualStanceComponents.CREST);
-				if (itemStack.has(DualStanceComponents.LINKED_CREST)) {
-					var effects2 = itemStack.get(DualStanceComponents.LINKED_CREST);
-					CrestHelper.tickCrestEffect(thisPlayer, effects2);
+			if (itemStack.has(DualStanceComponents.LINKED_MOB)) {
+				if (!itemStack.get(DualStanceComponents.HEART_SEALED_CREST).isEmpty()) {
+					CrestHelper.tickCrestEffect(thisPlayer, itemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest().get(DualStanceComponents.CREST));
 				}
-				CrestHelper.tickCrestEffect(thisPlayer, effects1);
+				if (itemStack.has(DualStanceComponents.LINKED_CREST)) {
+					CrestHelper.tickCrestEffect(thisPlayer, itemStack.get(DualStanceComponents.LINKED_CREST));
+				}
 				CrestHelper.renderLinkParticle(thisPlayer, otherMob);
 			} else unlinkSelf(itemStack, owner.asLivingEntity());
 		}
@@ -64,41 +63,44 @@ public class HeartSealItem extends Item {
 	// Linking code
 	@Override
 	public InteractionResult interactLivingEntity(ItemStack itemStack, Player player, LivingEntity target, InteractionHand type) {
-		// TODO: fix hand swinging on mobs even when gamerule is false
-		if (player.level() instanceof ServerLevel serverLevel && !(target instanceof Player)) {
-			if (serverLevel.getGameRules().get(DualStanceGameRules.ALLOW_PAIRING_WITH_MOBS) && itemStack.has(DualStanceComponents.HEART_SEALED_CREST)) {
-				if (!itemStack.get(DualStanceComponents.HEART_SEALED_CREST).isEmpty() && !itemStack.has(DualStanceComponents.LINKED_MOB)) {
-					linkNonPlayerMob(itemStack, player, target);
-					serverLevel.playSound(null, player.getOnPos(), SoundEvents.ARROW_HIT_PLAYER, SoundSource.PLAYERS);
+		if (player.level() instanceof ServerLevel serverLevel) {
+			if (!(target instanceof Player)) {
+				if (serverLevel.getGameRules().get(DualStanceGameRules.ALLOW_PAIRING_WITH_MOBS) && itemStack.has(DualStanceComponents.HEART_SEALED_CREST)) {
+					if (player.getInventory().countItem(DualStanceItems.HEART_SEAL) > 1)
+						return InteractionResult.FAIL;
+					if (!itemStack.get(DualStanceComponents.HEART_SEALED_CREST).isEmpty() && !itemStack.has(DualStanceComponents.LINKED_MOB)) {
+						// TODO: something is getting messed up in creative mode, but this works in survival
+						linkNonPlayerMob(itemStack, player, target);
+						return InteractionResult.SUCCESS_SERVER;
+					} else return InteractionResult.FAIL;
 				} else return InteractionResult.FAIL;
-			} else return InteractionResult.FAIL;
+			} else if (target instanceof Player otherPlayer) {
+				ItemStack otherItemStack = otherPlayer.getItemInHand(InteractionHand.MAIN_HAND);
+				if(!(otherItemStack.getItem() instanceof HeartSealItem))
+					return InteractionResult.FAIL;
+				if (player.getInventory().countItem(DualStanceItems.HEART_SEAL) > 1)
+					return InteractionResult.FAIL;
+				if (!otherItemStack.has(DualStanceComponents.HEART_SEALED_CREST) || !itemStack.has(DualStanceComponents.HEART_SEALED_CREST) || otherItemStack.has(DualStanceComponents.LINKED_MOB) || itemStack.has(DualStanceComponents.LINKED_MOB)) {
+					return InteractionResult.FAIL;
+				}
+				if (itemStack.get(DualStanceComponents.HEART_SEALED_CREST).isEmpty() || otherItemStack.get(DualStanceComponents.HEART_SEALED_CREST).isEmpty()) {
+					return InteractionResult.FAIL;
+				}
+				if (otherPlayer.getAttachedOrElse(DualStance.PAIR_OFFER_TIMER, 0) > 0) {
+					linkPlayer(itemStack, otherItemStack, player, otherPlayer);
+					linkPlayer(otherItemStack, itemStack, otherPlayer, player);
+					player.setAttached(DualStance.PAIR_OFFER_TIMER, 0);
+					otherPlayer.setAttached(DualStance.PAIR_OFFER_TIMER, 0);
+				} else {
+					player.setAttached(DualStance.PAIR_OFFER_TIMER, 200);
+					player.makeSound(SoundEvents.ARROW_HIT_PLAYER);
+					otherPlayer.sendOverlayMessage(Component.translatableWithFallback("overlay.dual_stance.pair_up_offer","%s wants to pair up!", player.getScoreboardName()));
+				}
+				player.setItemInHand(InteractionHand.MAIN_HAND, itemStack);
+				return InteractionResult.SUCCESS_SERVER;
+			} else return InteractionResult.PASS;
 		}
-		if (target instanceof Player otherPlayer) {
-			ItemStack otherItemStack = otherPlayer.getItemInHand(InteractionHand.MAIN_HAND);
-			if(!(otherItemStack.getItem() instanceof HeartSealItem))
-				return InteractionResult.FAIL;
-			if (player.getInventory().countItem(DualStanceItems.HEART_SEAL) > 1)
-				return InteractionResult.FAIL;
-			if (!otherItemStack.has(DualStanceComponents.HEART_SEALED_CREST) || !itemStack.has(DualStanceComponents.HEART_SEALED_CREST) || otherItemStack.has(DualStanceComponents.LINKED_MOB) || itemStack.has(DualStanceComponents.LINKED_MOB)) {
-				return InteractionResult.FAIL;
-			}
-			if (itemStack.get(DualStanceComponents.HEART_SEALED_CREST).isEmpty() || otherItemStack.get(DualStanceComponents.HEART_SEALED_CREST).isEmpty()) {
-				return InteractionResult.FAIL;
-			}
-			if (otherPlayer.getAttachedOrElse(DualStance.PAIR_OFFER_TIMER, 0) > 0) {
-				linkPlayer(itemStack, otherItemStack, player, otherPlayer);
-				linkPlayer(otherItemStack, itemStack, otherPlayer, player);
-				player.setAttached(DualStance.PAIR_OFFER_TIMER, 0);
-				otherPlayer.setAttached(DualStance.PAIR_OFFER_TIMER, 0);
-			} else {
-				player.setAttached(DualStance.PAIR_OFFER_TIMER, 200);
-				player.makeSound(SoundEvents.ARROW_HIT_PLAYER);
-				otherPlayer.sendOverlayMessage(Component.translatableWithFallback("overlay.dual_stance.pair_up_offer","%s wants to pair up!", player.getScoreboardName()));
-			}
-		}
-
-		player.setItemInHand(InteractionHand.MAIN_HAND, itemStack);
-		return InteractionResult.SUCCESS;
+		return InteractionResult.PASS;
 	}
 
 	@Override
@@ -182,21 +184,21 @@ public class HeartSealItem extends Item {
 	}
 
 	public static void linkPlayer(ItemStack itemStack, ItemStack otherItemStack, LivingEntity player, LivingEntity otherPlayer) {
-		CrestHelper.linkPlayer(itemStack, otherItemStack, player, otherPlayer);
 		// TODO: add linking sound event
 		player.level().playSound(null, player.getOnPos(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS);
+		CrestHelper.linkPlayer(itemStack, otherItemStack, player, otherPlayer);
 	}
 
 	public static void linkNonPlayerMob(ItemStack itemStack, LivingEntity player, LivingEntity mob) {
-		CrestHelper.linkNonPlayerMob(itemStack, player, mob);
 		// TODO: add linking sound event
 		player.level().playSound(null, player.getOnPos(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS);
+		CrestHelper.linkNonPlayerMob(itemStack, player, mob);
 	}
 
-	public static void unlinkSelf(ItemStack itemStack, LivingEntity player) {
-		CrestHelper.unlink(itemStack, player);
+	public static void unlinkSelf(ItemStack itemStack, LivingEntity self) {
 		// TODO: add unlinking sound event
-		player.level().playSound(null, player.getOnPos(), SoundEvents.VILLAGER_NO, SoundSource.PLAYERS);
+		self.level().playSound(null, self.getOnPos(), SoundEvents.VILLAGER_NO, SoundSource.PLAYERS);
+		CrestHelper.unlink(itemStack, self);
 	}
 
 	// TODO: add new non-bundle sounds

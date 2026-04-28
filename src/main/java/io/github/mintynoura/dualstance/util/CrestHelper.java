@@ -55,7 +55,9 @@ public class CrestHelper {
 
 	public static void linkPlayer(ItemStack itemStack, ItemStack otherItemStack, LivingEntity player, LivingEntity otherPlayer) {
 		itemStack.set(DualStanceComponents.LINKED_MOB, new LinkedMobComponent(otherPlayer.getUUID(), otherPlayer.getScoreboardName()));
-		itemStack.set(DualStanceComponents.LINKED_CREST, CrestComponent.copy(getHeartSealedCrestComponent(otherItemStack)));
+		if (!getHeartSealedCrest(otherItemStack).isEmpty()) {
+			itemStack.set(DualStanceComponents.LINKED_CREST, CrestComponent.copy(getHeartSealedCrestComponent(otherItemStack)));
+		}
 		itemStack.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true);
 
 		for (CrestEffect crestEffect : getHeartSealedCrestComponent(itemStack).crestEffects()) {
