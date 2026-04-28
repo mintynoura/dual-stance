@@ -71,6 +71,7 @@ public class HeartSealItem extends Item {
 					if (!itemStack.get(DualStanceComponents.HEART_SEALED_CREST).isEmpty() && !itemStack.has(DualStanceComponents.LINKED_MOB)) {
 						// TODO: something is getting messed up in creative mode, but this works in survival
 						linkNonPlayerMob(itemStack, player, target);
+						player.setItemInHand(InteractionHand.MAIN_HAND, itemStack);
 						return InteractionResult.SUCCESS_SERVER;
 					} else return InteractionResult.FAIL;
 				} else return InteractionResult.FAIL;
