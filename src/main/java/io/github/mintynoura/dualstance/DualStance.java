@@ -23,7 +23,7 @@ public class DualStance implements ModInitializer {
 		DualStanceComponents.initialize();
 		DualStanceItems.initialize();
 		DualStanceGameRules.initialize();
-		DualStanceParticles.initialize();
 		DualStanceSoundEvents.initialize();
+		DualStanceParticles.initialize();
 	}
 }
