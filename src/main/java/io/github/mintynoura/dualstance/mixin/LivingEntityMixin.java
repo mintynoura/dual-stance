@@ -5,6 +5,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import io.github.mintynoura.dualstance.DualStance;
 import io.github.mintynoura.dualstance.registries.DualStanceComponents;
 import io.github.mintynoura.dualstance.registries.DualStanceItems;
+import io.github.mintynoura.dualstance.registries.DualStanceTags;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
@@ -55,6 +56,36 @@ public abstract class LivingEntityMixin extends Entity {
 							}
 						} else {
 							damage = 0;
+							return damage;
+						}
+					}
+				}
+				//copy+pasted the pacifism logic, halve damage dealt instead of negating it
+				else if (itemStack.has(DualStanceComponents.HEART_SEALED_CREST) && itemStack.has(DualStanceComponents.LINKED_MOB)) {
+					if (itemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest().getItem() == DualStanceItems.ENCHANTER_CREST) {
+						if (itemStack.has(DualStanceComponents.LINKED_CREST)) {
+							if (!itemStack.get(DualStanceComponents.LINKED_CREST).id().equals(Identifier.fromNamespaceAndPath(DualStance.ID, "enchanter_crest"))) {
+								damage = damage * 0.5f;
+								return damage;
+							}
+						} else {
+							damage = damage * 0.5f;
+							return damage;
+						}
+					}
+				}
+				//copy+pasted the pacifism logic, increase damage dealt instead of negating it
+				else if (itemStack.has(DualStanceComponents.HEART_SEALED_CREST) && itemStack.has(DualStanceComponents.LINKED_MOB)) {
+					if (itemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest().getItem() == DualStanceItems.ENCHANTER_CREST) {
+						if (itemStack.has(DualStanceComponents.LINKED_CREST)) {
+							if (!itemStack.get(DualStanceComponents.LINKED_CREST).id().equals(Identifier.fromNamespaceAndPath(DualStance.ID, "enchanter_crest"))) {
+								if(!source.is(DualStanceTags.HATRED_EXEMPT))
+									damage = damage * 1.5f;
+								return damage;
+							}
+						} else {
+							if(!source.is(DualStanceTags.HATRED_EXEMPT))
+								damage = damage * 1.5f;
 							return damage;
 						}
 					}

@@ -9,6 +9,8 @@
 	"item.dual_stance.stone_crest": "Crest of Stone",
 	"item.dual_stance.specters_crest": "Crest of Specters",
 	"item.dual_stance.pacifism_crest": "Crest of Pacifism",
+	"item.dual_stance.enchanter_crest": "Crest of the Enchanter",
+	"item.dual_stance.hatred_crest": "Crest of Hatred",
 
 	"lore.item.dual_stance.peace_crest": "Attach a crest to a Heart Seal to determine its pair up bonus. This crest has protective properties.",
 	"lore.item.dual_stance.bones_crest": "Attach a crest to a Heart Seal to determine its pair up bonus. This crest gives you faster fingers.",
@@ -17,6 +19,8 @@
 	"lore.item.dual_stance.stone_crest": "Attach a crest to a Heart Seal to determine its pair up bonus. This crest has strength-enhancing properties.",
 	"lore.item.dual_stance.specter_crest": "Attach a crest to a Heart Seal to determine its pair up bonus. This crest gives you some more mobility.",
 	"lore.item.dual_stance.pacifism_crest": "Attach this crest to a Heart Seal to designate your pair up partner as your protector. Provides pacifism and invulnerability.",
+	"lore.item.dual_stance.enchanter_crest": "Attach this crest to a Heart Seal to designate your pair up partner as your protector. A powerful crest that enhances your ally at the cost of your power and defense.",
+	"lore.item.dual_stance.hatred_crest": "Attach this crest to a Heart Seal to imbue yourself with hatred while paired. A powerful crest that enhances your power at the cost of nearly all defense.",
 
 	"item.dual_stance.heart_seal.empty_description": "Attach a Crest to boost your bond",
 	"tooltip.dual_stance.crest_bond": "When bonded:",

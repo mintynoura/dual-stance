@@ -73,6 +73,23 @@ public class DualStanceItems {
 		.component(DualStanceComponents.CREST, new CrestComponent(Identifier.fromNamespaceAndPath(DualStance.ID, "pacifism_crest"), List.of())),
 		CreativeModeTabs.COMBAT);
 
+	public static final Item ENCHANTER_CREST = registerItem("enchanter_crest", Item::new, new Item.Properties()
+			.component(DualStanceComponents.CREST, new CrestComponent(Identifier.fromNamespaceAndPath(DualStance.ID, "enchanter_crest"),
+				List.of(new AttributeCrestEffect(List.of(
+					new AttributeCrestEffect.Entry(Attributes.ARMOR, new AttributeModifier(Identifier.fromNamespaceAndPath(DualStance.ID, "enchanter_crest"), 4.0f, AttributeModifier.Operation.ADD_VALUE)),
+					new AttributeCrestEffect.Entry(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(Identifier.fromNamespaceAndPath(DualStance.ID, "enchanter_crest"), 2.0f, AttributeModifier.Operation.ADD_VALUE)),
+					new AttributeCrestEffect.Entry(Attributes.ATTACK_DAMAGE, new AttributeModifier(Identifier.fromNamespaceAndPath(DualStance.ID, "enchanter_crest"), 4.0f, AttributeModifier.Operation.ADD_VALUE)),
+					new AttributeCrestEffect.Entry(Attributes.MOVEMENT_SPEED, new AttributeModifier(Identifier.fromNamespaceAndPath(DualStance.ID, "enchanter_crest"), 0.2f, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL))
+					)
+					)
+				)
+				)),
+		CreativeModeTabs.COMBAT);
+
+	public static final Item HATRED_CREST = registerItem("hatred_crest", Item::new, new Item.Properties()
+			.component(DualStanceComponents.CREST, new CrestComponent(Identifier.fromNamespaceAndPath(DualStance.ID, "hatred_crest"), List.of())),
+		CreativeModeTabs.COMBAT);
+
 	public static Item registerItem(String name, Function<Item.Properties, Item> factory, Item.Properties settings, ResourceKey<CreativeModeTab> tab) {
 		ResourceKey<Item> itemRegistryKey = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(DualStance.ID, name));
 		Item item = factory.apply(settings.setId(itemRegistryKey));
