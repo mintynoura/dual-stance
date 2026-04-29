@@ -48,6 +48,9 @@ public class HeartSealItem extends Item {
 			unlinkSelf(itemStack, owner.asLivingEntity());
 		}
 		if (itemStack.has(DualStanceComponents.HEART_SEALED_CREST)) {
+			if (itemStack.get(DualStanceComponents.HEART_SEALED_CREST).isEmpty()) {
+				unlinkSelf(itemStack, owner.asLivingEntity());
+			}
 			if (itemStack.has(DualStanceComponents.LINKED_MOB)) {
 				if (!itemStack.get(DualStanceComponents.HEART_SEALED_CREST).isEmpty()) {
 					CrestHelper.tickCrestEffect(thisPlayer, itemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest().get(DualStanceComponents.CREST));
