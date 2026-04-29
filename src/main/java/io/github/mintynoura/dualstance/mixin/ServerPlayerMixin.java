@@ -2,9 +2,11 @@ package io.github.mintynoura.dualstance.mixin;
 
 import com.mojang.authlib.GameProfile;
 import io.github.mintynoura.dualstance.registries.DualStanceComponents;
+import io.github.mintynoura.dualstance.registries.DualStanceSoundEvents;
 import io.github.mintynoura.dualstance.util.CrestHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -35,6 +37,7 @@ public abstract class ServerPlayerMixin extends Player {
 						if (otherItemStack.has(DualStanceComponents.LINKED_MOB)) {
 							if (otherItemStack.get(DualStanceComponents.LINKED_MOB).id().equals(this.getUUID())) {
 								CrestHelper.unlink(otherItemStack, otherPlayer);
+								this.level().playSound(null, this.getOnPos(), DualStanceSoundEvents.PAIR_UNLINK, SoundSource.PLAYERS);
 							}
 						}
 					}

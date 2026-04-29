@@ -1,12 +1,10 @@
 package io.github.mintynoura.dualstance.util;
 
-import io.github.mintynoura.dualstance.DualStance;
 import io.github.mintynoura.dualstance.item.component.*;
 import io.github.mintynoura.dualstance.registries.DualStanceComponents;
 import io.github.mintynoura.dualstance.registries.DualStanceItems;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -16,6 +14,9 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.List;
+import java.util.Set;
 
 public class CrestHelper {
 
@@ -38,10 +39,32 @@ public class CrestHelper {
 		return x1+ t*(x2-x1);
 	}
 
-	public static void tickCrestEffect(LivingEntity entity, CrestComponent effects) {
-		for (CrestEffect crestEffect : effects.crestEffects()) {
-			if (crestEffect instanceof MobEffectCrestEffect mobEffectCrestEffect) {
+	// TODO: render pacifist particle
+	public static void renderPacifistParticle() {}
+
+	public static void tickCrestEffect(LivingEntity entity, ItemStack itemStack) {
+		if (!itemStack.get(DualStanceComponents.HEART_SEALED_CREST).isEmpty()) {
+			for (CrestEffect crestEffect : getHeartSealedCrestComponent(itemStack).crestEffects()) {
+				if (crestEffect instanceof MobEffectCrestEffect mobEffectCrestEffect) {
 				loopMobEffectCrest(entity, mobEffectCrestEffect);
+				}
+			}
+		}
+		if (itemStack.has(DualStanceComponents.LINKED_CREST)) {
+			for (CrestEffect crestEffect : itemStack.get(DualStanceComponents.LINKED_CREST).crestEffects()) {
+				if (crestEffect instanceof MobEffectCrestEffect mobEffectCrestEffect) {
+					loopMobEffectCrest(entity, mobEffectCrestEffect);
+				}
+			}
+			if (!getHeartSealedCrestComponent(itemStack).id().equals(itemStack.get(DualStanceComponents.LINKED_CREST).id())) {
+				List<CrestEffect> comboEffects = CrestCombinations.evaluateCombo(Set.of(getHeartSealedCrestComponent(itemStack).id(), itemStack.get(DualStanceComponents.LINKED_CREST).id()));
+				if (!comboEffects.isEmpty()) {
+					for (CrestEffect crestEffect : comboEffects) {
+						if (crestEffect instanceof MobEffectCrestEffect mobEffectCrestEffect) {
+							loopMobEffectCrest(entity, mobEffectCrestEffect);
+						}
+					}
+				}
 			}
 		}
 	}
@@ -53,6 +76,7 @@ public class CrestHelper {
 		return itemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest();
 	}
 
+	// TODO: check duplicates in linked crest attributes
 	public static void linkPlayer(ItemStack itemStack, ItemStack otherItemStack, LivingEntity player, LivingEntity otherPlayer) {
 		itemStack.set(DualStanceComponents.LINKED_MOB, new LinkedMobComponent(otherPlayer.getUUID(), otherPlayer.getScoreboardName()));
 		if (!getHeartSealedCrest(otherItemStack).isEmpty()) {
@@ -73,6 +97,16 @@ public class CrestHelper {
 		// pacifism attack damage attribute modifier applying
 		if (getHeartSealedCrest(itemStack).getItem() == DualStanceItems.PACIFISM_CREST && !(getHeartSealedCrest(otherItemStack).getItem() == DualStanceItems.PACIFISM_CREST)) {
 			CrestHelper.applyPacifismAttribute(player);
+		}
+		if (!getHeartSealedCrestComponent(itemStack).id().equals(itemStack.get(DualStanceComponents.LINKED_CREST).id())) {
+			List<CrestEffect> comboEffects = CrestCombinations.evaluateCombo(Set.of(getHeartSealedCrestComponent(itemStack).id(), itemStack.get(DualStanceComponents.LINKED_CREST).id()));
+			if (!comboEffects.isEmpty()) {
+				for (CrestEffect crestEffect : comboEffects) {
+					if (crestEffect instanceof AttributeCrestEffect attributeCrestEffect) {
+						CrestHelper.applyAttributeCrest(player, attributeCrestEffect);
+					}
+				}
+			}
 		}
 	}
 	public static void linkNonPlayerMob(ItemStack itemStack, LivingEntity player, LivingEntity mob) {
@@ -102,6 +136,16 @@ public class CrestHelper {
 			for (CrestEffect crestEffect2 : itemStack.get(DualStanceComponents.LINKED_CREST).crestEffects()) {
 				if (crestEffect2 instanceof AttributeCrestEffect attributeCrestEffect) {
 					CrestHelper.clearAttributeCrest(entity, attributeCrestEffect);
+				}
+			}
+			if (!getHeartSealedCrestComponent(itemStack).id().equals(itemStack.get(DualStanceComponents.LINKED_CREST).id())) {
+				List<CrestEffect> comboEffects = CrestCombinations.evaluateCombo(Set.of(getHeartSealedCrestComponent(itemStack).id(), itemStack.get(DualStanceComponents.LINKED_CREST).id()));
+				if (!comboEffects.isEmpty()) {
+					for (CrestEffect crestEffect : comboEffects) {
+						if (crestEffect instanceof AttributeCrestEffect attributeCrestEffect) {
+							CrestHelper.clearAttributeCrest(entity, attributeCrestEffect);
+						}
+					}
 				}
 			}
 		}
@@ -142,15 +186,15 @@ public class CrestHelper {
 	public static void applyPacifismAttribute(LivingEntity entity) {
 		AttributeInstance instance = entity.getAttributes().getInstance(Attributes.ATTACK_DAMAGE);
 		if (instance != null) {
-			instance.removeModifier(Identifier.fromNamespaceAndPath(DualStance.ID, "pacifism_crest"));
-			instance.addTransientModifier(new AttributeModifier(Identifier.fromNamespaceAndPath(DualStance.ID, "pacifism_crest"), -1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+			instance.removeModifier(CrestIdentifiers.PACIFISM_CREST);
+			instance.addTransientModifier(new AttributeModifier(CrestIdentifiers.PACIFISM_CREST, -1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
 		}
 	}
 
 	public static void clearPacifismAttribute(LivingEntity entity) {
 		AttributeInstance instance = entity.getAttributes().getInstance(Attributes.ATTACK_DAMAGE);
 		if (instance != null) {
-			instance.removeModifier(Identifier.fromNamespaceAndPath(DualStance.ID, "pacifism_crest"));
+			instance.removeModifier(CrestIdentifiers.PACIFISM_CREST);
 		}
 	}
 }

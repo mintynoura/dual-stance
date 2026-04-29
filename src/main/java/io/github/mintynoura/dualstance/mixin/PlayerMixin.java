@@ -2,11 +2,10 @@ package io.github.mintynoura.dualstance.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import io.github.mintynoura.dualstance.DualStance;
 import io.github.mintynoura.dualstance.registries.DualStanceComponents;
 import io.github.mintynoura.dualstance.registries.DualStanceItems;
+import io.github.mintynoura.dualstance.util.CrestIdentifiers;
 import io.github.mintynoura.dualstance.util.DualStanceTags;
-import net.minecraft.resources.Identifier;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
@@ -50,7 +49,7 @@ public abstract class PlayerMixin extends Avatar implements ContainerUser {
 				if (itemStack.has(DualStanceComponents.HEART_SEALED_CREST) && itemStack.has(DualStanceComponents.LINKED_MOB)) {
 					if (itemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest().getItem() == DualStanceItems.PACIFISM_CREST) {
 						if (itemStack.has(DualStanceComponents.LINKED_CREST)) {
-							if (!itemStack.get(DualStanceComponents.LINKED_CREST).id().equals(Identifier.fromNamespaceAndPath(DualStance.ID, "pacifism_crest"))) {
+							if (!itemStack.get(DualStanceComponents.LINKED_CREST).id().equals(CrestIdentifiers.PACIFISM_CREST)) {
 								damage = 0;
 								return damage;
 							}
@@ -62,7 +61,7 @@ public abstract class PlayerMixin extends Avatar implements ContainerUser {
 					// enchanter damage taken is increased
 					else if (itemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest().getItem() == DualStanceItems.ENCHANTER_CREST) {
 						if (itemStack.has(DualStanceComponents.LINKED_CREST)) {
-							if (!itemStack.get(DualStanceComponents.LINKED_CREST).id().equals(Identifier.fromNamespaceAndPath(DualStance.ID, "enchanter_crest"))) {
+							if (!itemStack.get(DualStanceComponents.LINKED_CREST).id().equals(CrestIdentifiers.ENCHANTER_CREST)) {
 								if (!source.is(DualStanceTags.DamageTypes.CREST_INCREASE_EXEMPT))
 									damage = damage * 3f + 2f;
 								return damage;
@@ -75,17 +74,9 @@ public abstract class PlayerMixin extends Avatar implements ContainerUser {
 					}
 					// hatred damage taken is increased
 					else if (itemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest().getItem() == DualStanceItems.HATRED_CREST) {
-						if (itemStack.has(DualStanceComponents.LINKED_CREST)) {
-							if (!itemStack.get(DualStanceComponents.LINKED_CREST).id().equals(Identifier.fromNamespaceAndPath(DualStance.ID, "hatred_crest"))) {
-								if (!source.is(DualStanceTags.DamageTypes.CREST_INCREASE_EXEMPT))
-									damage = damage * 4f + 5f;
-								return damage;
-							}
-						} else {
-							if (!source.is(DualStanceTags.DamageTypes.CREST_INCREASE_EXEMPT))
-								damage = damage * 4f + 5f;
-							return damage;
-						}
+						if (!source.is(DualStanceTags.DamageTypes.CREST_INCREASE_EXEMPT))
+							damage = damage * 4f + 5f;
+						return damage;
 					}
 				}
 			}

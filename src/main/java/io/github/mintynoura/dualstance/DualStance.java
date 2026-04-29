@@ -1,6 +1,7 @@
 package io.github.mintynoura.dualstance;
 
 import io.github.mintynoura.dualstance.registries.*;
+import io.github.mintynoura.dualstance.util.CrestCombinations;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
@@ -25,5 +26,6 @@ public class DualStance implements ModInitializer {
 		DualStanceGameRules.initialize();
 		DualStanceSoundEvents.initialize();
 		DualStanceParticles.initialize();
+		CrestCombinations.initializeCombos();
 	}
 }

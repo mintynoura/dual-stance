@@ -44,6 +44,7 @@ public record CrestComponent(Identifier id, List<CrestEffect> crestEffects) impl
 	}
 
 	// This method is called in HeartSealedCrest to handle double "When Bounded" texts
+	// TODO: crest combo tooltips?
 	public void addToTooltip(boolean withText, Item.TooltipContext context, Consumer<Component> consumer, TooltipFlag flag, DataComponentGetter components) {
 		if (!this.crestEffects.isEmpty()) {
 			// no player, with text (linked) -> bounded text

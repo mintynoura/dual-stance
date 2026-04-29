@@ -48,16 +48,8 @@ public class HeartSealItem extends Item {
 			unlinkSelf(itemStack, owner.asLivingEntity());
 		}
 		if (itemStack.has(DualStanceComponents.HEART_SEALED_CREST)) {
-			if (itemStack.get(DualStanceComponents.HEART_SEALED_CREST).isEmpty()) {
-				unlinkSelf(itemStack, owner.asLivingEntity());
-			}
 			if (itemStack.has(DualStanceComponents.LINKED_MOB)) {
-				if (!itemStack.get(DualStanceComponents.HEART_SEALED_CREST).isEmpty()) {
-					CrestHelper.tickCrestEffect(thisPlayer, itemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest().get(DualStanceComponents.CREST));
-				}
-				if (itemStack.has(DualStanceComponents.LINKED_CREST)) {
-					CrestHelper.tickCrestEffect(thisPlayer, itemStack.get(DualStanceComponents.LINKED_CREST));
-				}
+				CrestHelper.tickCrestEffect(thisPlayer, itemStack);
 				CrestHelper.renderLinkParticle(thisPlayer, otherMob);
 			} else unlinkSelf(itemStack, owner.asLivingEntity());
 		}
@@ -125,10 +117,10 @@ public class HeartSealItem extends Item {
 				}
 				this.broadcastChangesOnContainerMenu(player);
 				return true;
-			} else if (clickAction == ClickAction.SECONDARY && other.isEmpty() && !sealedCrest.isEmpty()) {
+			} else if (clickAction == ClickAction.SECONDARY && other.isEmpty() && !sealedCrest.isEmpty() && !self.has(DualStanceComponents.LINKED_MOB)) {
 				ItemStack slotStack = slot.safeInsert(sealedCrest.crest());
 				if (slotStack != null) {
-					playRemoveOneSound(player);
+					playRemoveSound(player);
 				}
 				self.set(DualStanceComponents.HEART_SEALED_CREST, newSealedCrest);
 				this.broadcastChangesOnContainerMenu(player);
@@ -160,11 +152,11 @@ public class HeartSealItem extends Item {
 					}
 					this.broadcastChangesOnContainerMenu(player);
 					return true;
-				} else if (clickAction == ClickAction.SECONDARY && other.isEmpty()) {
+				} else if (clickAction == ClickAction.SECONDARY && other.isEmpty() && !self.has(DualStanceComponents.LINKED_MOB)) {
 					if (slot.allowModification(player) && !sealedCrest.isEmpty()) {
 						ItemStack removed = sealedCrest.crest();
 						if (removed != null) {
-							playRemoveOneSound(player);
+							playRemoveSound(player);
 							carriedItem.set(removed);
 						}
 					}
@@ -201,7 +193,7 @@ public class HeartSealItem extends Item {
 		CrestHelper.unlink(itemStack, self);
 	}
 
-	private static void playRemoveOneSound(final Entity entity) {
+	private static void playRemoveSound(final Entity entity) {
 		entity.playSound(DualStanceSoundEvents.HEART_SEAL_REMOVE, 0.8F, 0.8F + entity.level().getRandom().nextFloat() * 0.4F);
 	}
 
