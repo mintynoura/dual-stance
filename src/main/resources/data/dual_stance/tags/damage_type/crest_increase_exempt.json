@@ -1,0 +1,9 @@
+{
+	"replace": false,
+	"values": [
+		{
+			"id":"bloom_festal:eclipse",
+			"required": false
+		}
+	]
+}
