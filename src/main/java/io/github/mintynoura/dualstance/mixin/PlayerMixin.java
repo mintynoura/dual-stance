@@ -5,7 +5,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import io.github.mintynoura.dualstance.DualStance;
 import io.github.mintynoura.dualstance.registries.DualStanceComponents;
 import io.github.mintynoura.dualstance.registries.DualStanceItems;
-import io.github.mintynoura.dualstance.registries.DualStanceTags;
+import io.github.mintynoura.dualstance.util.DualStanceTags;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
@@ -43,10 +43,10 @@ public abstract class PlayerMixin extends Avatar implements ContainerUser {
 	}
 
 	@ModifyVariable(method = "hurtServer", at = @At("HEAD"), name = "damage", argsOnly = true)
-	private float dualStance$disablePacifismDamageTaken(float damage, @Local(argsOnly = true, name = "source") DamageSource source) {
+	private float dualStance$modifyCrestDamageTaken(float damage, @Local(argsOnly = true, name = "source") DamageSource source) {
 		if (source.getEntity() != null && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
 			for (ItemStack itemStack : this.getInventory()) {
-				//pacifism
+				// pacifism damage taken is disabled
 				if (itemStack.has(DualStanceComponents.HEART_SEALED_CREST) && itemStack.has(DualStanceComponents.LINKED_MOB)) {
 					if (itemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest().getItem() == DualStanceItems.PACIFISM_CREST) {
 						if (itemStack.has(DualStanceComponents.LINKED_CREST)) {
@@ -59,34 +59,30 @@ public abstract class PlayerMixin extends Avatar implements ContainerUser {
 							return damage;
 						}
 					}
-				}
-				//enchanter damage taken is increased
-				else if (itemStack.has(DualStanceComponents.HEART_SEALED_CREST) && itemStack.has(DualStanceComponents.LINKED_MOB)) {
-					if (itemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest().getItem() == DualStanceItems.ENCHANTER_CREST) {
+					// enchanter damage taken is increased
+					else if (itemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest().getItem() == DualStanceItems.ENCHANTER_CREST) {
 						if (itemStack.has(DualStanceComponents.LINKED_CREST)) {
 							if (!itemStack.get(DualStanceComponents.LINKED_CREST).id().equals(Identifier.fromNamespaceAndPath(DualStance.ID, "enchanter_crest"))) {
-								if(!source.is(DualStanceTags.HATRED_EXEMPT))
+								if (!source.is(DualStanceTags.DamageTypes.CREST_INCREASE_EXEMPT))
 									damage = damage * 3f + 2f;
 								return damage;
 							}
 						} else {
-							if(!source.is(DualStanceTags.HATRED_EXEMPT))
+							if (!source.is(DualStanceTags.DamageTypes.CREST_INCREASE_EXEMPT))
 								damage = damage * 3f + 2f;
 							return damage;
 						}
 					}
-				}
-				//hatred damage taken is increased
-				else if (itemStack.has(DualStanceComponents.HEART_SEALED_CREST) && itemStack.has(DualStanceComponents.LINKED_MOB)) {
-					if (itemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest().getItem() == DualStanceItems.HATRED_CREST) {
+					// hatred damage taken is increased
+					else if (itemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest().getItem() == DualStanceItems.HATRED_CREST) {
 						if (itemStack.has(DualStanceComponents.LINKED_CREST)) {
 							if (!itemStack.get(DualStanceComponents.LINKED_CREST).id().equals(Identifier.fromNamespaceAndPath(DualStance.ID, "hatred_crest"))) {
-								if(!source.is(DualStanceTags.HATRED_EXEMPT))
+								if (!source.is(DualStanceTags.DamageTypes.CREST_INCREASE_EXEMPT))
 									damage = damage * 4f + 5f;
 								return damage;
 							}
 						} else {
-							if(!source.is(DualStanceTags.HATRED_EXEMPT))
+							if (!source.is(DualStanceTags.DamageTypes.CREST_INCREASE_EXEMPT))
 								damage = damage * 4f + 5f;
 							return damage;
 						}
