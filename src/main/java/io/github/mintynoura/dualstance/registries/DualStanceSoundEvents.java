@@ -13,6 +13,8 @@ public class DualStanceSoundEvents {
 	public static final SoundEvent HEART_SEAL_INSERT = register("item.heart_seal.insert");
 	public static final SoundEvent HEART_SEAL_INSERT_FAIL = register("item.heart_seal.insert_fail");
 	public static final SoundEvent HEART_SEAL_REMOVE = register("item.heart_seal.remove");
+	public static final SoundEvent DAMAGE_BOOST = register("entity.damage_boost");
+	public static final SoundEvent DAMAGE_NEGATION = register("entity.damage_negation");
 
 	public static SoundEvent register(String name) {
 		return Registry.register(BuiltInRegistries.SOUND_EVENT, Identifier.fromNamespaceAndPath(DualStance.ID, name), SoundEvent.createVariableRangeEvent(Identifier.fromNamespaceAndPath(DualStance.ID, name)));

@@ -27,7 +27,7 @@
 		]
 	},
 	"item.heart_seal.insert": {
-		"subtitle": "subtitles.dual_stance.heart_seal.insert",
+		"subtitle": "subtitles.dual_stance.item.heart_seal.insert",
 		"sounds": [
 			{
 				"name": "block.respawn_anchor.charge",
@@ -36,7 +36,7 @@
 		]
 	},
 	"item.heart_seal.insert_fail": {
-		"subtitle": "subtitles.dual_stance.heart_seal.insert_fail",
+		"subtitle": "subtitles.dual_stance.item.heart_seal.insert_fail",
 		"sounds": [
 			{
 				"name": "block.vault.insert_item_fail",
@@ -45,10 +45,28 @@
 		]
 	},
 	"item.heart_seal.remove": {
-		"subtitle": "subtitles.dual_stance.heart_seal.remove",
+		"subtitle": "subtitles.dual_stance.item.heart_seal.remove",
 		"sounds": [
 			{
 				"name": "block.vault.open_shutter",
+				"type": "event"
+			}
+		]
+	},
+	"entity.damage_boost": {
+		"subtitle": "subtitles.dual_stance.entity.damage_boost",
+		"sounds": [
+			{
+				"name": "entity.player.attack.crit",
+				"type": "event"
+			}
+		]
+	},
+	"entity.damage_negation": {
+		"subtitle": "subtitles.dual_stance.entity.damage_negation",
+		"sounds": [
+			{
+				"name": "item.shield.block",
 				"type": "event"
 			}
 		]

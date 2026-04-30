@@ -2,10 +2,15 @@ package io.github.mintynoura.dualstance.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
+import io.github.mintynoura.dualstance.item.component.CrestEffect;
+import io.github.mintynoura.dualstance.item.component.DamageBoostCrestEffect;
 import io.github.mintynoura.dualstance.registries.DualStanceComponents;
 import io.github.mintynoura.dualstance.registries.DualStanceItems;
+import io.github.mintynoura.dualstance.registries.DualStanceSoundEvents;
+import io.github.mintynoura.dualstance.util.CrestHelper;
 import io.github.mintynoura.dualstance.util.CrestIdentifiers;
 import io.github.mintynoura.dualstance.util.DualStanceTags;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -53,6 +58,7 @@ public abstract class LivingEntityMixin extends Entity {
 							if (!itemStack.get(DualStanceComponents.LINKED_CREST).id().equals(CrestIdentifiers.PACIFISM_CREST)) {
 								damage = 0;
 								return damage;
+
 							}
 						} else {
 							damage = 0;
@@ -64,19 +70,37 @@ public abstract class LivingEntityMixin extends Entity {
 						if (itemStack.has(DualStanceComponents.LINKED_CREST)) {
 							if (!itemStack.get(DualStanceComponents.LINKED_CREST).id().equals(CrestIdentifiers.ENCHANTER_CREST)) {
 								damage *= 0.5f;
-								return damage;
 							}
 						} else {
 							damage *= 0.5f;
-							return damage;
 						}
 					}
 					// increase damage dealt for the hatred crest
 					else if (itemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest().getItem() == DualStanceItems.HATRED_CREST) {
 						if (!source.is(DualStanceTags.DamageTypes.CREST_INCREASE_EXEMPT))
-							damage = damage * 2f;
-						return damage;
+							damage *= 2f;
 					}
+					// damage boosts
+					for (CrestEffect crestEffect : CrestHelper.collectCrestEffects(itemStack)) {
+						if (crestEffect instanceof DamageBoostCrestEffect(
+							float baseChance, boolean doProximityBoost, DamageBoostCrestEffect.Modifier modifier
+						)) {
+							float chance = baseChance;
+							if (doProximityBoost) {
+								Entity linkedEntity = player.level().getEntity(itemStack.get(DualStanceComponents.LINKED_MOB).id());
+								if (player.distanceTo(linkedEntity) < 4f) {
+									chance += baseChance * (float) Math.sqrt((4f - player.distanceTo(linkedEntity)) / 4f);
+								}
+							}
+							if (player.getRandom().nextFloat() <= chance) {
+								if (modifier.multiply()) {
+									damage *= modifier.amount();
+								} else damage += modifier.amount();
+								player.level().playSound(null, player.getOnPos(), DualStanceSoundEvents.DAMAGE_BOOST, SoundSource.PLAYERS);
+							}
+						}
+					}
+					return damage;
 				}
 			}
 		}

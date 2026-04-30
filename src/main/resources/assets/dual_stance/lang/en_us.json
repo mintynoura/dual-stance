@@ -34,7 +34,9 @@
 	"subtitles.dual_stance.pair.link": "Pair linked",
 	"subtitles.dual_stance.pair.unlink": "Pair broken",
 	"subtitles.dual_stance.pair.offer": "Pair offered",
-	"subtitles.dual_stance.heart_seal.insert": "Crest attached",
-	"subtitles.dual_stance.heart_seal.insert_fail": "Heart Seal full",
-	"subtitles.dual_stance.heart_seal.remove": "Crest removed"
+	"subtitles.dual_stance.item.heart_seal.insert": "Crest attached",
+	"subtitles.dual_stance.item.heart_seal.insert_fail": "Heart Seal full",
+	"subtitles.dual_stance.item.heart_seal.remove": "Crest removed",
+	"subtitles.dual_stance.entity.damage_boost": "Damage boosted",
+	"subtitles.dual_stance.entity.damage_negation": "Damage blocked"
 }
