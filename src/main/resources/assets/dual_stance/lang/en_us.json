@@ -27,6 +27,7 @@
 	"tooltip.dual_stance.thanks_to": "Thanks to %s:",
 	"tooltip.dual_stance.mob_effect_interval": "every %s seconds",
 	"overlay.dual_stance.pair_up_offer": "%s wants to pair up!",
+	"tooltip.dual_stance.combo": "Crest Bonus!",
 
 	"gamerule.dual_stance.allow_pairing_with_mobs": "Allow pairing with mobs",
 	"gamerule.dual_stance.allow_pairing_with_mobs.description": "Whether players are able to use a Heart Seal on a mob to pair up with them.",
@@ -38,5 +39,8 @@
 	"subtitles.dual_stance.item.heart_seal.insert_fail": "Heart Seal full",
 	"subtitles.dual_stance.item.heart_seal.remove": "Crest removed",
 	"subtitles.dual_stance.entity.damage_boost": "Damage boosted",
-	"subtitles.dual_stance.entity.damage_negation": "Damage blocked"
+	"subtitles.dual_stance.entity.damage_negation": "Damage blocked",
+
+	"dual_stance.peace_crest.bones_crest.combo": "Nimble Shield: 10% chance to negate damage taken, up to 20% based on proximity. Haste I",
+	"dual_stance.bones_crest.peace_crest.combo": "Nimble Shield: 10% chance to negate damage taken, up to 20% based on proximity. Haste I"
 }

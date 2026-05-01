@@ -160,6 +160,10 @@ public class CrestCombinations {
 		return List.of();
 	}
 
+	public static String createTranslationString(Identifier id1, Identifier id2) {
+		return DualStance.ID + "." + id1.getPath() + "." + id2.getPath() + ".combo";
+	}
+
 	public static void initializeCombos() {
 		crestCombinationMap.put(Set.of(CrestIdentifiers.PEACE_CREST, CrestIdentifiers.BONES_CREST), PEACE_BONES_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.PEACE_CREST, CrestIdentifiers.STONE_CREST), PEACE_STONE_COMBO);

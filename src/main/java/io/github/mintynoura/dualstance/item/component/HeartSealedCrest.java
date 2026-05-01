@@ -2,11 +2,15 @@ package io.github.mintynoura.dualstance.item.component;
 
 import com.mojang.serialization.Codec;
 
+import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import io.github.mintynoura.dualstance.registries.DualStanceComponents;
+import io.github.mintynoura.dualstance.util.CrestCombinations;
 import io.github.mintynoura.dualstance.util.DualStanceTags;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -39,6 +43,15 @@ public record HeartSealedCrest(ItemStack crest) implements TooltipComponent, Too
 			return;
 		if (this.crest.has(DualStanceComponents.CREST)) {
 			this.crest.get(DualStanceComponents.CREST).addToTooltip(false, context, consumer, flag, components);
+			if (components.get(DualStanceComponents.LINKED_CREST) != null) {
+				if (!this.crest.get(DualStanceComponents.CREST).id().equals(components.get(DualStanceComponents.LINKED_CREST).id())) {
+					List<CrestEffect> comboEffects = CrestCombinations.evaluateCombo(Set.of(this.crest.get(DualStanceComponents.CREST).id(), components.get(DualStanceComponents.LINKED_CREST).id()));
+					if (!comboEffects.isEmpty()) {
+						consumer.accept(Component.translatableWithFallback("tooltip.dual_stance.combo", "Crest Bonus!").withStyle(ChatFormatting.GRAY));
+						consumer.accept(Component.translatable(CrestCombinations.createTranslationString(this.crest.get(DualStanceComponents.CREST).id(), components.get(DualStanceComponents.LINKED_CREST).id())).withStyle(ChatFormatting.BLUE));
+					}
+				}
+			}
 		}
 	}
 
