@@ -44,12 +44,22 @@ public class CrestCombinations {
 	public static final List<CrestEffect> BONES_STONE_COMBO = List.of(
 		new DamageBoostCrestEffect(0.1f, true, new DamageBoostCrestEffect.Modifier(2, true))
 	);
+	public static final List<CrestEffect> BONES_EMBLEMS_COMBO = List.of(
+		new HealthLeechCrestEffect(0.5f, true)
+	);
 	public static final List<CrestEffect> BONES_SPECTERS_COMBO = List.of(
 		new MobEffectCrestEffect(List.of(
 			new MobEffectInstance(MobEffects.JUMP_BOOST, 300, 0, true, true),
 			new MobEffectInstance(MobEffects.SPEED, 300, 0, true, true),
 			new MobEffectInstance(MobEffects.HASTE, 300, 0, true, true)),
 			200)
+	);
+	public static final List<CrestEffect> STONE_SHELLS_COMBO = List.of(
+		new MobEffectCrestEffect(List.of(
+			new MobEffectInstance(MobEffects.HUNGER, 300, 1, true, true),
+			new MobEffectInstance(MobEffects.STRENGTH, 300, 2, true, true)),
+			200),
+		new FoodLeechCrestEffect(1, 0.1f)
 	);
 	public static final List<CrestEffect> EMBLEMS_SPECTERS_COMBO = List.of(
 		new MobEffectCrestEffect(List.of(
@@ -170,7 +180,9 @@ public class CrestCombinations {
 		crestCombinationMap.put(Set.of(CrestIdentifiers.PEACE_CREST, CrestIdentifiers.EMBLEMS_CREST), PEACE_EMBLEMS_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.PEACE_CREST, CrestIdentifiers.SHELLS_CREST), PEACE_SHELLS_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.BONES_CREST, CrestIdentifiers.STONE_CREST), BONES_STONE_COMBO);
+		crestCombinationMap.put(Set.of(CrestIdentifiers.BONES_CREST, CrestIdentifiers.EMBLEMS_CREST), BONES_EMBLEMS_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.BONES_CREST, CrestIdentifiers.SPECTERS_CREST), BONES_SPECTERS_COMBO);
+		crestCombinationMap.put(Set.of(CrestIdentifiers.STONE_CREST, CrestIdentifiers.SHELLS_CREST), STONE_SHELLS_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.EMBLEMS_CREST, CrestIdentifiers.SPECTERS_CREST), EMBLEMS_SPECTERS_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.SPECTERS_CREST, CrestIdentifiers.SHELLS_CREST), SPECTERS_SHELLS_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.PACIFISM_CREST, CrestIdentifiers.PEACE_CREST), PACIFISM_PEACE_OR_EMBLEMS_COMBO);
