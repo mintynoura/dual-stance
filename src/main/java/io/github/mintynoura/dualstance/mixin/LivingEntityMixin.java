@@ -2,10 +2,10 @@ package io.github.mintynoura.dualstance.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import io.github.mintynoura.dualstance.item.component.CrestEffect;
-import io.github.mintynoura.dualstance.item.component.DamageBoostCrestEffect;
-import io.github.mintynoura.dualstance.item.component.FoodLeechCrestEffect;
-import io.github.mintynoura.dualstance.item.component.HealthLeechCrestEffect;
+import io.github.mintynoura.dualstance.item.component.crest_effects.CrestEffect;
+import io.github.mintynoura.dualstance.item.component.crest_effects.DamageBoostCrestEffect;
+import io.github.mintynoura.dualstance.item.component.crest_effects.FoodLeechCrestEffect;
+import io.github.mintynoura.dualstance.item.component.crest_effects.HealthLeechCrestEffect;
 import io.github.mintynoura.dualstance.registries.DualStanceComponents;
 import io.github.mintynoura.dualstance.registries.DualStanceItems;
 import io.github.mintynoura.dualstance.registries.DualStanceSoundEvents;

@@ -1,11 +1,11 @@
 package io.github.mintynoura.dualstance.registries;
 
 import io.github.mintynoura.dualstance.DualStance;
-import io.github.mintynoura.dualstance.item.component.AttributeCrestEffect;
+import io.github.mintynoura.dualstance.item.component.crest_effects.AttributeCrestEffect;
 import io.github.mintynoura.dualstance.item.component.CrestComponent;
 import io.github.mintynoura.dualstance.item.HeartSealItem;
-import io.github.mintynoura.dualstance.item.component.HeartSealedCrest;
-import io.github.mintynoura.dualstance.item.component.MobEffectCrestEffect;
+import io.github.mintynoura.dualstance.item.component.crest_effects.HeartSealedCrest;
+import io.github.mintynoura.dualstance.item.component.crest_effects.MobEffectCrestEffect;
 import io.github.mintynoura.dualstance.util.CrestIdentifiers;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.minecraft.core.Holder;

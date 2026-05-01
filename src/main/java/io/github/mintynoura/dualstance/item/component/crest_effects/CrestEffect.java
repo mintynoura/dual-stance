@@ -1,4 +1,4 @@
-package io.github.mintynoura.dualstance.item.component;
+package io.github.mintynoura.dualstance.item.component.crest_effects;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;

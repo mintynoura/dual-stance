@@ -1,4 +1,4 @@
-package io.github.mintynoura.dualstance.item.component;
+package io.github.mintynoura.dualstance.item.component.crest_effects;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -40,7 +40,7 @@ public record DamageBoostCrestEffect(float baseChance, boolean doProximityBoost,
 	public record Modifier(float amount, boolean multiply) {
 		public static final Codec<Modifier> CODEC = RecordCodecBuilder.create(builder -> builder.group(
 			Codec.FLOAT.fieldOf("amount").forGetter(Modifier::amount),
-			Codec.BOOL.fieldOf("multiply").forGetter(Modifier::multiply)
+			Codec.BOOL.optionalFieldOf("multiply", true).forGetter(Modifier::multiply)
 		).apply(builder, Modifier::new));
 		public static final StreamCodec<RegistryFriendlyByteBuf, Modifier> STREAM_CODEC = StreamCodec.composite(
 			ByteBufCodecs.FLOAT,

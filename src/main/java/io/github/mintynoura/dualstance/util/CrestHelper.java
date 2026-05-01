@@ -2,6 +2,9 @@ package io.github.mintynoura.dualstance.util;
 
 import io.github.mintynoura.dualstance.DualStance;
 import io.github.mintynoura.dualstance.item.component.*;
+import io.github.mintynoura.dualstance.item.component.crest_effects.AttributeCrestEffect;
+import io.github.mintynoura.dualstance.item.component.crest_effects.CrestEffect;
+import io.github.mintynoura.dualstance.item.component.crest_effects.MobEffectCrestEffect;
 import io.github.mintynoura.dualstance.registries.DualStanceComponents;
 import io.github.mintynoura.dualstance.registries.DualStanceItems;
 import net.minecraft.core.component.DataComponents;

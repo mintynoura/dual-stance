@@ -2,7 +2,7 @@ package io.github.mintynoura.dualstance.registries;
 
 import io.github.mintynoura.dualstance.DualStance;
 import io.github.mintynoura.dualstance.item.component.CrestComponent;
-import io.github.mintynoura.dualstance.item.component.HeartSealedCrest;
+import io.github.mintynoura.dualstance.item.component.crest_effects.HeartSealedCrest;
 import io.github.mintynoura.dualstance.item.component.LinkedMobComponent;
 import net.fabricmc.fabric.api.item.v1.ItemComponentTooltipProviderRegistry;
 import net.minecraft.core.Registry;

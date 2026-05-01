@@ -1,6 +1,9 @@
 package io.github.mintynoura.dualstance.item;
 
 import io.github.mintynoura.dualstance.DualStance;
+import io.github.mintynoura.dualstance.item.component.crest_effects.CrestEffect;
+import io.github.mintynoura.dualstance.item.component.crest_effects.HeartSealedCrest;
+import io.github.mintynoura.dualstance.item.component.crest_effects.PairUpRangeModifierCrestEffect;
 import io.github.mintynoura.dualstance.registries.DualStanceGameRules;
 import io.github.mintynoura.dualstance.item.component.*;
 import io.github.mintynoura.dualstance.registries.DualStanceComponents;
@@ -44,7 +47,7 @@ public class HeartSealItem extends Item {
 		}
 		if (!itemStack.has(DualStanceComponents.LINKED_MOB) || !(owner instanceof Player thisPlayer)) return;
 		Entity otherMob = level.getEntity(itemStack.get(DualStanceComponents.LINKED_MOB).id());
-		if (otherMob == null || otherMob.distanceTo(thisPlayer) > 8 || !otherMob.level().dimension().equals(level.dimension()) || otherMob == owner) {
+		if (otherMob == null || otherMob.distanceTo(thisPlayer) > getPairUpRange(itemStack, 8f) || !otherMob.level().dimension().equals(level.dimension()) || otherMob == owner) {
 			unlinkSelf(itemStack, owner.asLivingEntity());
 		}
 		if (itemStack.has(DualStanceComponents.HEART_SEALED_CREST)) {
@@ -176,6 +179,15 @@ public class HeartSealItem extends Item {
 			entity.getItem().set(DualStanceComponents.HEART_SEALED_CREST, HeartSealedCrest.EMPTY);
 			ItemUtils.onContainerDestroyed(entity, contents.itemCopyStream());
 		}
+	}
+
+	public static float getPairUpRange(ItemStack itemStack, float range) {
+		for (CrestEffect crestEffect : CrestHelper.collectCrestEffects(itemStack)) {
+			if (crestEffect instanceof PairUpRangeModifierCrestEffect(float modifier, boolean multiply)) {
+				return multiply ? range * modifier : range + modifier;
+			}
+		}
+		return range;
 	}
 
 	public static void linkPlayer(ItemStack itemStack, ItemStack otherItemStack, LivingEntity player, LivingEntity otherPlayer) {

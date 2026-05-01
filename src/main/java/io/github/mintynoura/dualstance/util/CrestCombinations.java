@@ -1,7 +1,7 @@
 package io.github.mintynoura.dualstance.util;
 
 import io.github.mintynoura.dualstance.DualStance;
-import io.github.mintynoura.dualstance.item.component.*;
+import io.github.mintynoura.dualstance.item.component.crest_effects.*;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -28,6 +28,12 @@ public class CrestCombinations {
 		new MobEffectCrestEffect(List.of(
 			new MobEffectInstance(MobEffects.STRENGTH, 300, 0, true, true)),
 			200)
+	);
+	public static final List<CrestEffect> PEACE_SPECTERS_COMBO = List.of(
+		new MobEffectCrestEffect(List.of(
+			new MobEffectInstance(MobEffects.SPEED, 300, 0, true, true)),
+			200),
+		new PairUpRangeModifierCrestEffect(2, true)
 	);
 	public static final List<CrestEffect> PEACE_SHELLS_COMBO = List.of(
 		new MobEffectCrestEffect(List.of(
@@ -178,6 +184,7 @@ public class CrestCombinations {
 		crestCombinationMap.put(Set.of(CrestIdentifiers.PEACE_CREST, CrestIdentifiers.BONES_CREST), PEACE_BONES_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.PEACE_CREST, CrestIdentifiers.STONE_CREST), PEACE_STONE_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.PEACE_CREST, CrestIdentifiers.EMBLEMS_CREST), PEACE_EMBLEMS_COMBO);
+		crestCombinationMap.put(Set.of(CrestIdentifiers.PEACE_CREST, CrestIdentifiers.SPECTERS_CREST), PEACE_SPECTERS_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.PEACE_CREST, CrestIdentifiers.SHELLS_CREST), PEACE_SHELLS_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.BONES_CREST, CrestIdentifiers.STONE_CREST), BONES_STONE_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.BONES_CREST, CrestIdentifiers.EMBLEMS_CREST), BONES_EMBLEMS_COMBO);

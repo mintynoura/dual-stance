@@ -1,6 +1,6 @@
 package io.github.mintynoura.dualstance.client;
 
-import io.github.mintynoura.dualstance.item.component.HeartSealedCrest;
+import io.github.mintynoura.dualstance.item.component.crest_effects.HeartSealedCrest;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.Font;
