@@ -2,10 +2,7 @@ package io.github.mintynoura.dualstance.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import io.github.mintynoura.dualstance.item.component.crest_effects.CrestEffect;
-import io.github.mintynoura.dualstance.item.component.crest_effects.DamageBoostCrestEffect;
-import io.github.mintynoura.dualstance.item.component.crest_effects.FoodLeechCrestEffect;
-import io.github.mintynoura.dualstance.item.component.crest_effects.HealthLeechCrestEffect;
+import io.github.mintynoura.dualstance.item.component.crest_effects.*;
 import io.github.mintynoura.dualstance.registries.DualStanceComponents;
 import io.github.mintynoura.dualstance.registries.DualStanceItems;
 import io.github.mintynoura.dualstance.registries.DualStanceSoundEvents;
@@ -101,13 +98,16 @@ public abstract class LivingEntityMixin extends Entity {
 								player.level().playSound(null, player.getOnPos(), DualStanceSoundEvents.DAMAGE_BOOST, SoundSource.PLAYERS);
 							}
 						}
+						if (crestEffect instanceof KineticDamageBoostCrestEffect(float multiplier, float max, float minSpeed)) {
+							if (damage > 0) damage += KineticDamageBoostCrestEffect.damageBoost(player, ((LivingEntity)(Object) this), multiplier, max, minSpeed);
+						}
 						if (crestEffect instanceof HealthLeechCrestEffect(float amount, boolean fractional)) {
 							if (fractional) {
 								player.heal(amount * damage);
 							} else if (damage > 0) player.heal(amount);
 						}
 						if (crestEffect instanceof FoodLeechCrestEffect(int food, float saturationModifier)) {
-							player.getFoodData().eat(food, saturationModifier);
+							if (damage > 0) player.getFoodData().eat(food, saturationModifier);
 						}
 					}
 					return damage;

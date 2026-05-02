@@ -63,6 +63,7 @@ public class CrestHelper {
 		return itemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest();
 	}
 
+	// TODO: apply sided enchanter buffs
 	public static void linkPlayer(ItemStack itemStack, ItemStack otherItemStack, LivingEntity player, LivingEntity otherPlayer) {
 		itemStack.set(DualStanceComponents.LINKED_MOB, new LinkedMobComponent(otherPlayer.getUUID(), otherPlayer.getScoreboardName()));
 		if (!getHeartSealedCrest(otherItemStack).isEmpty()) {

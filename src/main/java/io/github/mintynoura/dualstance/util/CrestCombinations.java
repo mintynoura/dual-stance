@@ -71,6 +71,9 @@ public class CrestCombinations {
 			new MobEffectInstance(MobEffects.STRENGTH, 300, 1, true, true)),
 			200, true, false)
 	);
+	public static final List<CrestEffect> STONE_SPECTERS_COMBO = List.of(
+		new KineticDamageBoostCrestEffect(2.75f, 8.0f, 3.0f)
+	);
 	public static final List<CrestEffect> STONE_SHELLS_COMBO = List.of(
 		new MobEffectCrestEffect(List.of(
 			new MobEffectInstance(MobEffects.HUNGER, 300, 1, true, true),
@@ -178,6 +181,14 @@ public class CrestCombinations {
 			new MobEffectInstance(MobEffects.RESISTANCE, 300, 1, true, true)),
 			200)
 	);
+	public static final List<CrestEffect> ENCHANTER_BONES_OR_SPECTERS_COMBO = List.of(
+		new KineticDamageBoostCrestEffect(2.75f, 8.0f, 3.0f),
+		new MobEffectCrestEffect(List.of(
+			new MobEffectInstance(MobEffects.JUMP_BOOST, 300, 1, true, true),
+			new MobEffectInstance(MobEffects.SPEED, 300, 1, true, true),
+			new MobEffectInstance(MobEffects.HASTE, 300, 3, true, true)),
+			200)
+	);
 	public static final List<CrestEffect> HATRED_BONES_OR_SPECTERS_COMBO = List.of(
 		new MobEffectCrestEffect(List.of(
 			new MobEffectInstance(MobEffects.JUMP_BOOST, 300, 0, true, true),
@@ -228,6 +239,7 @@ public class CrestCombinations {
 		crestCombinationMap.put(Set.of(CrestIdentifiers.BONES_CREST, CrestIdentifiers.SPECTERS_CREST), BONES_SPECTERS_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.BONES_CREST, CrestIdentifiers.SHELLS_CREST), BONES_SHELLS_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.STONE_CREST, CrestIdentifiers.EMBLEMS_CREST), STONE_EMBLEMS_COMBO);
+		crestCombinationMap.put(Set.of(CrestIdentifiers.STONE_CREST, CrestIdentifiers.SPECTERS_CREST), STONE_SPECTERS_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.STONE_CREST, CrestIdentifiers.SHELLS_CREST), STONE_SHELLS_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.EMBLEMS_CREST, CrestIdentifiers.SPECTERS_CREST), EMBLEMS_SPECTERS_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.EMBLEMS_CREST, CrestIdentifiers.SHELLS_CREST), EMBLEMS_SHELLS_COMBO);
@@ -242,6 +254,8 @@ public class CrestCombinations {
 		crestCombinationMap.put(Set.of(CrestIdentifiers.PACIFISM_CREST, CrestIdentifiers.HATRED_CREST), PACIFISM_HATRED_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.ENCHANTER_CREST, CrestIdentifiers.PEACE_CREST), ENCHANTER_PEACE_OR_EMBLEMS_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.ENCHANTER_CREST, CrestIdentifiers.EMBLEMS_CREST), ENCHANTER_PEACE_OR_EMBLEMS_COMBO);
+		crestCombinationMap.put(Set.of(CrestIdentifiers.ENCHANTER_CREST, CrestIdentifiers.BONES_CREST), ENCHANTER_BONES_OR_SPECTERS_COMBO);
+		crestCombinationMap.put(Set.of(CrestIdentifiers.ENCHANTER_CREST, CrestIdentifiers.SPECTERS_CREST), ENCHANTER_BONES_OR_SPECTERS_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.ENCHANTER_CREST, CrestIdentifiers.STONE_CREST), ENCHANTER_STONE_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.ENCHANTER_CREST, CrestIdentifiers.SHELLS_CREST), ENCHANTER_SHELLS_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.HATRED_CREST, CrestIdentifiers.BONES_CREST), HATRED_BONES_OR_SPECTERS_COMBO);

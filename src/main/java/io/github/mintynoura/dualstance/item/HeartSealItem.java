@@ -39,6 +39,7 @@ public class HeartSealItem extends Item {
 		super(properties);
 	}
 
+	// TODO: leash tugging physics when link is about to break
 	@Override
 	public void inventoryTick(ItemStack itemStack, ServerLevel level, Entity owner, @Nullable EquipmentSlot slot) {
 		super.inventoryTick(itemStack, level, owner, slot);

@@ -37,6 +37,7 @@ public record HeartSealedCrest(ItemStack crest) implements TooltipComponent, Too
 		return this.crest.isEmpty();
 	}
 
+	// TODO: fix newlines for long combo descriptions
 	@Override
 	public void addToTooltip(Item.TooltipContext context, Consumer<Component> consumer, TooltipFlag flag, DataComponentGetter components) {
 		if (this.isEmpty())
