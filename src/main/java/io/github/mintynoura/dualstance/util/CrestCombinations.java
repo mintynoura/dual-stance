@@ -60,6 +60,17 @@ public class CrestCombinations {
 			new MobEffectInstance(MobEffects.HASTE, 300, 0, true, true)),
 			200)
 	);
+	public static final List<CrestEffect> BONES_SHELLS_COMBO = List.of(
+		new FoodLeechCrestEffect(2, 0.25f),
+		new MobEffectCrestEffect(List.of(
+			new MobEffectInstance(MobEffects.STRENGTH, 300, 0, true,true)),
+			200, false, true)
+	);
+	public static final List<CrestEffect> STONE_EMBLEMS_COMBO = List.of(
+		new MobEffectCrestEffect(List.of(
+			new MobEffectInstance(MobEffects.STRENGTH, 300, 1, true, true)),
+			200, true, false)
+	);
 	public static final List<CrestEffect> STONE_SHELLS_COMBO = List.of(
 		new MobEffectCrestEffect(List.of(
 			new MobEffectInstance(MobEffects.HUNGER, 300, 1, true, true),
@@ -72,6 +83,16 @@ public class CrestCombinations {
 			new MobEffectInstance(MobEffects.REGENERATION, 300, 0, true, true),
 			new MobEffectInstance(MobEffects.SPEED, 300, 0, true, true)),
 			200)
+	);
+	public static final List<CrestEffect> EMBLEMS_SHELLS_COMBO = List.of(
+		new FoodLeechCrestEffect(1, 0.1f),
+		new HealthLeechCrestEffect(1, false),
+		new MobEffectCrestEffect(List.of(
+			new MobEffectInstance(MobEffects.STRENGTH, 300, 0, true, true)),
+			200, false, true),
+		new MobEffectCrestEffect(List.of(
+			new MobEffectInstance(MobEffects.RESISTANCE, 300, 1, true, true)),
+			200, true, false)
 	);
 	public static final List<CrestEffect> SPECTERS_SHELLS_COMBO = List.of(
 		new MobEffectCrestEffect(List.of(
@@ -134,6 +155,22 @@ public class CrestCombinations {
 			new MobEffectInstance(MobEffects.RESISTANCE, 300, 1, true, true)),
 			200)
 	);
+	public static final List<CrestEffect> ENCHANTER_SHELLS_COMBO = List.of(
+		new FoodLeechCrestEffect(3, 0.6f),
+		new AttributeCrestEffect(List.of(
+			new AttributeCrestEffect.Entry(Attributes.FALL_DAMAGE_MULTIPLIER, new AttributeModifier(Identifier.fromNamespaceAndPath(DualStance.ID, "enchanter_shells_combo"), 0.8, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)),
+			new AttributeCrestEffect.Entry(Attributes.SAFE_FALL_DISTANCE, new AttributeModifier(Identifier.fromNamespaceAndPath(DualStance.ID, "enchanter_shells_combo"), 5, AttributeModifier.Operation.ADD_VALUE))
+		)),
+		new MobEffectCrestEffect(List.of(
+			new MobEffectInstance(MobEffects.SPEED, 300, 1, true, true),
+			new MobEffectInstance(MobEffects.DOLPHINS_GRACE, 300, 0, true, true),
+			new MobEffectInstance(MobEffects.WATER_BREATHING, 300, 0, true, true),
+			new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 300, 0, true, true)),
+			200),
+		new MobEffectCrestEffect(List.of(
+			new MobEffectInstance(MobEffects.STRENGTH, 300, 0, true, true)),
+			200, false, true)
+	);
 	public static final List<CrestEffect> ENCHANTER_PEACE_OR_EMBLEMS_COMBO = List.of(
 		new DamageNegationCrestEffect(0.3f, true),
 		new MobEffectCrestEffect(List.of(
@@ -189,8 +226,11 @@ public class CrestCombinations {
 		crestCombinationMap.put(Set.of(CrestIdentifiers.BONES_CREST, CrestIdentifiers.STONE_CREST), BONES_STONE_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.BONES_CREST, CrestIdentifiers.EMBLEMS_CREST), BONES_EMBLEMS_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.BONES_CREST, CrestIdentifiers.SPECTERS_CREST), BONES_SPECTERS_COMBO);
+		crestCombinationMap.put(Set.of(CrestIdentifiers.BONES_CREST, CrestIdentifiers.SHELLS_CREST), BONES_SHELLS_COMBO);
+		crestCombinationMap.put(Set.of(CrestIdentifiers.STONE_CREST, CrestIdentifiers.EMBLEMS_CREST), STONE_EMBLEMS_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.STONE_CREST, CrestIdentifiers.SHELLS_CREST), STONE_SHELLS_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.EMBLEMS_CREST, CrestIdentifiers.SPECTERS_CREST), EMBLEMS_SPECTERS_COMBO);
+		crestCombinationMap.put(Set.of(CrestIdentifiers.EMBLEMS_CREST, CrestIdentifiers.SHELLS_CREST), EMBLEMS_SHELLS_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.SPECTERS_CREST, CrestIdentifiers.SHELLS_CREST), SPECTERS_SHELLS_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.PACIFISM_CREST, CrestIdentifiers.PEACE_CREST), PACIFISM_PEACE_OR_EMBLEMS_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.PACIFISM_CREST, CrestIdentifiers.EMBLEMS_CREST), PACIFISM_PEACE_OR_EMBLEMS_COMBO);
@@ -203,6 +243,7 @@ public class CrestCombinations {
 		crestCombinationMap.put(Set.of(CrestIdentifiers.ENCHANTER_CREST, CrestIdentifiers.PEACE_CREST), ENCHANTER_PEACE_OR_EMBLEMS_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.ENCHANTER_CREST, CrestIdentifiers.EMBLEMS_CREST), ENCHANTER_PEACE_OR_EMBLEMS_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.ENCHANTER_CREST, CrestIdentifiers.STONE_CREST), ENCHANTER_STONE_COMBO);
+		crestCombinationMap.put(Set.of(CrestIdentifiers.ENCHANTER_CREST, CrestIdentifiers.SHELLS_CREST), ENCHANTER_SHELLS_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.HATRED_CREST, CrestIdentifiers.BONES_CREST), HATRED_BONES_OR_SPECTERS_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.HATRED_CREST, CrestIdentifiers.SPECTERS_CREST), HATRED_BONES_OR_SPECTERS_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.HATRED_CREST, CrestIdentifiers.STONE_CREST), HATRED_STONE_COMBO);

@@ -66,6 +66,7 @@ public record CrestComponent(Identifier id, List<CrestEffect> crestEffects) impl
 				}
 				if (crestEffect instanceof MobEffectCrestEffect(
 					List<MobEffectInstance> effects, int interval
+					, _, _
 				)) {
 					MobEffectCrestEffect.display(effects, consumer, interval);
 				}

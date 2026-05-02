@@ -1,6 +1,7 @@
 package io.github.mintynoura.dualstance.item.component.crest_effects;
 
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.mintynoura.dualstance.registries.CrestEffectTypes;
@@ -19,6 +20,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
@@ -27,10 +29,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public record MobEffectCrestEffect(List<MobEffectInstance> effects, int interval) implements CrestEffect {
+public record MobEffectCrestEffect(List<MobEffectInstance> effects, int interval, boolean requireMaxHealth, boolean requireMaxSaturation) implements CrestEffect {
 	public static MapCodec<MobEffectCrestEffect> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
 		MobEffectInstance.CODEC.listOf().fieldOf("effects").forGetter(MobEffectCrestEffect::effects),
-		ExtraCodecs.POSITIVE_INT.optionalFieldOf("interval", 200).forGetter(MobEffectCrestEffect::interval)
+		ExtraCodecs.POSITIVE_INT.optionalFieldOf("interval", 200).forGetter(MobEffectCrestEffect::interval),
+		Codec.BOOL.optionalFieldOf("require_max_health", false).forGetter(MobEffectCrestEffect::requireMaxHealth),
+		Codec.BOOL.optionalFieldOf("require_max_saturation", false).forGetter(MobEffectCrestEffect::requireMaxSaturation)
 		).apply(builder, MobEffectCrestEffect::new)
 	);
 	public static StreamCodec<RegistryFriendlyByteBuf, MobEffectCrestEffect> STREAM_CODEC = StreamCodec.composite(
@@ -38,11 +42,28 @@ public record MobEffectCrestEffect(List<MobEffectInstance> effects, int interval
 		MobEffectCrestEffect::effects,
 		ByteBufCodecs.VAR_INT,
 		MobEffectCrestEffect::interval,
+		ByteBufCodecs.BOOL,
+		MobEffectCrestEffect::requireMaxHealth,
+		ByteBufCodecs.BOOL,
+		MobEffectCrestEffect::requireMaxSaturation,
 		MobEffectCrestEffect::new
 	);
+
+	public MobEffectCrestEffect(List<MobEffectInstance> effects, int interval) {
+		this(effects, interval, false, false);
+	}
+
 	@Override
 	public void trigger(Level level, LivingEntity entity) {
 		if (level instanceof ServerLevel serverLevel) {
+			if (requireMaxHealth && entity.getHealth() != entity.getMaxHealth()) {
+				return;
+			}
+			if (entity instanceof Player player) {
+				if (requireMaxSaturation && player.getFoodData().getSaturationLevel() != 20) {
+					return;
+				}
+			}
 			for (MobEffectInstance effectInstance: effects) {
 				if (effectInstance.getEffect().value().isInstantenous()) {
 					effectInstance.getEffect().value().applyInstantenousEffect(serverLevel, entity, entity, entity, effectInstance.getAmplifier(), 1.0);
