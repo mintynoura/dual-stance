@@ -1,6 +1,6 @@
 {
 	"item.dual_stance.heart_seal": "Heart Seal",
-	"lore.item.dual_stance.heart_seal": "When two players use a Heart Seal on each other, they will become paired and support each other! Attach a crest to determine the pair up bonus.",
+	"lore.dual_stance.heart_seal": "When two players use a Heart Seal on each other, they will become paired and support each other! Attach a crest to determine the pair up bonus.",
 
 	"item.dual_stance.peace_crest": "Crest of Peace",
 	"item.dual_stance.bones_crest": "Crest of Bones",
@@ -12,15 +12,15 @@
 	"item.dual_stance.enchanter_crest": "Crest of the Enchanter",
 	"item.dual_stance.hatred_crest": "Crest of Hatred",
 
-	"lore.item.dual_stance.peace_crest": "Attach a crest to a Heart Seal to determine its pair up bonus. This crest has protective properties.",
-	"lore.item.dual_stance.bones_crest": "Attach a crest to a Heart Seal to determine its pair up bonus. This crest gives you faster fingers.",
-	"lore.item.dual_stance.emblem_crest": "Attach a crest to a Heart Seal to determine its pair up bonus. This crest has healing properties.",
-	"lore.item.dual_stance.shells_crest": "Attach a crest to a Heart Seal to determine its pair up bonus. This crest is said to provide nourishment.",
-	"lore.item.dual_stance.stone_crest": "Attach a crest to a Heart Seal to determine its pair up bonus. This crest has strength-enhancing properties.",
-	"lore.item.dual_stance.specter_crest": "Attach a crest to a Heart Seal to determine its pair up bonus. This crest gives you some more mobility.",
-	"lore.item.dual_stance.pacifism_crest": "Attach this crest to a Heart Seal to designate your pair up partner as your protector. Provides pacifism and invulnerability.",
-	"lore.item.dual_stance.enchanter_crest": "Attach this crest to a Heart Seal to designate your pair up partner as your protector. A powerful crest that enhances your ally at the cost of your power and defense.",
-	"lore.item.dual_stance.hatred_crest": "Attach this crest to a Heart Seal to imbue yourself with hatred while paired. A powerful crest that enhances your power at the cost of nearly all defense.",
+	"lore.dual_stance.peace_crest": "Attach a crest to a Heart Seal to determine its pair up bonus. This crest has protective properties.",
+	"lore.dual_stance.bones_crest": "Attach a crest to a Heart Seal to determine its pair up bonus. This crest gives you faster fingers.",
+	"lore.dual_stance.emblem_crest": "Attach a crest to a Heart Seal to determine its pair up bonus. This crest has healing properties.",
+	"lore.dual_stance.shells_crest": "Attach a crest to a Heart Seal to determine its pair up bonus. This crest is said to provide nourishment.",
+	"lore.dual_stance.stone_crest": "Attach a crest to a Heart Seal to determine its pair up bonus. This crest has strength-enhancing properties.",
+	"lore.dual_stance.specter_crest": "Attach a crest to a Heart Seal to determine its pair up bonus. This crest gives you some more mobility.",
+	"lore.dual_stance.pacifism_crest": "Attach this crest to a Heart Seal to designate your pair up partner as your protector. Provides pacifism and invulnerability.",
+	"lore.dual_stance.enchanter_crest": "Attach this crest to a Heart Seal to designate your pair up partner as your protector. A powerful crest that enhances your ally at the cost of your power and defense.",
+	"lore.dual_stance.hatred_crest": "Attach this crest to a Heart Seal to imbue yourself with hatred while paired. A powerful crest that enhances your power at the cost of nearly all defense.",
 
 	"item.dual_stance.heart_seal.empty_description": "Attach a Crest to boost your bond",
 	"tooltip.dual_stance.crest_bond": "When bonded:",
