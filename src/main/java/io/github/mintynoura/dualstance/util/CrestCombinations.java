@@ -2,6 +2,9 @@ package io.github.mintynoura.dualstance.util;
 
 import io.github.mintynoura.dualstance.DualStance;
 import io.github.mintynoura.dualstance.item.component.crest_effects.*;
+import io.github.mintynoura.dualstance.registries.DualStanceItems;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -189,6 +192,13 @@ public class CrestCombinations {
 			new MobEffectInstance(MobEffects.HASTE, 300, 3, true, true)),
 			200)
 	);
+	public static final List<CrestEffect> ENCHANTER_HATRED_COMBO = List.of(
+		new SidedCrestEffect(new DamageBoostCrestEffect(1.0f, false, new DamageBoostCrestEffect.Modifier(2.0f, true)), SidedCrestEffect.Side.BOTH, HolderSet.direct(BuiltInRegistries.ITEM.get(BuiltInRegistries.ITEM.getKey(DualStanceItems.HATRED_CREST)).get()), false),
+		new SidedCrestEffect(		new MobEffectCrestEffect(List.of(
+			new MobEffectInstance(MobEffects.SPEED, 300, 1, true, true),
+			new MobEffectInstance(MobEffects.HASTE, 300, 3, true, true)),
+			200), SidedCrestEffect.Side.BOTH, HolderSet.direct(BuiltInRegistries.ITEM.get(BuiltInRegistries.ITEM.getKey(DualStanceItems.HATRED_CREST)).get()), false)
+	);
 	public static final List<CrestEffect> HATRED_BONES_OR_SPECTERS_COMBO = List.of(
 		new MobEffectCrestEffect(List.of(
 			new MobEffectInstance(MobEffects.JUMP_BOOST, 300, 0, true, true),
@@ -258,6 +268,7 @@ public class CrestCombinations {
 		crestCombinationMap.put(Set.of(CrestIdentifiers.ENCHANTER_CREST, CrestIdentifiers.SPECTERS_CREST), ENCHANTER_BONES_OR_SPECTERS_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.ENCHANTER_CREST, CrestIdentifiers.STONE_CREST), ENCHANTER_STONE_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.ENCHANTER_CREST, CrestIdentifiers.SHELLS_CREST), ENCHANTER_SHELLS_COMBO);
+		crestCombinationMap.put(Set.of(CrestIdentifiers.ENCHANTER_CREST, CrestIdentifiers.HATRED_CREST), ENCHANTER_HATRED_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.HATRED_CREST, CrestIdentifiers.BONES_CREST), HATRED_BONES_OR_SPECTERS_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.HATRED_CREST, CrestIdentifiers.SPECTERS_CREST), HATRED_BONES_OR_SPECTERS_COMBO);
 		crestCombinationMap.put(Set.of(CrestIdentifiers.HATRED_CREST, CrestIdentifiers.STONE_CREST), HATRED_STONE_COMBO);

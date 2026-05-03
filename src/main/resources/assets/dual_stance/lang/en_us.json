@@ -26,8 +26,10 @@
 	"tooltip.dual_stance.crest_bond": "When bonded:",
 	"tooltip.dual_stance.thanks_to": "Thanks to %s:",
 	"tooltip.dual_stance.mob_effect_interval": "every %s seconds",
-	"overlay.dual_stance.pair_up_offer": "%s wants to pair up!",
+	"tooltip.dual_stance.self_sided": "Only to self:",
+	"tooltip.dual_stance.partner_sided": "Only to partner:",
 	"tooltip.dual_stance.combo": "Crest Bonus!",
+	"overlay.dual_stance.pair_up_offer": "%s wants to pair up!",
 
 	"gamerule.dual_stance.allow_pairing_with_mobs": "Allow pairing with mobs",
 	"gamerule.dual_stance.allow_pairing_with_mobs.description": "Whether players are able to use a Heart Seal on a mob to pair up with them.",

@@ -40,6 +40,7 @@ public class HeartSealItem extends Item {
 	}
 
 	// TODO: leash tugging physics when link is about to break
+	// TODO: prevent placing in chests/other inventories
 	@Override
 	public void inventoryTick(ItemStack itemStack, ServerLevel level, Entity owner, @Nullable EquipmentSlot slot) {
 		super.inventoryTick(itemStack, level, owner, slot);
@@ -55,6 +56,9 @@ public class HeartSealItem extends Item {
 			if (itemStack.has(DualStanceComponents.LINKED_MOB)) {
 				CrestHelper.tickCrestEffect(thisPlayer, itemStack);
 				CrestHelper.renderLinkParticle(thisPlayer, otherMob);
+				if (CrestHelper.getHeartSealedCrest(itemStack).getItem().equals(DualStanceItems.PACIFISM_CREST) && owner.level().getGameTime() % 20L == 0L) {
+					CrestHelper.renderPacifistParticle(owner.asLivingEntity());
+				}
 			} else unlinkSelf(itemStack, owner.asLivingEntity());
 		}
 	}

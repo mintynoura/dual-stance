@@ -5,8 +5,11 @@ import io.github.mintynoura.dualstance.item.component.*;
 import io.github.mintynoura.dualstance.item.component.crest_effects.AttributeCrestEffect;
 import io.github.mintynoura.dualstance.item.component.crest_effects.CrestEffect;
 import io.github.mintynoura.dualstance.item.component.crest_effects.MobEffectCrestEffect;
+import io.github.mintynoura.dualstance.item.component.crest_effects.SidedCrestEffect;
 import io.github.mintynoura.dualstance.registries.DualStanceComponents;
 import io.github.mintynoura.dualstance.registries.DualStanceItems;
+import io.github.mintynoura.dualstance.registries.DualStanceParticles;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.Identifier;
@@ -17,6 +20,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
@@ -29,24 +33,32 @@ public class CrestHelper {
 	public static void renderLinkParticle(Player p1, Entity p2){
 		Vec3 pos1 = p1.position();
 		Vec3 pos2 = p2.position();
-		if(!(p1.level() instanceof ServerLevel lvl))
+		if(!(p1.level() instanceof ServerLevel serverLevel))
 			return;
-		if(lvl.getRandom().nextFloat() < 0.9)
+		if(serverLevel.getRandom().nextFloat() < 0.9)
 			return;
-		int nodeCount = 10;
+		int nodeCount = 5;
 		for (int i = 0; i < nodeCount; i++) {
 			float x = lerp((float) pos1.x, (float) pos2.x, i*1f/nodeCount);
 			float y = lerp((float) pos1.y, (float) pos2.y, i*1f/nodeCount);
 			float z = lerp((float) pos1.z, (float) pos2.z, i*1f/nodeCount);
-			lvl.sendParticles(ParticleTypes.CHERRY_LEAVES, x, y+1, z, 1,0.1, 0, 0.1, 0);
+			serverLevel.sendParticles(ParticleTypes.CHERRY_LEAVES, x, y+1, z, 1,0.1, 0, 0.1, 0);
 		}
 	}
 	public static float lerp(float x1, float x2, float t){
 		return x1+ t*(x2-x1);
 	}
 
-	// TODO: render pacifist particle
-	public static void renderPacifistParticle() {}
+	public static void renderPacifistParticle(LivingEntity entity) {
+		if (entity.level() instanceof ServerLevel serverLevel) {
+			for(int i = 0; i < 3; i++) {
+				double xa = entity.getRandom().nextGaussian() * 0.02;
+				double ya = entity.getRandom().nextGaussian() * 0.02;
+				double za = entity.getRandom().nextGaussian() * 0.02;
+				serverLevel.sendParticles(DualStanceParticles.PACIFISM_PARTICLE, entity.getRandomX(1.0), entity.getRandomY() + 0.5, entity.getRandomZ(1.0), 1, xa, ya, za, 0);
+			}
+		}
+	}
 
 	public static void tickCrestEffect(LivingEntity entity, ItemStack itemStack) {
 		for (CrestEffect crestEffect : collectCrestEffects(itemStack)) {
@@ -63,7 +75,6 @@ public class CrestHelper {
 		return itemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest();
 	}
 
-	// TODO: apply sided enchanter buffs
 	public static void linkPlayer(ItemStack itemStack, ItemStack otherItemStack, LivingEntity player, LivingEntity otherPlayer) {
 		itemStack.set(DualStanceComponents.LINKED_MOB, new LinkedMobComponent(otherPlayer.getUUID(), otherPlayer.getScoreboardName()));
 		if (!getHeartSealedCrest(otherItemStack).isEmpty()) {
@@ -119,14 +130,40 @@ public class CrestHelper {
 	public static List<CrestEffect> collectCrestEffects(ItemStack itemStack) {
 		List<CrestEffect> crestEffects = new ArrayList<>();
 		if (getHeartSealedCrestComponent(itemStack) != null) {
-			crestEffects.addAll(getHeartSealedCrestComponent(itemStack).crestEffects());
+//			crestEffects.addAll(getHeartSealedCrestComponent(itemStack).crestEffects());
+			for (CrestEffect crestEffect : getHeartSealedCrestComponent(itemStack).crestEffects()) {
+				if (crestEffect instanceof SidedCrestEffect(
+					CrestEffect effect, SidedCrestEffect.Side side, HolderSet<Item> items, boolean deny
+				)) {
+					if (effect instanceof SidedCrestEffect) SidedCrestEffect.logNestedSidedCrestEffect(itemStack);
+					else {
+						boolean crestMatches = true;
+						if (items.size() > 0) {
+							if (getHeartSealedCrest(itemStack).is(items) == deny) crestMatches = false;
+						}
+						if (crestMatches) {
+							if (side == SidedCrestEffect.Side.BOTH || side == SidedCrestEffect.Side.SELF) crestEffects.add(effect);
+						}
+					}
+				} else crestEffects.add(crestEffect);
+			}
 		}
 		if (itemStack.has(DualStanceComponents.LINKED_CREST)) {
 			collectLinkedCrestEffects(crestEffects, itemStack);
 			if (!getHeartSealedCrestComponent(itemStack).id().equals(itemStack.get(DualStanceComponents.LINKED_CREST).id())) {
 				List<CrestEffect> comboEffects = CrestCombinations.evaluateCombo(Set.of(getHeartSealedCrestComponent(itemStack).id(), itemStack.get(DualStanceComponents.LINKED_CREST).id()));
 				if (!comboEffects.isEmpty()) {
-					crestEffects.addAll(comboEffects);
+					for (CrestEffect crestEffect : comboEffects) {
+						if (crestEffect instanceof SidedCrestEffect(
+							CrestEffect effect, SidedCrestEffect.Side side, HolderSet<Item> items, boolean deny
+						)) {
+							boolean crestMatches = true;
+							if (items.size() > 0) {
+								if (getHeartSealedCrest(itemStack).is(items) == deny) crestMatches = false;
+							}
+							if (side == SidedCrestEffect.Side.BOTH && crestMatches) crestEffects.add(effect);
+						} else crestEffects.add(crestEffect);
+					}
 				}
 			}
 		}
@@ -145,6 +182,19 @@ public class CrestHelper {
 				}
 				AttributeCrestEffect linkedAttributeCrestEffect = new AttributeCrestEffect(linkedEntries);
 				crestEffects.add(linkedAttributeCrestEffect);
+			} else if (crestEffect instanceof SidedCrestEffect(
+				CrestEffect effect, SidedCrestEffect.Side side, HolderSet<Item> items, boolean deny
+			)) {
+				if (effect instanceof SidedCrestEffect) SidedCrestEffect.logNestedSidedCrestEffect(itemStack);
+				else {
+					boolean crestMatches = true;
+					if (items.size() > 0) {
+						if (getHeartSealedCrest(itemStack).is(items) == deny) crestMatches = false;
+					}
+					if (crestMatches) {
+						if (side == SidedCrestEffect.Side.BOTH || side == SidedCrestEffect.Side.PARTNER) crestEffects.add(effect);
+					}
+				}
 			}
 			else crestEffects.add(crestEffect);
 		}

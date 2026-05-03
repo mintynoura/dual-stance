@@ -22,6 +22,17 @@ public class ItemTagProvider extends FabricTagsProvider.ItemTagsProvider {
 			.add(DualStanceItems.EMBLEMS_CREST)
 			.add(DualStanceItems.SPECTERS_CREST)
 			.add(DualStanceItems.SHELLS_CREST)
-			.add(DualStanceItems.PACIFISM_CREST);
+			.add(DualStanceItems.PACIFISM_CREST)
+			.add(DualStanceItems.ENCHANTER_CREST)
+			.add(DualStanceItems.HATRED_CREST);
+		valueLookupBuilder(DualStanceTags.Items.NON_ENCHANTER_CRESTS)
+			.add(DualStanceItems.PEACE_CREST)
+			.add(DualStanceItems.BONES_CREST)
+			.add(DualStanceItems.STONE_CREST)
+			.add(DualStanceItems.EMBLEMS_CREST)
+			.add(DualStanceItems.SPECTERS_CREST)
+			.add(DualStanceItems.SHELLS_CREST)
+			.add(DualStanceItems.PACIFISM_CREST)
+			.add(DualStanceItems.HATRED_CREST);
 	}
 }

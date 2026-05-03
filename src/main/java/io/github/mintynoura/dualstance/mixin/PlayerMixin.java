@@ -85,8 +85,11 @@ public abstract class PlayerMixin extends Avatar implements ContainerUser {
 					else if (itemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest().getItem() == DualStanceItems.ENCHANTER_CREST) {
 						if (itemStack.has(DualStanceComponents.LINKED_CREST)) {
 							if (!itemStack.get(DualStanceComponents.LINKED_CREST).id().equals(CrestIdentifiers.ENCHANTER_CREST)) {
-								if (!source.is(DualStanceTags.DamageTypes.CREST_INCREASE_EXEMPT))
+								if (!source.is(DualStanceTags.DamageTypes.CREST_INCREASE_EXEMPT)) {
 									damage = damage * 3f + 2f;
+									// double damage taken when paired with hatred
+									if (itemStack.get(DualStanceComponents.LINKED_CREST).id().equals(CrestIdentifiers.HATRED_CREST)) damage *= 2;
+								}
 							}
 						} else {
 							if (!source.is(DualStanceTags.DamageTypes.CREST_INCREASE_EXEMPT))
@@ -95,8 +98,13 @@ public abstract class PlayerMixin extends Avatar implements ContainerUser {
 					}
 					// hatred damage taken is increased
 					else if (itemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest().getItem() == DualStanceItems.HATRED_CREST) {
-						if (!source.is(DualStanceTags.DamageTypes.CREST_INCREASE_EXEMPT))
+						if (!source.is(DualStanceTags.DamageTypes.CREST_INCREASE_EXEMPT)) {
 							damage = damage * 4f + 5f;
+							if (itemStack.has(DualStanceComponents.LINKED_CREST)) {
+								// double damage taken when paired with enchanter
+								if (itemStack.get(DualStanceComponents.LINKED_CREST).id().equals(CrestIdentifiers.ENCHANTER_CREST)) damage *= 2;
+							}
+						}
 					}
 					return damage;
 				}

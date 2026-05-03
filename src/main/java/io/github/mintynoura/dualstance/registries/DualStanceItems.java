@@ -6,7 +6,9 @@ import io.github.mintynoura.dualstance.item.component.CrestComponent;
 import io.github.mintynoura.dualstance.item.HeartSealItem;
 import io.github.mintynoura.dualstance.item.component.crest_effects.HeartSealedCrest;
 import io.github.mintynoura.dualstance.item.component.crest_effects.MobEffectCrestEffect;
+import io.github.mintynoura.dualstance.item.component.crest_effects.SidedCrestEffect;
 import io.github.mintynoura.dualstance.util.CrestIdentifiers;
+import io.github.mintynoura.dualstance.util.DualStanceTags;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -75,15 +77,14 @@ public class DualStanceItems {
 		CreativeModeTabs.COMBAT);
 
 	public static final Item ENCHANTER_CREST = registerItem("enchanter_crest", Item::new, new Item.Properties()
-			.component(DualStanceComponents.CREST, new CrestComponent(CrestIdentifiers.ENCHANTER_CREST,
-				List.of(new AttributeCrestEffect(List.of(
-					new AttributeCrestEffect.Entry(Attributes.ARMOR, new AttributeModifier(CrestIdentifiers.ENCHANTER_CREST, 4.0f, AttributeModifier.Operation.ADD_VALUE)),
-					new AttributeCrestEffect.Entry(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(CrestIdentifiers.ENCHANTER_CREST, 2.0f, AttributeModifier.Operation.ADD_VALUE)),
-					new AttributeCrestEffect.Entry(Attributes.ATTACK_DAMAGE, new AttributeModifier(CrestIdentifiers.ENCHANTER_CREST, 4.0f, AttributeModifier.Operation.ADD_VALUE)),
-					new AttributeCrestEffect.Entry(Attributes.MOVEMENT_SPEED, new AttributeModifier(CrestIdentifiers.ENCHANTER_CREST, 0.2f, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL))
-					)
-					)
-				)
+			.delayedComponent(DualStanceComponents.CREST, context ->
+				new CrestComponent(CrestIdentifiers.ENCHANTER_CREST,
+					List.of(new SidedCrestEffect(new AttributeCrestEffect(List.of(
+						new AttributeCrestEffect.Entry(Attributes.ARMOR, new AttributeModifier(CrestIdentifiers.ENCHANTER_CREST, 4.0f, AttributeModifier.Operation.ADD_VALUE)),
+						new AttributeCrestEffect.Entry(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(CrestIdentifiers.ENCHANTER_CREST, 2.0f, AttributeModifier.Operation.ADD_VALUE)),
+						new AttributeCrestEffect.Entry(Attributes.ATTACK_DAMAGE, new AttributeModifier(CrestIdentifiers.ENCHANTER_CREST, 1.0f, AttributeModifier.Operation.ADD_VALUE)),
+						new AttributeCrestEffect.Entry(Attributes.MOVEMENT_SPEED, new AttributeModifier(CrestIdentifiers.ENCHANTER_CREST, 0.2f, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL))
+					)), SidedCrestEffect.Side.PARTNER, context.getOrThrow(DualStanceTags.Items.NON_ENCHANTER_CRESTS), false))
 				)),
 		CreativeModeTabs.COMBAT);
 

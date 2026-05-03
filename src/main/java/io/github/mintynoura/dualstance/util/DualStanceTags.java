@@ -10,6 +10,7 @@ import net.minecraft.world.item.Item;
 public class DualStanceTags {
 	public static class Items {
 		public static final TagKey<Item> CRESTS = TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(DualStance.ID, "crests"));
+		public static final TagKey<Item> NON_ENCHANTER_CRESTS = TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(DualStance.ID, "non_enchanter_crests"));
 	}
 	public static class DamageTypes {
 		public static final TagKey<DamageType> CREST_INCREASE_EXEMPT = TagKey.create(Registries.DAMAGE_TYPE, Identifier.fromNamespaceAndPath(DualStance.ID, "crest_increase_exempt"));

@@ -6,6 +6,7 @@ import io.github.mintynoura.dualstance.DualStance;
 import io.github.mintynoura.dualstance.item.component.crest_effects.AttributeCrestEffect;
 import io.github.mintynoura.dualstance.item.component.crest_effects.CrestEffect;
 import io.github.mintynoura.dualstance.item.component.crest_effects.MobEffectCrestEffect;
+import io.github.mintynoura.dualstance.item.component.crest_effects.SidedCrestEffect;
 import io.github.mintynoura.dualstance.registries.DualStanceComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponentGetter;
@@ -47,16 +48,17 @@ public record CrestComponent(Identifier id, List<CrestEffect> crestEffects) impl
 	}
 
 	// This method is called in HeartSealedCrest to handle double "When Bonded" texts
-	public void addToTooltip(boolean withText, Item.TooltipContext context, Consumer<Component> consumer, TooltipFlag flag, DataComponentGetter components) {
+	// TODO: maybe evaluate SidedCrestEffect items, and prevent showing effects if denied
+	public void addToTooltip(boolean withLinkedText, Item.TooltipContext context, Consumer<Component> consumer, TooltipFlag flag, DataComponentGetter components) {
 		if (!this.crestEffects.isEmpty()) {
 			// no player, with text (linked) -> bounded text
 			// no player, without text (inner) -> bounded text
 			// player, with text (linked) -> thanks to text
 			// player, without text (inner) -> no text
 			var linkedPlayer = components.get(DualStanceComponents.LINKED_MOB);
-			if(linkedPlayer == null)
+			if (linkedPlayer == null)
 				consumer.accept(Component.translatableWithFallback("tooltip.dual_stance.crest_bond", "When bonded:").withStyle(ChatFormatting.GRAY));
-			else if(withText)
+			else if (withLinkedText)
 				consumer.accept(Component.translatableWithFallback("tooltip.dual_stance.thanks_to", "Thanks to",linkedPlayer.name()).withStyle(ChatFormatting.GRAY));
 			for (CrestEffect crestEffect : this.crestEffects) {
 				if (crestEffect instanceof AttributeCrestEffect(List<AttributeCrestEffect.Entry> modifiers)) {
@@ -69,6 +71,11 @@ public record CrestComponent(Identifier id, List<CrestEffect> crestEffects) impl
 					, _, _
 				)) {
 					MobEffectCrestEffect.display(effects, consumer, interval);
+				}
+				if (crestEffect instanceof SidedCrestEffect(CrestEffect crestEffect1, SidedCrestEffect.Side side, _, _)) {
+					if (!withLinkedText) {
+						SidedCrestEffect.displayUnlinked(crestEffect1, side, consumer);
+					} else SidedCrestEffect.displayLinked(crestEffect1, side, consumer);
 				}
 			}
 		}

@@ -19,7 +19,7 @@ public interface CrestEffect {
 
 	void trigger(Level level, LivingEntity entity);
 
-	CrestEffect.Type<? extends CrestEffect> getType();
+	Type<? extends CrestEffect> getType();
 
 	record Type<T extends CrestEffect>(MapCodec<T> codec, StreamCodec<RegistryFriendlyByteBuf, T> streamCodec) {
 		public static final ResourceKey<Registry<Type<?>>> CREST_EFFECT_TYPE_KEY = ResourceKey.createRegistryKey(Identifier.fromNamespaceAndPath(DualStance.ID, "crest_effect_types"));

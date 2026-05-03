@@ -14,6 +14,7 @@ public class CrestEffectTypes {
 	public static final CrestEffect.Type<FoodLeechCrestEffect> FOOD_LEECH_CREST_EFFECT_TYPE = register("food_leech", new CrestEffect.Type<>(FoodLeechCrestEffect.CODEC, FoodLeechCrestEffect.STREAM_CODEC));
 	public static final CrestEffect.Type<PairUpRangeModifierCrestEffect> PAIR_UP_RANGE_MODIFIER_CREST_EFFECT_TYPE = register("pair_up_range_modifier", new CrestEffect.Type<>(PairUpRangeModifierCrestEffect.CODEC, PairUpRangeModifierCrestEffect.STREAM_CODEC));
 	public static final CrestEffect.Type<KineticDamageBoostCrestEffect> KINETIC_DAMAGE_BOOST_CREST_EFFECT_TYPE = register("kinetic_damage_boost", new CrestEffect.Type<>(KineticDamageBoostCrestEffect.CODEC, KineticDamageBoostCrestEffect.STREAM_CODEC));
+	public static final CrestEffect.Type<SidedCrestEffect> SIDED_CREST_EFFECT_TYPE = register("sided", new CrestEffect.Type<>(SidedCrestEffect.CODEC, SidedCrestEffect.STREAM_CODEC));
 
 	public static <T extends CrestEffect> CrestEffect.Type<T> register(String id, CrestEffect.Type<T> crestEffectType) {
 		return Registry.register(CrestEffect.Type.CREST_EFFECT_TYPE_REGISTRY, Identifier.fromNamespaceAndPath(DualStance.ID, id), crestEffectType);
