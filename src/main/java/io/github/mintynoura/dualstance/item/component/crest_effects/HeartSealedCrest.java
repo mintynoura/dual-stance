@@ -11,9 +11,13 @@ import io.github.mintynoura.dualstance.registries.DualStanceComponents;
 import io.github.mintynoura.dualstance.util.CrestCombinations;
 import io.github.mintynoura.dualstance.util.DualStanceTags;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.component.DataComponentGetter;
+import net.minecraft.locale.Language;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.FormattedText;
+import net.minecraft.network.chat.Style;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.*;
@@ -37,9 +41,9 @@ public record HeartSealedCrest(ItemStack crest) implements TooltipComponent, Too
 		return this.crest.isEmpty();
 	}
 
-	// TODO: fix newlines for long combo descriptions
 	@Override
 	public void addToTooltip(Item.TooltipContext context, Consumer<Component> consumer, TooltipFlag flag, DataComponentGetter components) {
+		Language currentLanguage = Language.getInstance();
 		if (this.isEmpty())
 			return;
 		if (this.crest.has(DualStanceComponents.CREST)) {
@@ -49,7 +53,13 @@ public record HeartSealedCrest(ItemStack crest) implements TooltipComponent, Too
 					List<CrestEffect> comboEffects = CrestCombinations.evaluateCombo(Set.of(this.crest.get(DualStanceComponents.CREST).id(), components.get(DualStanceComponents.LINKED_CREST).id()));
 					if (!comboEffects.isEmpty()) {
 						consumer.accept(Component.translatableWithFallback("tooltip.dual_stance.combo", "Crest Bonus!").withStyle(ChatFormatting.GRAY));
-						consumer.accept(Component.translatable(CrestCombinations.createTranslationString(this.crest.get(DualStanceComponents.CREST).id(), components.get(DualStanceComponents.LINKED_CREST).id())).withStyle(ChatFormatting.BLUE));
+						String translationString = CrestCombinations.createTranslationString(this.crest.get(DualStanceComponents.CREST).id(), components.get(DualStanceComponents.LINKED_CREST).id());
+						if (currentLanguage.getOrDefault(translationString).length() <= 50) {
+							consumer.accept(Component.translatable(translationString).withStyle(ChatFormatting.DARK_GREEN).withStyle(ChatFormatting.ITALIC));
+						} else {
+							Minecraft.getInstance().font.getSplitter().splitLines(FormattedText.of(currentLanguage.getOrDefault(translationString)), currentLanguage.getOrDefault(translationString).length(), Style.EMPTY, (text, _) ->
+								consumer.accept(Component.literal(text.getString()).withStyle(ChatFormatting.DARK_GREEN).withStyle(ChatFormatting.ITALIC)));
+						}
 					}
 				}
 			}
