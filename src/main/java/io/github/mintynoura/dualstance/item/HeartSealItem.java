@@ -4,13 +4,11 @@ import io.github.mintynoura.dualstance.DualStance;
 import io.github.mintynoura.dualstance.item.component.crest_effects.CrestEffect;
 import io.github.mintynoura.dualstance.item.component.crest_effects.HeartSealedCrest;
 import io.github.mintynoura.dualstance.item.component.crest_effects.PairUpRangeModifierCrestEffect;
-import io.github.mintynoura.dualstance.registries.DualStanceGameRules;
+import io.github.mintynoura.dualstance.registries.*;
 import io.github.mintynoura.dualstance.item.component.*;
-import io.github.mintynoura.dualstance.registries.DualStanceComponents;
-import io.github.mintynoura.dualstance.registries.DualStanceItems;
-import io.github.mintynoura.dualstance.registries.DualStanceSoundEvents;
 import io.github.mintynoura.dualstance.util.CrestHelper;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
@@ -56,8 +54,17 @@ public class HeartSealItem extends Item {
 			if (itemStack.has(DualStanceComponents.LINKED_MOB)) {
 				CrestHelper.tickCrestEffect(thisPlayer, itemStack);
 				CrestHelper.renderLinkParticle(thisPlayer, otherMob);
-				if (CrestHelper.getHeartSealedCrest(itemStack).getItem().equals(DualStanceItems.PACIFISM_CREST) && owner.level().getGameTime() % 20L == 0L) {
-					CrestHelper.renderPacifistParticle(owner.asLivingEntity());
+				if (CrestHelper.getHeartSealedCrest(itemStack).getItem().equals(DualStanceItems.PACIFISM_CREST) && owner.level().getGameTime() % 3L == 0L) {
+					CrestHelper.renderParticle(owner.asLivingEntity(), DualStanceParticles.PACIFISM_PARTICLE);
+				}
+				else if (CrestHelper.getHeartSealedCrest(itemStack).getItem().equals(DualStanceItems.ENCHANTER_CREST) && owner.level().getGameTime() % 3L == 0L) {
+					if(owner.level().getGameTime() % 3L == 0L)
+						CrestHelper.renderParticle(owner.asLivingEntity(), ParticleTypes.ENCHANT);
+					if(owner.level().getGameTime() % 6L == 0L)
+						CrestHelper.renderParticle(owner.asLivingEntity(), ParticleTypes.SOUL_FIRE_FLAME);
+				}
+				else if (CrestHelper.getHeartSealedCrest(itemStack).getItem().equals(DualStanceItems.HATRED_CREST) && owner.level().getGameTime() % 4L == 0L) {
+					CrestHelper.renderParticle(owner.asLivingEntity(), ParticleTypes.RAID_OMEN);
 				}
 			} else unlinkSelf(itemStack, owner.asLivingEntity());
 		}

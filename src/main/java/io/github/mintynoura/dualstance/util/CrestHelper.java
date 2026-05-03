@@ -12,6 +12,7 @@ import io.github.mintynoura.dualstance.registries.DualStanceParticles;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -49,14 +50,12 @@ public class CrestHelper {
 		return x1+ t*(x2-x1);
 	}
 
-	public static void renderPacifistParticle(LivingEntity entity) {
+	public static void renderParticle(LivingEntity entity, SimpleParticleType particle) {
 		if (entity.level() instanceof ServerLevel serverLevel) {
-			for(int i = 0; i < 3; i++) {
-				double xa = entity.getRandom().nextGaussian() * 0.02;
-				double ya = entity.getRandom().nextGaussian() * 0.02;
-				double za = entity.getRandom().nextGaussian() * 0.02;
-				serverLevel.sendParticles(DualStanceParticles.PACIFISM_PARTICLE, entity.getRandomX(1.0), entity.getRandomY() + 0.5, entity.getRandomZ(1.0), 1, xa, ya, za, 0);
-			}
+			double xa = entity.getRandom().nextGaussian() * 0.02;
+			double ya = entity.getRandom().nextGaussian() * 0.02+0.02;
+			double za = entity.getRandom().nextGaussian() * 0.02;
+			serverLevel.sendParticles(particle, entity.getRandomX(1.0), entity.getRandomY() + 0.5, entity.getRandomZ(1.0), 1, xa, ya, za, 0);
 		}
 	}
 

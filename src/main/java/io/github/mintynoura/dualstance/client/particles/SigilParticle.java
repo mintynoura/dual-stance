@@ -16,8 +16,9 @@ public class SigilParticle  extends SimpleAnimatedParticle {
 		this.xd = xa;
 		this.yd = ya;
 		this.zd = za;
-		this.quadSize = 0.1F * (this.random.nextFloat() * 0.1F + 0.9F) * 2.0F;
-		this.lifetime = 60 + this.random.nextInt(12);
+		this.quadSize = 0.1F * (this.random.nextFloat() * 0.1F + 1.2F) * 2.0F;
+		//very short lifetime
+		this.lifetime = 8 + this.random.nextInt(4);
 		this.setFadeColor(15916745);
 		this.setSpriteFromAge(sprites);
 	}
