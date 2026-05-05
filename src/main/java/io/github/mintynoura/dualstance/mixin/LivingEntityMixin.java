@@ -31,17 +31,7 @@ public abstract class LivingEntityMixin extends Entity {
 	@ModifyReturnValue(method = "canBeSeenAsEnemy", at = @At("RETURN"))
 	private boolean dualStance$disablePacifistTargeting(boolean original) {
 		if (((LivingEntity)(Object) this) instanceof Player player) {
-			for (ItemStack itemStack : player.getInventory()) {
-				if (itemStack.has(DualStanceComponents.HEART_SEALED_CREST) && itemStack.has(DualStanceComponents.LINKED_MOB)) {
-					if (itemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest().getItem() == DualStanceItems.PACIFISM_CREST) {
-						if (itemStack.has(DualStanceComponents.LINKED_CREST)) {
-							if (!itemStack.get(DualStanceComponents.LINKED_CREST).id().equals(CrestIdentifiers.PACIFISM_CREST)) {
-								return false;
-							}
-						} else return false;
-					}
-				}
-			}
+			if (CrestHelper.isPacifismActive(player)) return false;
 		}
 		return original;
 	}

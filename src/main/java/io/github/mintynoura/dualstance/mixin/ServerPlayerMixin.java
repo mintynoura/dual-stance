@@ -29,15 +29,15 @@ public abstract class ServerPlayerMixin extends Player {
 
 	@Inject(method = "drop(Lnet/minecraft/world/item/ItemStack;ZZ)Lnet/minecraft/world/entity/item/ItemEntity;", at = @At("HEAD"))
 	private void dualStance$unlinkDroppedSeal(ItemStack itemStack, boolean randomly, boolean thrownFromHand, CallbackInfoReturnable<ItemEntity> cir) {
-		if (itemStack.has(DualStanceComponents.LINKED_MOB)) {
+		if (itemStack.has(DualStanceComponents.LINKED_MOB) && this.level() instanceof ServerLevel serverLevel) {
 			if (itemStack.has(DualStanceComponents.LINKED_CREST)) {
-				Entity linkedMob = this.level().getEntity(itemStack.get(DualStanceComponents.LINKED_MOB).id());
+				Entity linkedMob = serverLevel.getEntity(itemStack.get(DualStanceComponents.LINKED_MOB).id());
 				if (linkedMob instanceof ServerPlayer otherPlayer) {
 					for (ItemStack otherItemStack : otherPlayer.getInventory()) {
 						if (otherItemStack.has(DualStanceComponents.LINKED_MOB)) {
 							if (otherItemStack.get(DualStanceComponents.LINKED_MOB).id().equals(this.getUUID())) {
 								CrestHelper.unlink(otherItemStack, otherPlayer);
-								this.level().playSound(null, this.getOnPos(), DualStanceSoundEvents.PAIR_UNLINK, SoundSource.PLAYERS);
+								serverLevel.playSound(null, this.getOnPos(), DualStanceSoundEvents.PAIR_UNLINK, SoundSource.PLAYERS);
 							}
 						}
 					}

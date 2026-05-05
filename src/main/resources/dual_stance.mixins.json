@@ -1,19 +1,20 @@
 {
-  "required": true,
-  "minVersion": "0.8",
-  "package": "io.github.mintynoura.dualstance.mixin",
-  "compatibilityLevel": "JAVA_25",
-  "mixins": [
-    "LivingEntityMixin",
-    "PlayerMixin",
-    "ServerPlayerMixin",
-    "SlotMixin"
-  ],
-  "client": [
-  ],
-  "server": [
-  ],
-  "injectors": {
-    "defaultRequire": 1
+	"required": true,
+	"minVersion": "0.8",
+	"package": "io.github.mintynoura.dualstance.mixin",
+	"compatibilityLevel": "JAVA_25",
+	"mixins": [
+		"LivingEntityMixin",
+		"PlayerMixin",
+		"ServerPlayerMixin",
+		"SlotMixin",
+		"SpearMixin"
+	],
+	"client": [
+	],
+	"server": [
+	],
+	"injectors": {
+		"defaultRequire": 1
 	}
 }
