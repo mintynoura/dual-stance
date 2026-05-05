@@ -43,6 +43,9 @@
 	"subtitles.dual_stance.entity.damage_boost": "Damage boosted",
 	"subtitles.dual_stance.entity.damage_negation": "Damage blocked",
 
+	"tag.item.dual_stance.crests": "Crests",
+	"tag.item.dual_stance.non_enchanter_crests": "Non Enchanter Crests",
+
 	"dual_stance.peace_crest.bones_crest.combo": "Nimble Shield: 10% chance to negate damage taken, up to 20% based on proximity. Haste I",
 	"dual_stance.peace_crest.stone_crest.combo": "Towering Shield: Increases size slightly, and increases step height by 0.5 blocks. Strength I",
 	"dual_stance.peace_crest.emblems_crest.combo": "Shield Everlasting: 10% chance to negate damage taken, up to 20% based on proximity. Regeneration I",

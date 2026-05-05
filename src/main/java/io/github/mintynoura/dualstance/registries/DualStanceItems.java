@@ -73,6 +73,12 @@ public class DualStanceItems {
 			))), CreativeModeTabs.COMBAT);
 
 	public static final Item PACIFISM_CREST = registerItem("pacifism_crest", Item::new, new Item.Properties()
+			// 		.delayedComponent(DualStanceComponents.CREST, context ->
+			//			new CrestComponent(CrestIdentifiers.PACIFISM_CREST, List.of(
+			//			new SidedCrestEffect(new AttributeCrestEffect(
+			//				List.of(new AttributeCrestEffect.Entry(Attributes.ATTACK_DAMAGE, new AttributeModifier(CrestIdentifiers.PACIFISM_CREST, -1.0f, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)))
+			//			), SidedCrestEffect.Side.SELF, context.getOrThrow(DualStanceTags.Items.CRESTS), false)
+			//		))),
 		.component(DualStanceComponents.CREST, new CrestComponent(CrestIdentifiers.PACIFISM_CREST, List.of())),
 		CreativeModeTabs.COMBAT);
 

@@ -6,7 +6,8 @@
   "mixins": [
     "LivingEntityMixin",
     "PlayerMixin",
-    "ServerPlayerMixin"
+    "ServerPlayerMixin",
+    "SlotMixin"
   ],
   "client": [
   ],

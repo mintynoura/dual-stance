@@ -73,7 +73,7 @@ public record CrestComponent(Identifier id, List<CrestEffect> crestEffects) impl
 					MobEffectCrestEffect.display(effects, consumer, interval);
 				}
 				if (crestEffect instanceof SidedCrestEffect(CrestEffect crestEffect1, SidedCrestEffect.Side side, _, _)) {
-					if (!withLinkedText) {
+					if (linkedPlayer == null) {
 						SidedCrestEffect.displayUnlinked(crestEffect1, side, consumer);
 					} else SidedCrestEffect.displayLinked(crestEffect1, side, consumer);
 				}
