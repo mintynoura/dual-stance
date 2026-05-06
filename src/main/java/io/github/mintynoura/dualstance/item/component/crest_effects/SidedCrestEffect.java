@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.IntFunction;
 
+// TODO: add partner items list to check the linked crest (for pacifists and enchanters)
 public record SidedCrestEffect(CrestEffect crestEffect, Side side, HolderSet<Item> items, boolean deny) implements CrestEffect {
 	public static final MapCodec<SidedCrestEffect> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
 		CrestEffect.CODEC.fieldOf("crest_effect").forGetter(SidedCrestEffect::crestEffect),
