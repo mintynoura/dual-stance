@@ -72,6 +72,7 @@ public class HeartSealItem extends Item {
 	// Linking code
 	@Override
 	public InteractionResult interactLivingEntity(ItemStack itemStack, Player player, LivingEntity target, InteractionHand type) {
+		if (type == InteractionHand.OFF_HAND) return InteractionResult.PASS;
 		if (player.level() instanceof ServerLevel serverLevel) {
 			if (!(target instanceof Player)) {
 				if (serverLevel.getGameRules().get(DualStanceGameRules.ALLOW_PAIRING_WITH_MOBS) && itemStack.has(DualStanceComponents.HEART_SEALED_CREST)) {

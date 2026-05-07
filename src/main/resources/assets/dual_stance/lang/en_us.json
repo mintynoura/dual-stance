@@ -44,7 +44,7 @@
 	"subtitles.dual_stance.entity.damage_negation": "Damage blocked",
 
 	"tag.item.dual_stance.crests": "Crests",
-	"tag.item.dual_stance.non_enchanter_crests": "Non Enchanter Crests",
+	"tag.item.dual_stance.non_enchanter_crests": "Non-Enchanter Crests",
 
 	"dual_stance.peace_crest.bones_crest.combo": "Nimble Shield: 10% chance to negate damage taken, up to 20% based on proximity. Haste I",
 	"dual_stance.peace_crest.stone_crest.combo": "Towering Shield: Increases size slightly, and increases step height by 0.5 blocks. Strength I",
@@ -97,7 +97,7 @@
 	"dual_stance.shells_crest.emblems_crest.combo": "Ocean Bounty: Dealing damage recovers a bit of hunger and recovers half a heart. When fully fed, gain Strength I. At full health, gain Resistance II",
 	"dual_stance.shells_crest.specters_crest.combo": "Wave Skater: Speed I, Dolphin's Grace, and Water Breathing",
 	"dual_stance.shells_crest.pacifism_crest.combo": "Ocean Adventurer: Speed I, Dolphin's Grace, and Water Breathing",
-	"dual_stance.shells_crest.enchanter_crest.combo": "Blessed Bounty: Dealing damage recovers a great amount of hunger. When fully fed, gain Strength I\n-20% fall damage taken, +5 Safe Fall Distance, Speed II, Dolphin's Grace, Water Breathing, and Fire Resistance",
+	"dual_stance.shells_crest.enchanter_crest.combo": "Blessed Bounty: Dealing damage recovers a great amount of hunger. When fully fed, gain Strength I.\n-20% fall damage taken, +5 Safe Fall Distance, Speed II, Dolphin's Grace, Water Breathing, and Fire Resistance",
 	"dual_stance.shells_crest.hatred_crest.combo": "Ocean Adventurer: Speed I, Dolphin's Grace, and Water Breathing",
 
 	"dual_stance.pacifism_crest.peace_crest.combo": "Shield Everlasting: 10% chance to negate damage taken, up to 20% based on proximity. Regeneration I",
@@ -114,7 +114,7 @@
 	"dual_stance.enchanter_crest.stone_crest.combo": "Blessed Strength: 20% chance to deal double damage, up to 40% chance based on proximity. Strength II and Resistance II",
 	"dual_stance.enchanter_crest.emblems_crest.combo": "Blessed Shield: 30% chance to negate damage taken, up to 60% based on proximity. Regeneration II and Resistance II",
 	"dual_stance.enchanter_crest.specters_crest.combo": "Blessed Bone Vector: Deal extra damage based on velocity. Jump Boost II, Speed II, and Haste IV",
-	"dual_stance.enchanter_crest.shells_crest.combo": "Blessed Bounty: Dealing damage recovers a great amount of hunger. When fully fed, gain Strength I\n-20% fall damage taken, +5 Safe Fall Distance, Speed II, Dolphin's Grace, Water Breathing, and Fire Resistance",
+	"dual_stance.enchanter_crest.shells_crest.combo": "Blessed Bounty: Dealing damage recovers a great amount of hunger. When fully fed, gain Strength I.\n-20% fall damage taken, +5 Safe Fall Distance, Speed II, Dolphin's Grace, Water Breathing, and Fire Resistance",
 	"dual_stance.enchanter_crest.pacifism_crest.combo": "Rally Spectrum: 10% chance to negate damage taken, up to 20% based on proximity.\nRegeneration I, Jump Boost I, Haste I, Resistance I, Speed I, Dolphin's Grace, and Water Breathing",
 	"dual_stance.enchanter_crest.hatred_crest.combo": "Curse of Wrath: Double damage taken. Crest of Hatred bearer deals a further double damage. Speed II and Haste IV",
 
