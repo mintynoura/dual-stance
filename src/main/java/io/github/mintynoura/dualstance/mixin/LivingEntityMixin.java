@@ -1,6 +1,5 @@
 package io.github.mintynoura.dualstance.mixin;
 
-import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import io.github.mintynoura.dualstance.item.component.crest_effects.*;
 import io.github.mintynoura.dualstance.registries.DualStanceComponents;
@@ -26,14 +25,6 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 public abstract class LivingEntityMixin extends Entity {
 	public LivingEntityMixin(EntityType<?> type, Level level) {
 		super(type, level);
-	}
-
-	@ModifyReturnValue(method = "canBeSeenAsEnemy", at = @At("RETURN"))
-	private boolean dualStance$disablePacifistTargeting(boolean original) {
-		if (((LivingEntity)(Object) this) instanceof Player player) {
-			if (CrestHelper.isPacifismActive(player)) return false;
-		}
-		return original;
 	}
 
 	@ModifyVariable(method = "hurtServer", at = @At("HEAD"), argsOnly = true, name = "damage")
@@ -64,13 +55,14 @@ public abstract class LivingEntityMixin extends Entity {
 							damage *= 0.5f;
 						}
 					}
-					// increase damage dealt for the hatred crest
+					// double damage dealt for the hatred crest
 					else if (itemStack.get(DualStanceComponents.HEART_SEALED_CREST).crest().getItem() == DualStanceItems.HATRED_CREST) {
 						if (!source.is(DualStanceTags.DamageTypes.CREST_INCREASE_EXEMPT))
 							damage *= 2f;
 					}
 					// damage boosts and effects
 					for (CrestEffect crestEffect : CrestHelper.collectCrestEffects(itemStack)) {
+						// chanced damage boost
 						if (crestEffect instanceof DamageBoostCrestEffect(
 							float baseChance, boolean doProximityBoost, DamageBoostCrestEffect.Modifier modifier
 						)) {
@@ -88,14 +80,17 @@ public abstract class LivingEntityMixin extends Entity {
 								player.level().playSound(null, player.getOnPos(), DualStanceSoundEvents.DAMAGE_BOOST, SoundSource.PLAYERS);
 							}
 						}
+						// kinetic damage boost
 						if (crestEffect instanceof KineticDamageBoostCrestEffect(float multiplier, float max, float minSpeed)) {
 							if (damage > 0) damage += KineticDamageBoostCrestEffect.damageBoost(player, ((LivingEntity)(Object) this), multiplier, max, minSpeed);
 						}
+						// health leech
 						if (crestEffect instanceof HealthLeechCrestEffect(float amount, boolean fractional)) {
 							if (fractional) {
 								player.heal(amount * damage);
 							} else if (damage > 0) player.heal(amount);
 						}
+						// food leech
 						if (crestEffect instanceof FoodLeechCrestEffect(int food, float saturationModifier)) {
 							if (damage > 0) player.getFoodData().eat(food, saturationModifier);
 						}

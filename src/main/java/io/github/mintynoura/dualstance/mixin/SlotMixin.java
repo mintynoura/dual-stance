@@ -19,7 +19,7 @@ public abstract class SlotMixin {
 	public Container container;
 
 	@ModifyReturnValue(method = "mayPlace", at = @At("RETURN"))
-	private boolean dualStance$preventStoringHeartSeal(boolean original, @Local(argsOnly = true, name = "itemStack") ItemStack itemStack) {
+	private boolean dualStance$preventStoringLinkedHeartSeal(boolean original, @Local(argsOnly = true, name = "itemStack") ItemStack itemStack) {
 		if (!(this.container instanceof Inventory)) {
 			return !itemStack.has(DualStanceComponents.LINKED_MOB);
 		} else return original;

@@ -4,7 +4,7 @@ import io.github.mintynoura.dualstance.DualStance;
 import io.github.mintynoura.dualstance.item.component.crest_effects.AttributeCrestEffect;
 import io.github.mintynoura.dualstance.item.component.CrestComponent;
 import io.github.mintynoura.dualstance.item.HeartSealItem;
-import io.github.mintynoura.dualstance.item.component.crest_effects.HeartSealedCrest;
+import io.github.mintynoura.dualstance.item.component.HeartSealedCrest;
 import io.github.mintynoura.dualstance.item.component.crest_effects.MobEffectCrestEffect;
 import io.github.mintynoura.dualstance.item.component.crest_effects.SidedCrestEffect;
 import io.github.mintynoura.dualstance.util.CrestIdentifiers;

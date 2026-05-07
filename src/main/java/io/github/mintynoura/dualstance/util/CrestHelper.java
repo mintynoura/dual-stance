@@ -30,6 +30,7 @@ import java.util.Set;
 
 public class CrestHelper {
 
+	// TODO: make link particles take the middle of the current height into account, and tint them red as the pair distance increases
 	public static void renderLinkParticle(Player p1, Entity p2){
 		Vec3 pos1 = p1.position();
 		Vec3 pos2 = p2.position();

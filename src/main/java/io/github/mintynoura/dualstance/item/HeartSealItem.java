@@ -2,7 +2,7 @@ package io.github.mintynoura.dualstance.item;
 
 import io.github.mintynoura.dualstance.DualStance;
 import io.github.mintynoura.dualstance.item.component.crest_effects.CrestEffect;
-import io.github.mintynoura.dualstance.item.component.crest_effects.HeartSealedCrest;
+import io.github.mintynoura.dualstance.item.component.HeartSealedCrest;
 import io.github.mintynoura.dualstance.item.component.crest_effects.PairUpRangeModifierCrestEffect;
 import io.github.mintynoura.dualstance.registries.*;
 import io.github.mintynoura.dualstance.item.component.*;

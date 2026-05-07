@@ -1,4 +1,4 @@
-package io.github.mintynoura.dualstance.item.component.crest_effects;
+package io.github.mintynoura.dualstance.item.component;
 
 import com.mojang.serialization.Codec;
 
@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+import io.github.mintynoura.dualstance.item.component.crest_effects.CrestEffect;
 import io.github.mintynoura.dualstance.registries.DualStanceComponents;
 import io.github.mintynoura.dualstance.util.CrestCombinations;
 import io.github.mintynoura.dualstance.util.DualStanceTags;
@@ -41,6 +42,7 @@ public record HeartSealedCrest(ItemStack crest) implements TooltipComponent, Too
 		return this.crest.isEmpty();
 	}
 
+	// TODO: fix combo tooltips wrapping too early
 	@Override
 	public void addToTooltip(Item.TooltipContext context, Consumer<Component> consumer, TooltipFlag flag, DataComponentGetter components) {
 		Language currentLanguage = Language.getInstance();

@@ -32,6 +32,11 @@ public abstract class PlayerMixin extends Avatar implements ContainerUser {
 		super(type, level);
 	}
 
+	@ModifyReturnValue(method = "canBeSeenAsEnemy", at = @At("RETURN"))
+	private boolean dualStance$disablePacifistTargeting(boolean original) {
+		return !CrestHelper.isPacifismActive((Player)(Object) this);
+	}
+
 	@ModifyReturnValue(method = "canHarmPlayer", at = @At("RETURN"))
 	private boolean dualStance$disableHarmingPartner(boolean original, @Local(argsOnly = true, name = "target") Player target) {
 		for (ItemStack itemStack : this.getInventory()) {
@@ -51,7 +56,7 @@ public abstract class PlayerMixin extends Avatar implements ContainerUser {
 		if (source.getEntity() != null && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
 			for (ItemStack itemStack : this.getInventory()) {
 				if (itemStack.has(DualStanceComponents.HEART_SEALED_CREST) && itemStack.has(DualStanceComponents.LINKED_MOB)) {
-					// damage negation
+					// damage negation crest effect
 					for (CrestEffect crestEffect : CrestHelper.collectCrestEffects(itemStack)) {
 						if (crestEffect instanceof DamageNegationCrestEffect(
 							float baseChance, boolean doProximityBoost)) {
