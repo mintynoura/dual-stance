@@ -10,14 +10,13 @@ import io.github.mintynoura.dualstance.util.CrestHelper;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.SlotAccess;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -28,6 +27,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Optional;
@@ -36,36 +36,40 @@ public class HeartSealItem extends Item {
 	public HeartSealItem(Properties properties) {
 		super(properties);
 	}
+	public static float defaultPairRange = 10f;
 
-	// TODO: leash tugging physics when link is about to break
 	@Override
 	public void inventoryTick(ItemStack itemStack, ServerLevel level, Entity owner, @Nullable EquipmentSlot slot) {
 		super.inventoryTick(itemStack, level, owner, slot);
-		if (owner.getAttached(DualStance.PAIR_OFFER_TIMER) != null && owner.getAttached(DualStance.PAIR_OFFER_TIMER) > 0) {
-			owner.setAttached(DualStance.PAIR_OFFER_TIMER, owner.getAttached(DualStance.PAIR_OFFER_TIMER)-1);
+		if (owner.hasAttached(DualStance.PAIR_OFFER_TIMER)) {
+			if (owner.getAttached(DualStance.PAIR_OFFER_TIMER) > 0) {
+				owner.setAttached(DualStance.PAIR_OFFER_TIMER, owner.getAttached(DualStance.PAIR_OFFER_TIMER)-1);
+			}
 		}
-		if (!itemStack.has(DualStanceComponents.LINKED_MOB) || !(owner instanceof Player thisPlayer)) return;
+		if (!itemStack.has(DualStanceComponents.LINKED_MOB) || !(owner instanceof Player player)) return;
 		Entity otherMob = level.getEntity(itemStack.get(DualStanceComponents.LINKED_MOB).id());
-		if (otherMob == null || otherMob.distanceTo(thisPlayer) > getPairUpRange(itemStack, 8f) || !otherMob.level().dimension().equals(level.dimension()) || otherMob == owner) {
-			unlinkSelf(itemStack, owner.asLivingEntity());
-		}
-		if (itemStack.has(DualStanceComponents.HEART_SEALED_CREST)) {
+		if (otherMob == null || otherMob.distanceTo(player) > getModifiedPairRange(itemStack, defaultPairRange) || !otherMob.level().dimension().equals(level.dimension()) || otherMob == player) {
+			unlinkSelf(itemStack, player);
+		} else if (itemStack.has(DualStanceComponents.HEART_SEALED_CREST)) {
 			if (itemStack.has(DualStanceComponents.LINKED_MOB)) {
-				CrestHelper.tickCrestEffect(thisPlayer, itemStack);
-				CrestHelper.renderLinkParticle(thisPlayer, otherMob);
-				if (CrestHelper.getHeartSealedCrest(itemStack).getItem().equals(DualStanceItems.PACIFISM_CREST) && owner.level().getGameTime() % 3L == 0L) {
-					CrestHelper.renderParticle(owner.asLivingEntity(), DualStanceParticles.PACIFISM_PARTICLE);
+				CrestHelper.tickCrestEffect(player, itemStack);
+				CrestHelper.renderLinkParticle(player, otherMob);
+				if (otherMob.distanceTo(player) > 0.8 * getModifiedPairRange(itemStack, defaultPairRange)) {
+					pairElasticPulling(player, otherMob);
 				}
-				else if (CrestHelper.getHeartSealedCrest(itemStack).getItem().equals(DualStanceItems.ENCHANTER_CREST) && owner.level().getGameTime() % 3L == 0L) {
-					if(owner.level().getGameTime() % 3L == 0L)
-						CrestHelper.renderParticle(owner.asLivingEntity(), ParticleTypes.ENCHANT);
-					if(owner.level().getGameTime() % 6L == 0L)
-						CrestHelper.renderParticle(owner.asLivingEntity(), ParticleTypes.SOUL_FIRE_FLAME);
+				if (CrestHelper.getHeartSealedCrest(itemStack).getItem().equals(DualStanceItems.PACIFISM_CREST) && player.level().getGameTime() % 3L == 0L) {
+					CrestHelper.renderParticle(player, DualStanceParticles.PACIFISM_PARTICLE);
 				}
-				else if (CrestHelper.getHeartSealedCrest(itemStack).getItem().equals(DualStanceItems.HATRED_CREST) && owner.level().getGameTime() % 4L == 0L) {
-					CrestHelper.renderParticle(owner.asLivingEntity(), ParticleTypes.RAID_OMEN);
+				else if (CrestHelper.getHeartSealedCrest(itemStack).getItem().equals(DualStanceItems.ENCHANTER_CREST) && player.level().getGameTime() % 3L == 0L) {
+					if(player.level().getGameTime() % 3L == 0L)
+						CrestHelper.renderParticle(player, ParticleTypes.ENCHANT);
+					if(player.level().getGameTime() % 6L == 0L)
+						CrestHelper.renderParticle(player, ParticleTypes.SOUL_FIRE_FLAME);
 				}
-			} else unlinkSelf(itemStack, owner.asLivingEntity());
+				else if (CrestHelper.getHeartSealedCrest(itemStack).getItem().equals(DualStanceItems.HATRED_CREST) && player.level().getGameTime() % 4L == 0L) {
+					CrestHelper.renderParticle(player, ParticleTypes.RAID_OMEN);
+				}
+			} else unlinkSelf(itemStack, player);
 		}
 	}
 
@@ -193,7 +197,15 @@ public class HeartSealItem extends Item {
 		}
 	}
 
-	public static float getPairUpRange(ItemStack itemStack, float range) {
+	public void pairElasticPulling(Entity player, Entity partner) {
+		Vec3 direction = player.position().subtract(partner.position()).normalize().scale(0.003);
+		partner.push(direction);
+		if (partner instanceof ServerPlayer serverPlayer) {
+			serverPlayer.connection.send(new ClientboundSetEntityMotionPacket(serverPlayer));
+		}
+	}
+
+	public static float getModifiedPairRange(ItemStack itemStack, float range) {
 		for (CrestEffect crestEffect : CrestHelper.collectCrestEffects(itemStack)) {
 			if (crestEffect instanceof PairUpRangeModifierCrestEffect(float modifier, boolean multiply)) {
 				return multiply ? range * modifier : range + modifier;

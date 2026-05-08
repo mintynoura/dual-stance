@@ -48,7 +48,7 @@ public record CrestComponent(Identifier id, List<CrestEffect> crestEffects) impl
 	}
 
 	// This method is called in HeartSealedCrest to handle double "When Bonded" texts
-	// TODO: maybe evaluate SidedCrestEffect items, and prevent showing effects if denied
+	// TODO: evaluate SidedCrestEffect items, and prevent showing effects if denied
 	public void addToTooltip(boolean withLinkedText, Item.TooltipContext context, Consumer<Component> consumer, TooltipFlag flag, DataComponentGetter components) {
 		if (!this.crestEffects.isEmpty()) {
 			// no player, with text (linked) -> bounded text
