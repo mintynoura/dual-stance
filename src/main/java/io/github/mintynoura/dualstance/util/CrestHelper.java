@@ -45,12 +45,12 @@ public class CrestHelper {
 		int nodeCount = 5;
 		for (int i = 0; i < nodeCount; i++) {
 			float x = lerp((float) pos1.x, (float) pos2.x, i*1f/nodeCount);
-			float y = lerp((float) pos1.y, (float) pos2.y, i*1f/nodeCount);
+			float y = lerp((float) p1.getY(0.5), (float) p2.getY(0.5), i*1f/nodeCount);
 			float z = lerp((float) pos1.z, (float) pos2.z, i*1f/nodeCount);
 			if(renderRed)
-				serverLevel.sendParticles(DualStanceParticles.RED_CHERRY_PARTICLE, x, y+1, z, 1,0.1, 0, 0.1, 0);
+				serverLevel.sendParticles(DualStanceParticles.RED_CHERRY_PARTICLE, x, y, z, 1,0.1, 0, 0.1, 0);
 			else
-				serverLevel.sendParticles(ParticleTypes.CHERRY_LEAVES, x, y+1, z, 1,0.1, 0, 0.1, 0);
+				serverLevel.sendParticles(ParticleTypes.CHERRY_LEAVES, x, y, z, 1,0.1, 0, 0.1, 0);
 		}
 	}
 	public static float lerp(float x1, float x2, float t){
