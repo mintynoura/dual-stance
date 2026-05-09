@@ -8,6 +8,7 @@ import io.github.mintynoura.dualstance.item.component.crest_effects.MobEffectCre
 import io.github.mintynoura.dualstance.item.component.crest_effects.SidedCrestEffect;
 import io.github.mintynoura.dualstance.registries.DualStanceComponents;
 import io.github.mintynoura.dualstance.registries.DualStanceItems;
+import io.github.mintynoura.dualstance.registries.DualStanceParticles;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
@@ -28,10 +29,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import static io.github.mintynoura.dualstance.item.HeartSealItem.defaultPairRange;
+import static io.github.mintynoura.dualstance.item.HeartSealItem.getModifiedPairRange;
+
 public class CrestHelper {
 
 	// TODO: make link particles take the middle of the current height into account, and tint them red as the pair distance increases
-	public static void renderLinkParticle(Player p1, Entity p2){
+	public static void renderLinkParticle(Player p1, Entity p2,boolean renderRed){
 		Vec3 pos1 = p1.position();
 		Vec3 pos2 = p2.position();
 		if(!(p1.level() instanceof ServerLevel serverLevel))
@@ -43,7 +47,10 @@ public class CrestHelper {
 			float x = lerp((float) pos1.x, (float) pos2.x, i*1f/nodeCount);
 			float y = lerp((float) pos1.y, (float) pos2.y, i*1f/nodeCount);
 			float z = lerp((float) pos1.z, (float) pos2.z, i*1f/nodeCount);
-			serverLevel.sendParticles(ParticleTypes.CHERRY_LEAVES, x, y+1, z, 1,0.1, 0, 0.1, 0);
+			if(renderRed)
+				serverLevel.sendParticles(DualStanceParticles.RED_CHERRY_PARTICLE, x, y+1, z, 1,0.1, 0, 0.1, 0);
+			else
+				serverLevel.sendParticles(ParticleTypes.CHERRY_LEAVES, x, y+1, z, 1,0.1, 0, 0.1, 0);
 		}
 	}
 	public static float lerp(float x1, float x2, float t){

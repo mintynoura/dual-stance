@@ -53,8 +53,9 @@ public class HeartSealItem extends Item {
 		} else if (itemStack.has(DualStanceComponents.HEART_SEALED_CREST)) {
 			if (itemStack.has(DualStanceComponents.LINKED_MOB)) {
 				CrestHelper.tickCrestEffect(player, itemStack);
-				CrestHelper.renderLinkParticle(player, otherMob);
-				if (otherMob.distanceTo(player) > 0.8 * getModifiedPairRange(itemStack, defaultPairRange)) {
+				boolean needToPull = otherMob.distanceTo(player) > 0.8 * getModifiedPairRange(itemStack, defaultPairRange);
+				CrestHelper.renderLinkParticle(player, otherMob, needToPull);
+				if (needToPull) {
 					pairElasticPulling(player, otherMob);
 				}
 				if (CrestHelper.getHeartSealedCrest(itemStack).getItem().equals(DualStanceItems.PACIFISM_CREST) && player.level().getGameTime() % 3L == 0L) {

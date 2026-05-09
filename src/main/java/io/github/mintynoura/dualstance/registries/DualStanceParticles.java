@@ -9,10 +9,12 @@ import net.minecraft.resources.Identifier;
 
 public class DualStanceParticles {
 	public static final SimpleParticleType PACIFISM_PARTICLE = FabricParticleTypes.simple();
+	public static final SimpleParticleType RED_CHERRY_PARTICLE = FabricParticleTypes.simple();
 
 	public static void initialize() {
 
 		// Register our custom particle type in the mod initializer.
 		Registry.register(BuiltInRegistries.PARTICLE_TYPE, Identifier.fromNamespaceAndPath(DualStance.ID, "pacifism_particle"), PACIFISM_PARTICLE);
+		Registry.register(BuiltInRegistries.PARTICLE_TYPE, Identifier.fromNamespaceAndPath(DualStance.ID, "harm_petals"), RED_CHERRY_PARTICLE);
 	}
 }

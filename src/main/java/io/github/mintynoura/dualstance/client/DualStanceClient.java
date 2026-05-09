@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.client.particle.v1.ParticleProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ClientTooltipComponentCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
 import net.minecraft.client.particle.EndRodParticle;
+import net.minecraft.client.particle.FallingLeavesParticle;
 
 
 public class DualStanceClient implements ClientModInitializer {
@@ -20,5 +21,6 @@ public class DualStanceClient implements ClientModInitializer {
 
 		// Pacifism particles using the End Rod Particle physics/provider
 		ParticleProviderRegistry.getInstance().register(DualStanceParticles.PACIFISM_PARTICLE, SigilParticle.Provider::new);
+		ParticleProviderRegistry.getInstance().register(DualStanceParticles.RED_CHERRY_PARTICLE, FallingLeavesParticle.CherryProvider::new);
 	}
 }
