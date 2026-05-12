@@ -62,9 +62,9 @@ public class HeartSealItem extends Item {
 					CrestHelper.renderParticle(player, DualStanceParticles.PACIFISM_PARTICLE);
 				}
 				else if (CrestHelper.getHeartSealedCrest(itemStack).getItem().equals(DualStanceItems.ENCHANTER_CREST) && player.level().getGameTime() % 3L == 0L) {
-					if(player.level().getGameTime() % 3L == 0L)
+					if (player.level().getGameTime() % 3L == 0L)
 						CrestHelper.renderParticle(player, ParticleTypes.ENCHANT);
-					if(player.level().getGameTime() % 6L == 0L)
+					if (player.level().getGameTime() % 6L == 0L)
 						CrestHelper.renderParticle(player, ParticleTypes.SOUL_FIRE_FLAME);
 				}
 				else if (CrestHelper.getHeartSealedCrest(itemStack).getItem().equals(DualStanceItems.HATRED_CREST) && player.level().getGameTime() % 4L == 0L) {

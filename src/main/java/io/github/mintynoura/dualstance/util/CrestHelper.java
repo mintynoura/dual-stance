@@ -29,9 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static io.github.mintynoura.dualstance.item.HeartSealItem.defaultPairRange;
-import static io.github.mintynoura.dualstance.item.HeartSealItem.getModifiedPairRange;
-
 public class CrestHelper {
 
 	// TODO: make link particles take the middle of the current height into account, and tint them red as the pair distance increases
@@ -47,7 +44,7 @@ public class CrestHelper {
 			float x = lerp((float) pos1.x, (float) pos2.x, i*1f/nodeCount);
 			float y = lerp((float) p1.getY(0.5), (float) p2.getY(0.5), i*1f/nodeCount);
 			float z = lerp((float) pos1.z, (float) pos2.z, i*1f/nodeCount);
-			if(renderRed)
+			if (renderRed)
 				serverLevel.sendParticles(DualStanceParticles.RED_CHERRY_PARTICLE, x, y, z, 1,0.1, 0, 0.1, 0);
 			else
 				serverLevel.sendParticles(ParticleTypes.CHERRY_LEAVES, x, y, z, 1,0.1, 0, 0.1, 0);
@@ -66,6 +63,7 @@ public class CrestHelper {
 		}
 	}
 
+	// TODO: store collected crest effects somewhere, so they aren't collected every tick. should help performance and mitigate sided logspam
 	public static void tickCrestEffect(LivingEntity entity, ItemStack itemStack) {
 		for (CrestEffect crestEffect : collectCrestEffects(itemStack)) {
 			if (crestEffect instanceof MobEffectCrestEffect mobEffectCrestEffect) {
