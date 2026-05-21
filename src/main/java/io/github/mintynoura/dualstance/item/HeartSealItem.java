@@ -28,6 +28,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Optional;
@@ -76,11 +77,11 @@ public class HeartSealItem extends Item {
 
 	// Linking code
 	@Override
-	public InteractionResult interactLivingEntity(ItemStack itemStack, Player player, LivingEntity target, InteractionHand type) {
+	public @NonNull InteractionResult interactLivingEntity(ItemStack itemStack, Player player, LivingEntity target, InteractionHand type) {
 		if (type == InteractionHand.OFF_HAND) return InteractionResult.PASS;
 		if (player.level() instanceof ServerLevel serverLevel) {
 			if (!(target instanceof Player)) {
-				if (serverLevel.getGameRules().get(DualStanceGameRules.ALLOW_PAIRING_WITH_MOBS) && itemStack.has(DualStanceComponents.HEART_SEALED_CREST)) {
+				if (serverLevel.getGameRules().get(DualStanceGameRules.ALLOW_PAIRING_WITH_MOBS) && itemStack.has(DualStanceComponents.HEART_SEALED_CREST) && isHoldingHeartSeal(target)) {
 					if (player.getInventory().countItem(DualStanceItems.HEART_SEAL) > 1)
 						return InteractionResult.FAIL;
 					if (!itemStack.get(DualStanceComponents.HEART_SEALED_CREST).isEmpty() && !itemStack.has(DualStanceComponents.LINKED_MOB)) {
@@ -228,6 +229,11 @@ public class HeartSealItem extends Item {
 	public static void unlinkSelf(ItemStack itemStack, LivingEntity self) {
 		self.level().playSound(null, self.getOnPos(), DualStanceSoundEvents.PAIR_UNLINK, SoundSource.PLAYERS);
 		CrestHelper.unlink(itemStack, self);
+	}
+
+
+	public boolean isHoldingHeartSeal(LivingEntity livingEntity) {
+		return livingEntity.getMainHandItem().is(DualStanceItems.HEART_SEAL) || livingEntity.getOffhandItem().is(DualStanceItems.HEART_SEAL);
 	}
 
 	private static void playRemoveSound(final Entity entity) {
