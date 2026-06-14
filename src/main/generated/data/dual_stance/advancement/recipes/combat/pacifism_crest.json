@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_heart_seal": {
+      "conditions": {
+        "items": [
+          {
+            "items": "dual_stance:heart_seal"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_pacifism_crest": {
+      "conditions": {
+        "items": [
+          {
+            "items": "dual_stance:pacifism_crest"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "dual_stance:pacifism_crest"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_pacifism_crest",
+      "has_heart_seal"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "dual_stance:pacifism_crest"
+    ]
+  }
+}

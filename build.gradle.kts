@@ -11,9 +11,25 @@ val compatibleVersions: String by project
 
 version = modVersion
 
+repositories {
+	exclusiveContent {
+		forRepository {
+			maven {
+				name = "Modrinth"
+				url = uri("https://api.modrinth.com/maven")
+			}
+		}
+		filter {
+			includeGroup("maven.modrinth")
+		}
+	}
+}
+
 dependencies {
 	minecraft(libs.minecraft)
 	api(libs.bundles.fabric)
+//	implementation("maven.modrinth:peace-lily:TuDvfJgG")
+//	implementation("maven.modrinth:farmers-delight-refabricated:fjJnfO0r")
 }
 
 java {

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    "#dual_stance:crests",
+    "#dual_stance:crests",
+    "#dual_stance:shells_crest_ingredients"
+  ],
+  "result": {
+    "id": "dual_stance:shells_crest"
+  }
+}

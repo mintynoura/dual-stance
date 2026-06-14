@@ -1,0 +1,9 @@
+{
+  "values": [
+    "minecraft:iron_ingot",
+    {
+      "id": "peace_lily:peace_lily",
+      "required": false
+    }
+  ]
+}

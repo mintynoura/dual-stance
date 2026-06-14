@@ -1,5 +1,5 @@
 [versions]
-loom = "1.15.+"
+loom = "1.16.+"
 mod-publish = "1.1.0"
 
 minecraft = "26.1.2"

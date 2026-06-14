@@ -1,0 +1,9 @@
+{
+  "values": [
+    "minecraft:gold_ingot",
+    {
+      "id": "peace_lily:bird_of_paradise",
+      "required": false
+    }
+  ]
+}

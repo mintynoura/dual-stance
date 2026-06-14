@@ -45,6 +45,15 @@
 
 	"tag.item.dual_stance.crests": "Crests",
 	"tag.item.dual_stance.non_enchanter_crests": "Non-Enchanter Crests",
+	"tag.item.dual_stance.peace_crest_ingredients": "Peace Crest Ingredients",
+	"tag.item.dual_stance.bones_crest_ingredients": "Bones Crest Ingredients",
+	"tag.item.dual_stance.stone_crest_ingredients": "Stone Crest Ingredients",
+	"tag.item.dual_stance.emblems_crest_ingredients": "Emblems Crest Ingredients",
+	"tag.item.dual_stance.specters_crest_ingredients": "Specters Crest Ingredients",
+	"tag.item.dual_stance.shells_crest_ingredients": "Shells Crest Ingredients",
+	"tag.item.dual_stance.pacifism_crest_ingredients": "Pacifism Crest Ingredients",
+	"tag.item.dual_stance.enchanter_crest_ingredients": "Enchanter Crest Ingredients",
+	"tag.item.dual_stance.hatred_crest_ingredients": "Hatred Crest Ingredients",
 
 	"dual_stance.peace_crest.bones_crest.combo": "Nimble Shield: 10% chance to negate damage taken, up to 20% based on proximity. Haste I",
 	"dual_stance.peace_crest.stone_crest.combo": "Towering Shield: Increases size slightly, and increases step height by 0.5 blocks. Strength I",

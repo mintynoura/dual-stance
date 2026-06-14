@@ -1,0 +1,9 @@
+{
+  "values": [
+    "minecraft:bone_block",
+    {
+      "id": "peace_lily:red_snapdragon",
+      "required": false
+    }
+  ]
+}

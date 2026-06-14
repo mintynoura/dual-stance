@@ -1,0 +1,17 @@
+{
+	"values": [
+		"minecraft:nautilus_shell",
+		{
+			"id": "#c:crops/rice",
+			"required": false
+		},
+		{
+			"id": "farmersdelight:fried_rice",
+			"required": false
+		},
+		{
+			"id": "psithurism:rice_bowl",
+			"required": false
+		}
+	]
+}
