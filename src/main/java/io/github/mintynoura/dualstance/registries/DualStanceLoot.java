@@ -18,7 +18,7 @@ public class DualStanceLoot {
 			if (source.isBuiltin()) {
 				if (id.equals(BuiltInLootTables.ANCIENT_CITY)) tableBuilder.pool(LootPool.lootPool().add(EmptyLootItem.emptyItem().setWeight(11)).add(LootItem.lootTableItem(DualStanceItems.PEACE_CREST)).setRolls(UniformGenerator.between(1, 2)).build());
 
-				if (id.equals(EntityType.SKELETON.getDefaultLootTable().get())) tableBuilder.pool(LootPool.lootPool()
+				if (id.equals(EntityType.SKELETON.getDefaultLootTable().orElse(null))) tableBuilder.pool(LootPool.lootPool()
 					.add(LootItem.lootTableItem(DualStanceItems.BONES_CREST))
 					.when(
 						LootItemEntityPropertyCondition.hasProperties(
@@ -35,9 +35,9 @@ public class DualStanceLoot {
 
 				if (id.equals(BuiltInLootTables.BURIED_TREASURE)) tableBuilder.pool(LootPool.lootPool().add(EmptyLootItem.emptyItem().setWeight(2)).add(LootItem.lootTableItem(DualStanceItems.SHELLS_CREST)).setRolls(UniformGenerator.between(1, 2)).build());
 				if (id.equals(BuiltInLootTables.UNDERWATER_RUIN_BIG) || id.equals(BuiltInLootTables.UNDERWATER_RUIN_SMALL)) tableBuilder.pool(LootPool.lootPool().add(EmptyLootItem.emptyItem().setWeight(5)).add(LootItem.lootTableItem(DualStanceItems.SHELLS_CREST)).setRolls(UniformGenerator.between(1, 2)).build());
-				if (id.equals(EntityType.ZOMBIE_NAUTILUS.getDefaultLootTable().get())) tableBuilder.pool(LootPool.lootPool().add(EmptyLootItem.emptyItem().setWeight(4)).add(LootItem.lootTableItem(DualStanceItems.SHELLS_CREST)).build());
+				if (id.equals(EntityType.ZOMBIE_NAUTILUS.getDefaultLootTable().orElse(null))) tableBuilder.pool(LootPool.lootPool().add(EmptyLootItem.emptyItem().setWeight(4)).add(LootItem.lootTableItem(DualStanceItems.SHELLS_CREST)).build());
 
-				if (id.equals(EntityType.WITHER.getDefaultLootTable().get())) tableBuilder.pool(LootPool.lootPool()
+				if (id.equals(EntityType.WITHER.getDefaultLootTable().orElse(null))) tableBuilder.pool(LootPool.lootPool()
 					.add(LootItem.lootTableItem(DualStanceItems.HATRED_CREST))
 					.when(
 						LootItemEntityPropertyCondition.hasProperties(
