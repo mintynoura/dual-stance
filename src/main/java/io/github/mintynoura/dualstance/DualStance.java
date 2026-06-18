@@ -27,5 +27,6 @@ public class DualStance implements ModInitializer {
 		DualStanceSoundEvents.initialize();
 		DualStanceParticles.initialize();
 		CrestCombinations.initializeCombos();
+		DualStanceLoot.modify();
 	}
 }
